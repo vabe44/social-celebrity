@@ -20,7 +20,6 @@ router.get("/client_token", function (req, res) {
 });
 
 router.post("/braintree-checkout", function (req, res) {
-    // var nonceFromTheClient = req.body.payment_method_nonce;
     // Use payment method nonce here
     console.log("nonce received");
 
@@ -65,8 +64,6 @@ res.render("charge"));
 // STRIPE
 /* POST route to receive purchase form data and create charge request. */
 router.post("/charge", (req, res) => {
-
-    console.log(req.body);
 
     // bitcoin payment
     if (req.body.object === "source") {
@@ -187,30 +184,11 @@ router.post("/charge", (req, res) => {
 /* POST route to receive webhooks from Stripe to finalize charge. */
 router.post("/webhook", function (request, response) {
 
-    response.json({isPaid: true});
+    response.sendStatus(200);
     // Retrieve the request's body and parse it as JSON
     var event_json = request.body;
-    console.log(event_json);
+    // console.log(event_json);
     // Do something with event_json
-    if (event_json.type === "source.chargeable") {
-
-        // stripe.charges.create({
-        //     amount: event_json.data.object.amount,
-        //     currency: event_json.data.object.currency,
-        //     description: event_json.data.object.PAYDESCRIPTION,
-        //     source: event_json.data.object.id,
-        //     metadata: {
-        //         description: event_json.data.object.PAYDESCRIPTION,
-        //     },
-        // }, function (err, charge) {
-        //     // asynchronously called
-        //     if (err) {
-        //         console.log(`${err.type} - ${err.message}`);
-        //     }
-        //     // res.render("charge");
-        // });
-
-    }
 
 });
 
