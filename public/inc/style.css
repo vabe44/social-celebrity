@@ -2420,3 +2420,11 @@ input[type="radio"]:checked + label span {
     margin-bottom: 24px !important;
     margin-top: -4px !important;
 }
+
+#myModal .modal-content {
+    background-color: transparent;
+}
+
+#myModal .modal-footer {
+    border-top: none;
+}
