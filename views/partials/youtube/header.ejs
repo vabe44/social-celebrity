@@ -1,0 +1,15 @@
+<a href="/youtube/likes" class="<%= (subpage === '/' || subpage === '/likes') ? 'twitter1active' : 'twitter1 inactive' %>"><span class="<%= (subpage === '/' || subpage === '/likes') ? 'ytblue' : 'ytgrey' %>"></span>Likes</a>
+<% if (subpage === '/likes') { %> <div id="selected" style="width:245px"><span class="checkmark"></span>selected</div> <% } %>
+
+<a href="/youtube/views" class="<%= subpage === '/views' ? 'usatwitteractive' : 'usatwitter inactive' %>"><span class="<%= subpage === '/views' ? 'ytblue' : 'ytgrey' %>"></span>Views</a>
+<% if (subpage === '/views') { %> <div id="selected" style="width:299px;margin-left:248px;"><span class="checkmark"></span>selected</div> <% } %>
+
+<a href="/youtube/subscribers" class="<%= subpage === '/subscribers' ? 'retweetsactive' : 'retweets inactive' %>"><span class="<%= subpage === '/subscribers' ? 'ytblue' : 'ytgrey' %>"></span>Subscribers</a>
+<% if (subpage === '/subscribers') { %> <div id="selected" style="width:239px;margin-left:550px;"><span class="checkmark"></span>selected</div> <% } %>
+
+<a href="/youtube/comments" class="<%= subpage === '/comments' ? 'favoritesactive' : 'favorites inactive' %>"><span class="<%= subpage === '/comments' ? 'ytblue' : 'ytgrey' %>"></span>Comments</a>
+<% if (subpage === '/comments') { %> <div id="selected" style="width:191px;margin-left:792px;"><span class="checkmark"></span>selected</div> <% } %>
+
+<!-- <div id="autolikes" style="">
+    Introducing <a href="likesMonthly.html" class="allink" target="_blank">Youtube Auto Likes!</a> Get likes automatically <a href="javascript:void(null)" id="closepop">Dismiss</a>
+</div> -->

@@ -1,0 +1,72 @@
+<% include ../partials/header %>
+
+<div id="container-bg">
+
+	<div id="container2">
+
+		<% include ../partials/youtube/header %>
+
+    <div id="pricing-code" class="pricing-code" style="margin-top: 26px;">
+        <form class="order" role="form" action="" method="post">
+          <div class="form-section">
+            <h3>Youtube Likes: <span class="quantity">2,500</span> <span class="align-right price-container"><span class="price">$60</span> <span class="discount">(40% discount)</span></span></h3>
+            <input class="quantity" type="hidden" name="data[quantity]" value="2500">
+            <div class="quantity-slider recurringfix ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><div class="ui-slider-range ui-widget-header ui-corner-all ui-slider-range-min"></div><span class="ui-slider-handle ui-state-default ui-corner-all" tabindex="0"></span></div>
+          </div>
+          <div class="form-section">
+            <h3>YouTube Video URL</h3>
+            <input type="text" name="data[url]" placeholder="Enter your YouTube video link" value="">
+          </div>
+          <% include ../partials/form-payment %>
+        </form>
+    </div><!-- pricing code -->
+
+    <% include ../partials/partners %>
+
+    <div id="home-divider"></div>
+
+    <div id="faq-spacer"></div>
+
+       <div id="leftpage">
+
+          <div id="faqbox">
+            <h3></h3>
+            <p></p>
+          </div>
+
+       </div>
+
+       <div id="rightpage">
+            <% include ../partials/scrolling-sidebar %>
+        </div>
+	</div>
+	<!-- container2 -->
+
+    </div><!-- container bg -->
+
+    <% include ../partials/footer %>
+
+<!-- FORM SLIDER -->
+<% include ../partials/pricing-slider-deps %>
+<script type="text/javascript">
+    var sliderValues = [100, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650, 1700, 1750, 1800, 1850, 1900, 1950, 2000, 2050, 2100, 2150, 2200, 2250, 2300, 2350, 2400, 2450, 2500, 2550, 2600, 2650, 2700, 2750, 2800, 2850, 2900, 2950, 3000, 3050, 3100, 3150, 3200, 3250, 3300, 3350, 3400, 3450, 3500, 3550, 3600, 3650, 3700, 3750, 3800, 3850, 3900, 3950, 4000, 4050, 4100, 4150, 4200, 4250, 4300, 4350, 4400, 4450, 4500, 4550, 4600, 4650, 4700, 4750, 4800, 4850, 4900, 4950, 5000, 5500, 6000, 6500, 7000, 7500, 8000, 8500, 9000, 9500, 10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000, 110000, 120000, 130000, 140000, 150000, 160000, 170000, 180000, 190000, 200000, 210000, 220000, 230000, 240000, 250000, 260000, 270000, 280000, 290000, 300000, 310000, 320000, 330000, 340000, 350000, 360000, 370000, 380000, 390000, 400000, 410000, 420000, 430000, 440000, 450000, 460000, 470000, 480000, 490000, 500000, 750000, 1000000];
+    var discountValues = [  {quantity: 500, discount: 0.05}, {quantity: 1000, discount: 0.1}, {quantity: 2000, discount: 0.15}, {quantity: 5000, discount: 0.2}, {quantity: 10000, discount: 0.3}, {quantity: 50000, discount: 0.4},  {quantity: 100000, discount: 0.5}];
+    var defaultQuantity = 30;
+    var price = 0.0125;
+
+    var itemName = "Youtube Likes";
+    var itemDescription = "Likes";
+    var category = "youtube";
+    SLIDER.init([sliderValues, discountValues, defaultQuantity, price, itemName, itemDescription, category]);
+    SLIDER.create();
+</script>
+
+<% include ../partials/payment-radio-controller %>
+<% include ../partials/stripe-checkout %>
+<% include ../partials/braintree-checkout %>
+
+<% include ../partials/sticky-sidebar-deps %>
+<% include ../partials/autolikes-banner-script %>
+
+</body>
+</html>

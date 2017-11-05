@@ -1,0 +1,11 @@
+<script>
+    window.addEventListener('load', function () {
+        $('#closepop').click(function () {
+            $('#autolikes').slideUp(250);
+            $.cookie('ReadNotice', true, { expires: 12728 });
+        });
+        if (!$.cookie('ReadNotice')) {
+            $('#autolikes').delay(3000).slideDown(500);
+        }
+    });
+</script>

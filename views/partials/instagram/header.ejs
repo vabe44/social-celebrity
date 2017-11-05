@@ -1,0 +1,12 @@
+<a href="/instagram/followers" class="<%= (subpage === '/' || subpage === '/followers') ? 'instagramactive' : 'instagram inactive' %>"><span class="<%= (subpage === '/' || subpage === '/followers') ? 'igbrown' : 'iggrey' %>"></span>Followers</a>
+<% if (subpage === '/followers') { %> <div id="selected" style="width:345px"><span class="checkmark"></span>selected</div> <% } %>
+
+<a href="/instagram/likes" class="<%= subpage === '/likes' ? 'instagramlikesactive' : 'instagramlikes inactive' %>"><span class="<%= subpage === '/likes' ? 'igbrown' : 'iggrey' %>"></span>Likes</a>
+<% if (subpage === '/likes') { %> <div id="selected" style="width:282px;margin-left:346px;"><span class="checkmark"></span>selected</div> <% } %>
+
+<a href="/instagram/comments" class="<%= subpage === '/likes' ? 'commentsactive' : 'comments inactive' %>"><span class="<%= subpage === '/comments' ? 'igbrown' : 'iggrey' %>"></span>Comments</a>
+<% if (subpage === '/comments') { %> <div id="selected" style="width:354px;margin-left:629px;"><span class="checkmark"></span>selected</div> <% } %>
+
+<!-- <div id="autolikes" style="display: block;">
+    Introducing <a href="likesMonthly.html" class="allink" target="_blank">Instagram Auto Likes!</a> Get likes on your new posts automatically <a href="javascript:void(null)" id="closepop">Dismiss</a>
+</div> -->

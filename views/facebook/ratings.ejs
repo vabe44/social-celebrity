@@ -1,0 +1,74 @@
+<% include ../partials/header %>
+
+<div id="container-bg">
+
+	<div id="container2">
+
+		<% include ../partials/facebook/header %>
+
+		<div id="pricing-code" class="pricing-code" style="margin-top: 26px;">
+				<form class="order" role="form" action="" method="post">
+					<div class="form-section">
+						<h3>Facebook 5 Star Ratings: <span class="quantity">100</span> <span class="align-right price-container"><span class="price">$102</span> <span class="discount">(15% discount)</span></span></h3>
+						<input class="quantity" type="hidden" name="data[quantity]" value="2500">
+						<div class="quantity-slider recurringfix ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all">
+              <div class="ui-slider-range ui-widget-header ui-corner-all ui-slider-range-min"></div><span class="ui-slider-handle ui-state-default ui-corner-all" tabindex="0"></span></div>
+					</div>
+                    <% include ../partials/form-payment %>
+				</form>
+    </div><!-- pricing code -->
+
+    <% include ../partials/partners %>
+
+		<div id="home-divider"></div>
+
+		<div id="faq-spacer"></div>
+
+			 <div id="leftpage">
+
+		     	<div id="faqbox">
+		     		<h3>Will these all be 5 star ratings?</h3>
+		     		<p>We send visitors to your page with the intent of leaving a 5 star rating. We can't guarantee that every review will be 5 stars, as ultimately, we can't control who leaves the review. However, in most cases, 95%+ percent of your reviews will be 5 stars with favorable comments about your business. We work hard to maintain a quality service.</p>
+		     	</div>
+
+		     	<div id="faqbox">
+		     		<h3>What will the reviews say?</h3>
+		     		<p>It varies quite a bit, but they will likely leave positive comments about your business / service and customer service. If you already have reviews, they may use details about your business to aid them in their review. For instance, you won't receive a review about your "restaurant" if you own an auto body shop; it will be accurate to your business and helpful to your visitors. We have a high level of customer satisfaction with these services.</p>
+		     	</div>
+
+	     </div>
+
+		 <div id="rightpage">
+                <% include ../partials/scrolling-sidebar %>
+            </div>
+        </div>
+        <!-- container2 -->
+
+  </div><!-- container bg -->
+
+<% include ../partials/footer %>
+
+<!-- FORM SLIDER -->
+<% include ../partials/pricing-slider-deps %>
+<script type="text/javascript">
+    var sliderValues = [15, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 210, 220, 230, 240, 250, 260, 270, 280, 290, 300, 310, 320, 330, 340, 350, 360, 370, 380, 390, 400, 410, 420, 430, 440, 450, 460, 470, 480, 490, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 2100, 2200, 2300, 2400, 2500, 2600, 2700, 2800, 2900, 3000];
+    var discountValues = [ {quantity: 100, discount: 0.15}, {quantity: 500, discount: 0.2}, {quantity: 1000, discount: 0.25}, {quantity: 5000, discount: 0.45}, {quantity: 10000, discount: 0.58}, {quantity: 25000, discount: 0.75}, {quantity: 50000, discount: 0.78}, {quantity: 100000, discount: 0.84}, {quantity: 250000, discount: 0.87}, {quantity: 500000, discount: 0.88}, {quantity: 1000000, discount: 0.9}];
+    var defaultQuantity = 12;
+    var price = 1.2;
+
+    var itemName = "Facebook Ratings";
+    var itemDescription = "Ratings";
+    var category = "facebook";
+    SLIDER.init([sliderValues, discountValues, defaultQuantity, price, itemName, itemDescription, category]);
+    SLIDER.create();
+</script>
+
+<% include ../partials/payment-radio-controller %>
+<% include ../partials/stripe-checkout %>
+<% include ../partials/braintree-checkout %>
+
+<% include ../partials/sticky-sidebar-deps %>
+<% include ../partials/autolikes-banner-script %>
+
+</body>
+</html>

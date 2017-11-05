@@ -1,0 +1,95 @@
+<script>
+    // Be sure to have PayPal's checkout.js library loaded on your page.
+    // Create a client.
+    $.get("/payments/client_token")
+        .done(function (token) {
+            braintree.client.create({
+                authorization: token
+            }, function (clientErr, clientInstance) {
+
+                // Stop if there was a problem creating the client.
+                // This could happen if there is a network error or if the authorization
+                // is invalid.
+                if (clientErr) {
+                    console.error('Error creating client:', clientErr);
+                    return;
+                }
+
+                // Create a PayPal Checkout component.
+                braintree.paypalCheckout.create({
+                    client: clientInstance
+                }, function (paypalCheckoutErr, paypalCheckoutInstance) {
+
+                    // Stop if there was a problem creating PayPal Checkout.
+                    // This could happen if there was a network error or if it's incorrectly
+                    // configured.
+                    if (paypalCheckoutErr) {
+                        console.error('Error creating PayPal Checkout:', paypalCheckoutErr);
+                        return;
+                    }
+
+                    // Set up PayPal with the checkout.js library
+                    paypal.Button.render({
+                        env: 'sandbox', // Or 'sandbox'
+                        commit: true, // This will add the transaction amount to the PayPal button
+
+                        style: {
+                            label: 'buynow',
+                            fundingicons: false, // optional
+                            branding: true, // optional
+                            tagline: false,
+                            size: 'medium', // small | medium | large | responsive
+                            shape: 'pill',   // pill | rect
+                            color: 'blue'   // gold | blue | silver | black
+                        },
+
+
+                        payment: function () {
+                            return paypalCheckoutInstance.createPayment({
+                                flow: 'checkout', // Required
+                                amount: Number(document.getElementsByName("data[total]")[0].value), // Required
+                                currency: 'HUF', // Required
+                                enableShippingAddress: false
+                            });
+                        },
+
+                        onAuthorize: function (data, actions) {
+                            return paypalCheckoutInstance.tokenizePayment(data)
+                                .then(function (payload) {
+                                    console.log("postin nonce");
+                                    $.post("/payments/braintree-checkout", {
+                                        nonce: payload.nonce,
+                                        amount: Number(document.getElementsByName("data[total]")[0].value),
+                                        description: document.getElementsByName("data[quantity]")[0].value + " " + itemName + ": " + document.getElementsByName("data[url]")[0].value,
+                                        itemName: itemName,
+                                        itemQuantity: document.getElementsByName("data[quantity]")[0].value,
+                                        itemUrl: document.getElementsByName("data[url]")[0].value,
+                                    }, function(response) {
+                                        console.log(response);
+                                        if(response.result.status === "success") {
+                                            window.location.href = "/success";
+                                        } else {
+                                            alert('An error occured. \n\n'+response.result.message+".\n\n Please try again.");
+                                        }
+                                    });
+                                });
+                        },
+
+                        onCancel: function (data) {
+                            console.log('checkout.js payment cancelled', JSON.stringify(data, 0, 2));
+                        },
+
+                        onError: function (err) {
+                            console.error('checkout.js error', err);
+                        }
+                    }, '#paypal-button').then(function () {
+                        // The PayPal button will be rendered in an html element with the id
+                        // `paypal-button`. This function will be called when the PayPal button
+                        // is set up and ready to be used.
+                    });
+
+                });
+
+            });
+        });
+</script>

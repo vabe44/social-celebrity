@@ -1,0 +1,31 @@
+<div id="scrollingdiscordsidebar-sticky-wrapper" class="sticky-wrapper is-sticky" style="height: 150px;z-index: 99999;margin-top:-150px;">
+    <div id="scrollingdiscordsidebar" style="top: 330px;z-index: 99999;margin-left:100%;margin-right:45px;">
+        <img src="/img/discordicon2.png" id="discordwidgetbutton" style="max-height: 131px;max-width: 100%;cursor:pointer;position:absolute;z-index: 99999;margin-left:-45px;">
+        <span id="discordwidget" style="margin-left:45px;top:330px;z-index: 99999;">
+                <iframe src="https://discordapp.com/widget?id=345010050097610763&theme=dark" width="350" height="500" allowtransparency="true" frameborder="0"></iframe>
+        </span>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $('#scrollingdiscordsidebar').sticky({
+            topSpacing: 330,
+            bottomSpacing: 390
+        });
+    });
+    $("#discordwidgetbutton").click(function () {
+        // widget is closed
+        if($("#discordwidgetbutton").css("margin-left") !== "-395px") {
+            $("#discordwidgetbutton").animate({'margin-left': '-395px'}, 'slow');
+            $("#discordwidget").animate({'margin-left': '-350px'}, 'slow');
+            $("#scrollingdiscordsidebar").animate({'top': '0px'}, 'slow');
+        // widget is open
+        } else {
+            $("#discordwidgetbutton").animate({'margin-left': '-45px'}, 'slow');
+            $("#discordwidget").animate({'margin-left': '45px'}, 'slow');
+            // $("#discordwidget").css("display","inherit");
+            $("#scrollingdiscordsidebar").animate({'top': '330px'}, 'slow');
+        }
+    });
+</script>

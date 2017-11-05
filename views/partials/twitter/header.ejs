@@ -1,0 +1,15 @@
+<a href="/twitter/followers" class="<%= (subpage === '/' || subpage === '/followers') ? 'twitter1active' : 'twitter1 inactive' %>"><span class="<%= (subpage === '/' || subpage === '/followers') ? 'twblue' : 'twgrey' %>"></span>Followers</a>
+<% if (subpage === '/followers') { %> <div id="selected" style="width:245px"><span class="checkmark"></span>selected</div> <% } %>
+
+<a href="/twitter/followers/usa" class="<%= subpage === '/followers/usa' ? 'usatwitteractive' : 'usatwitter inactive' %>"><span class="<%= subpage === '/followers/usa' ? 'twblue' : 'twgrey' %>"></span>USA Followers</a>
+<% if (subpage === '/followers/usa') { %> <div id="selected" style="width:299px;margin-left:248px;"><span class="checkmark"></span>selected</div> <% } %>
+
+<a href="/twitter/retweets" class="<%= subpage === '/retweets' ? 'retweetsactive' : 'retweets inactive' %>"><span class="<%= subpage === '/retweets' ? 'twblue' : 'twgrey' %>"></span>Retweets</a>
+<% if (subpage === '/retweets') { %> <div id="selected" style="width:239px;margin-left:550px;"><span class="checkmark"></span>selected</div> <% } %>
+
+<a href="/twitter/likes" class="<%= subpage === '/likes' ? 'favoritesactive' : 'favorites inactive' %>"><span class="<%= subpage === '/likes' ? 'twblue' : 'twgrey' %>"></span>Likes</a>
+<% if (subpage === '/likes') { %> <div id="selected" style="width:191px;margin-left:792px;"><span class="checkmark"></span>selected</div> <% } %>
+
+<!-- <div id="autolikes" style="">
+    Introducing <a href="/twitter/likes?=monthly" class="allink" target="_blank">Twitter Auto Likes!</a> Get likes and retweets automatically <a href="javascript:void(null)" id="closepop">Dismiss</a>
+</div> -->

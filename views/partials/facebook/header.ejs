@@ -1,0 +1,22 @@
+<a href="/facebook/likes" class="<%= subpage === '/likes' ? 'facebook1active' : 'facebook1 inactive' %>"><span class="<%= subpage === '/likes' ? 'fbblue' : 'fbgrey' %>"></span>Likes</a>
+<% if (subpage === '/likes') { %> <div id="selected" style="width:147px"><span class="checkmark"></span>selected</div> <% } %>
+
+<a href="/facebook/followers" class="<%= subpage === '/followers' ? 'followsactive' : 'follows inactive' %>"><span class="<%= subpage === '/followers' ? 'fbblue' : 'fbgrey' %>"></span>Followers</a>
+<% if (subpage === '/followers') { %> <div id="selected" style="width:173px;margin-left:148px;"><span class="checkmark"></span>selected</div> <% } %>
+
+<a href="/facebook/weblikes" class="<%= subpage === '/weblikes' ? 'websitesactive' : 'websites inactive' %>"><span class="<%= subpage === '/weblikes' ? 'fbblue' : 'fbgrey' %>"></span>Websites</a>
+<% if (subpage === '/weblikes') { %> <div id="selected" style="width:189px;margin-left:322px;"><span class="checkmark"></span>selected</div> <% } %>
+
+<a href="/facebook/postlikes" class="<%= subpage === '/postlikes' ? 'post2 active' : 'post2 inactive' %>"><span class="<%= subpage === '/postlikes' ? 'fbblue' : 'fbgrey' %>"></span>Post</a>
+<% if (subpage === '/postlikes') { %> <div id="selected" style="width:138px;margin-left:512px;"><span class="checkmark"></span>selected</div> <% } %>
+
+<a href="/facebook/ratings" class="<%= subpage === '/ratings' ? 'ratingsactive' : 'ratings inactive' %>"><span class="<%= subpage === '/ratings' ? 'fbblue' : 'fbgrey' %>"></span>Ratings</a>
+<% if (subpage === '/ratings') { %> <div id="selected" style="width:171px;margin-left:651px;"><span class="checkmark"></span>selected</div> <% } %>
+
+<a href="/facebook/shares" class="<%= subpage === '/shares' ? 'sharesactive' : 'shares inactive' %>"><span class="<%= subpage === '/shares' ? 'fbblue' : 'fbgrey' %>"></span>Shares</a>
+<% if (subpage === '/shares') { %> <div id="selected" style="width:160px;margin-left:823px;"><span class="checkmark"></span>selected</div> <% } %>
+
+
+<!-- <div id="autolikes" style="display: block;">
+    Introducing <a href="/facebook/postlikes?=monthly" class="allink" target="_blank">Facebook Auto Likes!</a> Get likes on your new posts automatically <a href="javascript:void(null)" id="closepop">Dismiss</a>
+</div> -->

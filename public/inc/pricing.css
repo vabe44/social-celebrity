@@ -1,0 +1,240 @@
+.pricing-code {
+	padding-bottom:16px;
+}
+	.pricing-code .quantity-slider {
+		background: #262b31;
+		border: none;
+		border-radius: 50px;
+		height: 7px;
+		margin-bottom: 20px;
+		-webkit-box-shadow: 0px 1px 0px 0px rgba(255,255,255,0.12);
+		-moz-box-shadow: 0px 1px 0px 0px rgba(255,255,255,0.12);
+		box-shadow: 0px 1px 0px 0px rgba(255,255,255,0.12);
+		margin-left:4px;
+		width:854px;
+	}
+		.pricing-code .quantity-slider .ui-slider-range {
+			background: url('../img/pricing/slider-bg.png') no-repeat;
+			background-size: cover;
+		}
+		.pricing-code .quantity-slider .ui-slider-handle {
+			background: url('../img/pricing/slider-handle.png') no-repeat;
+			border: none;
+			cursor: pointer;
+			height: 31px;
+			margin-top: -7px;
+			outline: none;
+			width: 31px;
+			-webkit-border-radius: 16px;
+			-moz-border-radius: 16px;
+			border-radius: 16px;
+			/* -webkit-box-shadow: -4px 4px 0px 0px rgba(0,0,0,0.17);
+			-moz-box-shadow: -4px 4px 0px 0px rgba(0,0,0,0.17);
+			box-shadow: -4px 4px 0px 0px rgba(0,0,0,0.17); */
+		}
+	.pricing-code .form-section {
+		border-bottom: 1px solid #56626f;
+		padding: 20px 30px;
+	}
+	.pricing-code h3 {
+		color: #f3f6f9;
+		text-shadow: 0px 1px 0 #000;
+		font-family: "Montserrat", serif;
+		font-size: 26px;
+		font-weight: 300;
+		margin: 10px 0 20px;
+	}
+		.pricing-code h3 .align-right {
+			color: #697583;
+			float: right;
+		}
+			.pricing-code h3 .align-right .price {
+				color: #abfdba;
+				opacity:1 !important;
+				text-shadow:none;
+				letter-spacing:1px;
+			}
+	.pricing-code input[type="text"] {
+		border-radius: 9px;
+		-webkit-box-shadow: 0px 1px 0px 0px rgba(255,255,255,0.12);
+		-moz-box-shadow: 0px 1px 0px 0px rgba(255,255,255,0.12);
+		box-shadow: 0px 1px 0px 0px rgba(255,255,255,0.12);
+		background:#262b31;
+		box-sizing: border-box;
+		color: #FFF;
+		font-family: "Montserrat", serif;
+		font-size: 16px;
+		height: 48px;
+		margin-bottom: 15px;
+		padding: 0 15px;
+		width: 100%;
+		border:none;
+	}
+
+
+
+
+/* added on 08/03/17*/
+
+
+.pricing-code input[type="text"] {
+    border-radius: 9px;
+    box-sizing: border-box;
+    color: #a3a4b0;
+    font-family: "Montserrat", serif;
+    font-size: 16px;
+    height: 48px;
+    margin-bottom: 15px;
+    padding: 0 15px;
+    width: 100%;
+}
+.pricing-code .paypal {
+    /*background: url('img/pricing/payments.png') no-repeat;
+    display: block;
+    height: 60px;
+    float: left;
+    width: 280px;
+    margin-top: 10px;*/
+}
+.pricing-code .delivery {
+    color: #999;
+    float: left;
+    font-family: Helvetica,serif;
+    font-size: 15px;
+    font-weight: 100;
+    line-height: 26px;
+    margin-left: 20px;
+    margin-top: 17px;
+}
+.pricing-code .place-order {
+    background: url(../img/pricing/cart-icon.png) no-repeat scroll 35px center;
+    background-color: #23ab26;
+    border-radius: 100px;
+    color: #fff;
+    float: right;
+    font-family: "Montserrat",serif;
+    font-size: 21px;
+    padding: 5px 40px 5px 69px;
+    text-decoration: none;
+    margin-top: 20px;
+    width: 141px;
+}
+
+#paypal-button {
+    float: right;
+    margin-top: 20px;
+}
+
+#pricing-code {
+    height: auto;
+}
+.payment {
+
+    border: 1px solid #56626f;
+    border-radius: 9px;
+    float: left;
+    margin-top: 0 !important;
+    width: 100%;
+}
+.payment .payment-container {
+    padding: 25px;
+    float: left;
+}
+.payment .payment-container input[type="radio"] {
+    float: left;
+    color:#556569;
+}
+.payment .payment-container input[type="radio"]+label {
+    border: 3px solid #556569;
+    color: #fff;
+}
+.payment .payment-container input[type="radio"]+label:hover {
+    border: 3px solid #738488;
+}
+.payment .payment-container input[type="radio"]:checked+label{
+    border: 3px solid #7ce4f3;
+}
+.payment .payment-container .payment-logo {
+    border-radius: 10px;
+    float: left;
+    margin-right: 23px;
+    padding: 10px;
+    cursor: pointer;
+}
+.payment .payment-container .payment-logo span {
+    background-image: none !important;
+}
+.payment .payment-container .payment-logo img {
+    float: left;
+    display: block;
+}
+.payment .payment-container .payment-logo .stripe {
+    width: 200px;
+	background-size:100% auto;
+	background-repeat:no-repeat;
+	image-rendering: -moz-crisp-edges;         /* Firefox */
+	image-rendering:   -o-crisp-edges;         /* Opera */
+	image-rendering: -webkit-optimize-contrast;/* Webkit (non-standard naming) */
+	image-rendering: crisp-edges;
+	-ms-interpolation-mode: nearest-neighbor;  /* IE (non-standard property) */
+}
+.payment .payment-container .payment-logo .paypal-2checkout {
+    margin-top: 8px;
+    margin-bottom: 4px;
+    width: 235px;
+}
+.payment .payment-container .payment-logo .bitcoin {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 120px;
+}
+
+#testingModal{
+    display:none;
+}
+.more-container {
+    display: block;
+    margin-top: 18px;
+    float: left;
+}
+.more-container a {
+    color: #3197c9;
+    font-weight: normal;
+}
+.select-interval .payment-logo {
+    padding: 7px 10px !important;
+}
+.interval-container {
+    margin-top: 15px !important;
+}
+.monthly-bonus {
+    display: block !important;
+    float: right;
+    width: 350px !important;
+    margin-left: 17px;
+    color: #abfdba;
+}
+.monthly-bonus img {
+    float: left;
+    margin-left: 0px;
+    margin-right: 13px;
+    margin-top: -2px;
+}
+.pricing-code .delivery {
+    font-size: 17px !important;
+    margin-left: 0;
+    margin-bottom: 40px;
+    width: 575px !important;
+}
+.pricing-code .delivery a {
+    color: #87d8ea;
+    display: inline-block;
+    font-family: Helvetica;
+    text-decoration: none;
+    border-bottom: 1px dashed #8fceff;
+    padding-bottom: 1px !important;
+    height: 23px;
+}
+.pricing-code .delivery a:hover {
+	color:#FFF !important;
+}

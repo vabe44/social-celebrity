@@ -1,0 +1,37 @@
+<script>
+    function PaymentRadioController() {
+        // if card checked
+        if (document.getElementById('p1').checked) {
+            //enable monthly
+            document.getElementById('i2').disabled = false;
+            document.getElementById('i2').hidden = false;
+            document.getElementById('monthly-label').hidden = false;
+            document.getElementById('place-order-button').hidden = false;
+            document.getElementById('paypal-button').hidden = true;
+            document.getElementById("place-order-button").style.backgroundColor = "#23ab26";
+        } else {
+            // disable, hide monthly && select one time
+            document.getElementById('i2').checked = false;
+            document.getElementById('i2').disabled = true;
+            document.getElementById('i2').hidden = true;
+            document.getElementById('monthly-label').hidden = true;
+            document.getElementById('i1').checked = true;
+            document.getElementById('place-order-button').hidden = false;
+            document.getElementById('paypal-button').hidden = true;
+        }
+
+        // if paypal selected, hide place order and show paypal instead
+        if (document.getElementById('p2').checked) {
+            document.getElementById('place-order-button').hidden = true;
+            document.getElementById('paypal-button').hidden = false;
+        }
+
+        // if bitcoin is checked, change order button background color to gold
+        if (document.getElementById('p3').checked) {
+            document.getElementById("place-order-button").style.backgroundColor = "#e6b800";
+        }
+
+    }
+    PaymentRadioController();
+    $("[name='payment-radio']").change(PaymentRadioController);
+</script>

@@ -1,0 +1,132 @@
+<% include ./partials/header %>
+
+  <div id="container-bg">
+
+    <div id="container2">
+
+      <div id="faq-spacer"></div>
+
+      <div id="leftpage">
+
+        <h3 class="pagetitle">Write and Get Free Followers</h3>
+
+        <p class="page-p">We'll grow your page by 1000 free followers, free of charge, to your Twitter profile, Instagram profile, or Facebook
+          page of your choice! Simply write a blog post about Follows.com (or mention us within your article), and we'll
+          give you $26 in services as our thanks for your shoutout.</p>
+
+        <h4 class="pagesubtitle">Step 1</h4>
+
+        <p class="page-p">Write a blog post, either about Follows.com or social media, and include Follows.com within your article to share
+          us with your audience! You could mention your experience, our services, or even one of our many
+          <a href="blog.html" target="_blank">blog posts</a>; whichever you prefer to write about.
+          <br>
+          <br>
+          <em>Please only quality sites (no free blogs, e.g. Wordpress.com, Blogger/Blogspot, Livejournal, etc) due to bots and
+            abuse.
+          </em>
+        </p>
+
+        <h4 class="pagesubtitle">Step 2</h4>
+
+        <p class="page-p">Use the form below to let us know where your article is, and to let us know which page you'd like to promote. Max
+          one offer per article per page.</p>
+
+        <h4 class="pagesubtitle">Step 3</h4>
+
+        <p class="page-p">All set! Please give us a day or two to look over your article and kick off your order. We'll send you an email as
+          soon as your order is started.</p>
+
+        <p class="page-p"></p>
+
+        <div id="contact-freefollowers">
+          <div id="ffl-contact">
+
+            <div id="contactForm">
+              <form action="/free-followers#contactForm" method="post" class="contactForm">
+                <p>
+                  <span class="contact-title">Your Published Blog Article</span>
+                  <span class="ffl-required">*</span>
+                  <input class="contact-form" id="article" name="article" placeholder="e.g. http://mywebsite.com/blog/my-article/" type="text">
+                </p>
+
+                <p class="url-error" style="display:none"></p>
+
+                <p>
+                  <span class="contact-title" style="margin-top:25px;">Your Profile URL</span>
+                  <span class="ffl-required" style="margin-top:25px;">*</span>
+                  <input class="contact-form" placeholder="e.g. twitter.com/myprofile or facebook.com/mypage" name="fan-page" type="text">
+                </p>
+                <p>
+                  <span class="contact-title" style="margin-top:25px;">Your Email</span>
+                  <span class="ffl-required" style="margin-top:25px;">*</span>
+                  <input class="contact-form" name="email" type="text">
+                </p>
+
+                <button class="contactbtn" name="submit" value="Submit" type="submit">Submit</button>
+                <img id="inprogress_img" src="img/spinner.gif" style="position:relative;top:8px; display: none; left: 5px;">
+
+                <span class="ffl-notice">* Required Fields</span>
+                <p></p>
+              </form>
+            </div>
+
+          </div>
+
+        </div>
+        <!-- contact free followers -->
+
+      </div>
+      <!-- left page -->
+
+      <div id="rightpage">
+        <% include ./partials/scrolling-sidebar %>
+      </div>
+    </div>
+    <!-- container2 -->
+
+    <script type="text/javascript" charset="utf-8">
+      jQuery(".contactForm").on("submit", function (e) {
+        var validUrl = jQuery(".contactForm").data("validurl"),
+          url = jQuery("#article").val();
+
+        jQuery("#inprogress_img").show();
+        if (validUrl === "true") {
+
+        } else {
+          e.preventDefault();
+          $.ajax({
+            type: 'POST',
+            url: '/free-followers.check.php?checkUrl',
+            data: {
+              "url": url
+            },
+            success: function (data) {
+
+              if (!data.error) {
+                jQuery(".contactForm").data("validurl", "true");
+                jQuery(".contactbtn").click();
+              } else {
+                jQuery(".contactForm").data("validurl", "false");
+                jQuery(".url-error").html(data.error).show();
+                jQuery("#inprogress_img").hide();
+
+              }
+
+            },
+            error: function (xhr, type, exception) {
+
+            }
+          });
+        }
+
+      });
+    </script>
+
+    <% include ./partials/footer %>
+
+    <% include ./partials/sticky-sidebar-deps %>
+    <% include ./partials/autolikes-banner-script %>
+
+  </body>
+
+</html>

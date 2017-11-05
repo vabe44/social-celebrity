@@ -1,0 +1,89 @@
+<% include ../partials/header %>
+
+<div id="container-bg">
+
+	<div id="container2">
+
+		<% include ../partials/twitter/header %>
+
+		<div id="pricing-code" class="pricing-code" style="margin-top: 26px;">
+				<form class="order" role="form" action="" method="post">
+					<div class="form-section">
+						<h3>USA Twitter Followers: <span class="quantity">2,500</span> <span class="align-right price-container"><span class="price">$180</span> <span class="discount">(40% discount)</span></span></h3>
+						<input class="quantity" type="hidden" name="data[quantity]" value="2500">
+						<div class="quantity-slider recurringfix ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><div class="ui-slider-range ui-widget-header ui-corner-all ui-slider-range-min"></div><span class="ui-slider-handle ui-state-default ui-corner-all" tabindex="0"></span></div>
+					</div>
+					<div class="form-section">
+						<h3>Twitter Profile URL</h3>
+						<input type="text" name="data[url]" placeholder="Enter your Twitter profile link" value="">
+					</div>
+					<% include ../partials/form-payment %>
+				</form>
+		</div><!-- pricing code -->
+
+		<% include ../partials/partners %>
+
+		<div id="home-divider"></div>
+
+		<div id="faq-spacer"></div>
+
+			 <div id="leftpage">
+
+		     	<div id="faqbox">
+		     		<h3>Will all of these followers be from the United States?</h3>
+		     		<p>The large majority of the followers we build for you will be from the United States, often 95-99% of them. However, you may get a few followers that aren't from the United States, but these are out of our control.</p>
+		     	</div>
+
+		     	<div id="faqbox">
+		     		<h3>Do you target to other countries or just the United States?</h3>
+		     		<p>Currently we only target our Twitter services to a Worldwide audience and a United States audience; we don't support other countries at this time.</p>
+		     	</div>
+
+		     	<div id="faqbox">
+		     		<h3>How long do these take to come in?</h3>
+		     		<p>You'll start receiving followers within 24 hours. Typically our orders are complete within 1-3 weeks; smaller orders will complete much faster than larger orders. We aim to make all of our campaigns as natural and organic looking as possible.
+		     		</p>
+		     	</div>
+
+		     	<div id="faqbox">
+		     		<h3>How do these compare to other Twitter followers service?</h3>
+		     		<p>Not only do our Twitter followers last longer, but they are higher quality, especially our USA Twitter followers service. The Twitter profiles are real humans with complete profiles and are active and use Twitter regularly.
+		     		</p>
+		     	</div>
+
+	     </div>
+
+		 <div id="rightpage">
+				<% include ../partials/scrolling-sidebar %>
+			</div>
+		</div>
+		<!-- container2 -->
+
+</div><!-- container bg -->
+
+<% include ../partials/footer %>
+
+<!-- FORM SLIDER -->
+<% include ../partials/pricing-slider-deps %>
+<script type="text/javascript">
+    var sliderValues = [1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650, 1700, 1750, 1800, 1850, 1900, 1950, 2000, 2050, 2100, 2150, 2200, 2250, 2300, 2350, 2400, 2450, 2500, 2550, 2600, 2650, 2700, 2750, 2800, 2850, 2900, 2950, 3000, 3050, 3100, 3150, 3200, 3250, 3300, 3350, 3400, 3450, 3500, 3550, 3600, 3650, 3700, 3750, 3800, 3850, 3900, 3950, 4000, 4050, 4100, 4150, 4200, 4250, 4300, 4350, 4400, 4450, 4500, 4550, 4600, 4650, 4700, 4750, 4800, 4850, 4900, 4950, 5000, 5500, 6000, 6500, 7000, 7500, 8000, 8500, 9000, 9500, 10000, 20000, 30000, 40000, 50000, 60000, 70000, 80000, 90000, 100000, 110000, 120000, 130000, 140000, 150000, 160000, 170000, 180000, 190000, 200000, 210000, 220000, 230000, 240000, 250000, 260000, 270000, 280000, 290000, 300000, 310000, 320000, 330000, 340000, 350000, 360000, 370000, 380000, 390000, 400000, 410000, 420000, 430000, 440000, 450000, 460000, 470000, 480000, 490000, 500000];
+    var discountValues = [ {quantity: 250, discount: 0.02}, {quantity: 1000, discount: 0.35}, {quantity: 2500, discount: 0.4}, {quantity: 5000, discount: 0.45}, {quantity: 10000, discount: 0.58}, {quantity: 25000, discount: 0.75}, {quantity: 50000, discount: 0.78}, {quantity: 100000, discount: 0.84}, {quantity: 250000, discount: 0.87}, {quantity: 500000, discount: 0.88}, {quantity: 1000000, discount: 0.9}];
+    var defaultQuantity = 30;
+    var price = 0.12;
+
+    var itemName = "USA Twitter Followers";
+    var itemDescription = "Followers";
+    var category = "twitter";
+    SLIDER.init([sliderValues, discountValues, defaultQuantity, price, itemName, itemDescription, category]);
+    SLIDER.create();
+</script>
+
+<% include ../partials/payment-radio-controller %>
+<% include ../partials/stripe-checkout %>
+<% include ../partials/braintree-checkout %>
+
+<% include ../partials/sticky-sidebar-deps %>
+<% include ../partials/autolikes-banner-script %>
+
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!-- STRIPE  -->
+<script src="https://checkout.stripe.com/checkout.js"></script>
+<script type="text/javascript">
+
+    var handler = StripeCheckout.configure({
+        key: '<%= stripeKeyPublishable %>',
+        image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
+        locale: 'auto',
+        billingAddress: false,
+        shippingAddress: false,
+        zipCode: false,
+        bitcoin: true,
+        token: function handleToken(token) {
+
+            token.PAYINTERVAL = $('input[name="interval-radio"]:checked').val();
+            token.PAYAMOUNT = Number(document.getElementsByName("data[total]")[0].value) * 100;
+            token.PAYITEM = itemName;
+            token.PAYQUANTITY = document.getElementsByName("data[quantity]")[0].value;
+            token.PAYURL = document.getElementsByName("data[url]")[0].value;
+            token.PAYDESCRIPTION = document.getElementsByName("data[quantity]")[0].value + " " + itemName + ": " + document.getElementsByName("data[url]")[0].value;
+
+            fetch("/payments/charge", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(token)
+            })
+            .then(output => {
+                if (output.status === 200) {
+                    window.location.href = "/success";
+                } else {
+                    alert('An error occured. Please try again.');
+                }
+            });
+        }
+    });
+
+    var handlerMonthly = StripeCheckout.configure({
+        key: '<%= stripeKeyPublishable %>',
+        image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
+        locale: 'auto',
+        billingAddress: false,
+        shippingAddress: false,
+        zipCode: false,
+        token: function handleToken(token) {
+
+            token.PAYINTERVAL = $('input[name="interval-radio"]:checked').val();
+            token.PAYAMOUNT = Number(document.getElementsByName("data[total]")[0].value) * 100;
+            token.PAYITEM = itemName;
+            token.PAYQUANTITY = document.getElementsByName("data[quantity]")[0].value;
+            token.PAYURL = document.getElementsByName("data[url]")[0].value;
+            token.PAYDESCRIPTION = document.getElementsByName("data[quantity]")[0].value + " " + itemName + ": " + document.getElementsByName("data[url]")[0].value;
+
+            fetch("/payments/charge", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(token)
+            })
+            .then(output => {
+                if (output.status === 200) {
+                    window.location.href = "/success";
+                } else {
+                    alert('An error occured. Please try again.');
+                }
+            });
+        }
+    });
+
+    document.getElementsByClassName("stage-cta2 place-order right")[0].addEventListener('click', function (e) {
+        // Open Checkout with further options:
+        if(document.getElementById('p1').checked && document.getElementById('i2').checked) {
+            handlerMonthly.open({
+                name: itemName,
+                description: document.getElementsByName("data[quantity]")[0].value + " " + itemDescription + " (monthly): " + document.getElementsByName("data[url]")[0].value,
+                amount: Number(document.getElementsByName("data[total]")[0].value) * 90
+            });
+            e.preventDefault();
+        }
+
+        if(document.getElementById('i1').checked && !document.getElementById('p2').checked) {
+            handler.open({
+                name: itemName,
+                description: document.getElementsByName("data[quantity]")[0].value + " " + itemDescription + ": " + document.getElementsByName("data[url]")[0].value,
+                amount: Number(document.getElementsByName("data[total]")[0].value) * 100
+            });
+            e.preventDefault();
+        }
+
+    });
+
+    // Close Checkout on page navigation:
+    window.addEventListener('popstate', function () {
+        handler.close();
+    });
+</script>

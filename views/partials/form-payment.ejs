@@ -1,0 +1,35 @@
+<div class="form-section">
+    <h3>Select Payment Method</h3>
+    <div id="radios" class="payment">
+        <div class="payment-container select-payment">
+            <input type="radio" name="payment-radio" id="p1" value="card" checked="checked">
+            <label for="p1" class="payment-logo">Card</label>
+            <input type="radio" name="payment-radio" id="p2" value="paypal">
+            <label for="p2" class="payment-logo">PayPal</label>
+            <input type="radio" name="payment-radio" id="p3" value="bitcoin">
+            <label for="p3" class="payment-logo">Bitcoin</label>
+        </div>
+    </div>
+    <div id="radios" class="payment interval-container">
+        <div class="payment-container select-interval">
+            <input type="radio" name="interval-radio" id="i1" value="onetime" checked="checked">
+            <label for="i1" class="payment-logo">One-Time Order</label>
+            <input type="radio" name="interval-radio" id="i2" value="monthly">
+            <!-- <input type="checkbox" name="interval-radio" id="i2" value="recurring"> -->
+            <label id="monthly-label" for="i2" class="payment-logo">Monthly Recurring
+                <span class="monthly-bonus">
+                    <img src="/img/payment/award.png"> Bonus Follows + 10% Discount</span>
+            </label>
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>
+<div class="form-section clear" style="border-bottom: 0;">
+    <input class="total" name="data[total]" type="hidden" value="60">
+    <p class="delivery">If you have delivery time requirements, please email us after placing your order. By placing your order, you agree to
+        the Social-Celebrity.com
+        <a href="/terms" target="_blank">terms of service</a>.</p>
+    <a id="place-order-button" class="stage-cta2 place-order right" href="javascript:void(0)">Place Order</a>
+    <div id="paypal-button" hidden></div>
+    <div class="total-text right"></div>
+</div>

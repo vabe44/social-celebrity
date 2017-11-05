@@ -1,0 +1,83 @@
+<% include ../partials/header %>
+
+<div id="container-bg">
+
+	<div id="container2">
+
+		<% include ../partials/facebook/header %>
+
+		<div id="pricing-code" class="pricing-code" style="margin-top: 26px;">
+				<form class="order" role="form" action="" method="post">
+					<div class="form-section">
+						<h3 id="productSummary">Facebook Profile Follows: <span class="quantity">1,000</span> <span class="align-right price-container"><span class="price">$60</span> <span class="discount">(50% discount)</span></span></h3>
+						<input class="quantity" type="hidden" name="data[quantity]" value="2500">
+						<div class="quantity-slider recurringfix ui-slider ui-slider-horizontal ui-widget ui-widget-content ui-corner-all"><div class="ui-slider-range ui-widget-header ui-corner-all ui-slider-range-min"></div><span class="ui-slider-handle ui-state-default ui-corner-all" tabindex="0"></span></div>
+					</div>
+					<div class="form-section">
+						<h3>Facebook Profile URL</h3>
+						<input type="text" name="data[url]" placeholder="Enter your Facebook profile link" value="">
+					</div>
+					<% include ../partials/form-payment %>
+				</form>
+		</div><!-- pricing code -->
+
+		<% include ../partials/partners %>
+
+		<div id="home-divider"></div>
+
+		<div id="faq-spacer"></div>
+
+			 <div id="leftpage">
+
+		     	<div id="faqbox">
+		     		<h3>What are Facebook follows?</h3>
+		     		<p>Facebook follows are specifically for people with personal Facebook profiles that have the follow button enabled. You can't buy Facebook follows for a Facebook fan page. If you're unsure what kind of page you have, you can reach out to us through our contact form and we'll help you out.</p>
+		     	</div>
+
+		     	<div id="faqbox">
+		     		<h3>How do I enable the follow feature on my Facebook profile?</h3>
+		     		<p>Here's the official Facebook page to enable the "Follow" feature on your profile: <a href = "https://www.facebook.com/about/follow">https://www.facebook.com/about/follow</a></p>
+		     	</div>
+
+		     	<div id="faqbox">
+		     		<h3>What happens after somebody becomes a follower of my profile?</h3>
+		     		<p>Facebook follows are extremely useful. Any time you post something to your profile, each of your followers are immediately notified about your latest post. This makes follows arguably more valuable than Facebook likes, as when somebody has "liked" your page, they don't necessarily always see the content you post.
+		     		</p>
+		     	</div>
+
+	     </div>
+
+		 <div id="rightpage">
+			<% include ../partials/scrolling-sidebar %>
+		</div>
+	</div>
+	<!-- container2 -->
+
+  </div><!-- container bg -->
+
+<% include ../partials/footer %>
+
+<!-- FORM SLIDER -->
+<% include ../partials/pricing-slider-deps %>
+<script type="text/javascript">
+    var sliderValues = [250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650, 1700, 1750, 1800, 1850, 1900, 1950, 2000, 2050, 2100, 2150, 2200, 2250, 2300, 2350, 2400, 2450, 2500];
+    var discountValues = [ {quantity: 250, discount: 0.25}, {quantity: 1000, discount: 0.5}, {quantity: 2500, discount: 0.55}, {quantity: 5000, discount: 0.12}, {quantity: 10000, discount: 0.15}, {quantity: 25000, discount: 0.75}, {quantity: 50000, discount: 0.78}, {quantity: 100000, discount: 0.84}, {quantity: 250000, discount: 0.87}, {quantity: 500000, discount: 0.88}, {quantity: 1000000, discount: 0.9}];
+    var defaultQuantity = 15;
+    var price = 0.12;
+
+    var itemName = "Facebook Follows";
+    var itemDescription = "Follows";
+    var category = "facebook";
+    SLIDER.init([sliderValues, discountValues, defaultQuantity, price, itemName, itemDescription, category]);
+    SLIDER.create();
+</script>
+
+<% include ../partials/payment-radio-controller %>
+<% include ../partials/stripe-checkout %>
+<% include ../partials/braintree-checkout %>
+
+<% include ../partials/sticky-sidebar-deps %>
+<% include ../partials/autolikes-banner-script %>
+
+</body>
+</html>
