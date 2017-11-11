@@ -9,6 +9,11 @@
         <h2>Dashboard</h2>
         <h5>Hurray! you are logged in.</h5>
 
+        <% if(currentUser.stripe_user_id !== null) { %>
+            Connected to Stripe: <%= currentUser.stripe_user_id %>
+        <% } else { %>
+            <a href="<%= redirectUri %>">Connect to Stripe</a>
+        <% } %>
     </body>
 
 </html>

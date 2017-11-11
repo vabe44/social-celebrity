@@ -30,13 +30,19 @@ app.use(express.static(path.join(__dirname, '/app/public')));
 var models = require("./app/models");
 
 // Load passport strategies
-require('./app/config/passport/passport.js')(passport, models.user);
+require('./app/config/passport/passport.js')(passport, models.User);
 
 // Sync Database
 models.sequelize.sync().then(function() {
    console.log('Nice! Database looks fine')
 }).catch(function(err) {
    console.log(err, "Something went wrong with the Database Update!")
+});
+
+// Current User Local
+app.use(function(req, res, next){
+  res.locals.currentUser = req.user;
+  next();
 });
 
 // Routes

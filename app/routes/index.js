@@ -1,5 +1,19 @@
 var express = require('express');
 var router = express.Router();
+const stripe = require("stripe")(process.env.STRIPE_SECRETKEY);
+var OAuth = require('client-oauth2');
+var models = require("../models");
+
+// Configure the OAuth 2.0 Client
+var oauth = new OAuth({
+  clientId: process.env.STRIPE_CLIENTID,
+  clientSecret: process.env.STRIPE_SECRETKEY,
+  scopes: ['read_write'],
+  redirectUri: process.env.STRIPE_REDIRECTURI,
+  authorizationUri: 'https://connect.stripe.com/oauth/authorize',
+  accessTokenUri: 'https://connect.stripe.com/oauth/token'
+});
+
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -85,6 +99,38 @@ router.get('/success', function(req, res, next) {
     description: "",
     page: req.path
   });
+});
+
+/* GET purchase success page. */
+router.get('/connected', function(req, res, next) {
+  if (req.query.error) return response.render('connected', {
+    error: req.query.error
+  });
+
+  // Use the Authorization Code to get a Token
+  oauth.code.getToken(req.url).then(handleToken);
+
+  // Go fetch the Account from the Token
+  function handleToken(token) {
+    stripe.account.retrieve(token.data.stripe_user_id, onAccount);
+  }
+
+  // Render the Account information
+  function onAccount(error, account) {
+
+    models.User.findById(req.user.id)
+      .then(user => {
+        user.update({
+          stripe_user_id: account.id,
+        })
+        .then(() => {
+          res.render('connected', {
+            error: error,
+            account: account
+          });
+        });
+      });
+  }
 });
 
 module.exports = router;
