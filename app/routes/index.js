@@ -101,7 +101,7 @@ router.get('/success', function(req, res, next) {
   });
 });
 
-/* GET purchase success page. */
+/* GET - Stripe Connect Redirect URI page */
 router.get('/connected', function(req, res, next) {
   if (req.query.error) return response.render('connected', {
     error: req.query.error
