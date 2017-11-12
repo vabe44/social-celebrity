@@ -1,0 +1,16 @@
+<h1>Verify @<%= account.screen_name %> Account</h1>
+
+<img src="<%= account.profile_image_url_https %>" alt="">
+
+<h2>@<%= account.screen_name %></h2>
+<p><strong><%= account.followers_count %></strong> followers</p>
+
+<p>Please verify this account by placing “<%= twitterVerificationCode %>” in your twitter bio section, then click Verify.</p>
+
+<form id="verifytwitteraccount" name="verifytwitteraccount" method="post" action="/dashboard/accounts/verify/twitter/<%= account.screen_name %>">
+    <input class="text" name="user_id" type="text" value="<%= currentUser.id %>" hidden />
+    <input class="text" name="verification_code" type="text" value="<%= twitterVerificationCode %>" hidden />
+    <button>Verify</button>
+</form>
+
+<button>Cancel</button>

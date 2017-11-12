@@ -1,0 +1,28 @@
+<h1>Accounts</h1>
+
+Adding accounts is for influencers only, you do not need to add an account to buy shoutouts or tweets.
+
+<h2>Instagram</h2>
+<a href="/dashboard/accounts/add/instagram">Add New Instagram Account</a>
+
+<p>Your linked accounts:</p>
+
+
+
+<h2>Twitter</h2>
+<a href="/dashboard/accounts/add/twitter">Add New Twitter Account</a>
+
+<p>Your linked accounts:</p>
+<% if(twitterAccounts) { %>
+<ul>
+    <% twitterAccounts.forEach(function(twitter){ %>
+        <li>
+            <form id="delete-form" action="/dashboard/accounts/remove/twitter/<%= twitter.username %>?_method=DELETE" method="POST">
+                <%= twitter.username %> - <input type="submit" value="Remove">
+            </form>
+        </li>
+    <% }); %>
+</ul>
+<% }  else { %>
+You have no linked accounts.
+<% } %>

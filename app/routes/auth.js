@@ -17,12 +17,5 @@ module.exports = function(app, passport) {
     ));
 
     app.get('/logout', authController.logout);
-    app.get('/dashboard', isLoggedIn, authController.dashboard);
-
-    function isLoggedIn(req, res, next) {
-        if (req.isAuthenticated())
-            return next();
-        res.redirect('/login');
-    }
 
 }

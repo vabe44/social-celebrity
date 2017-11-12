@@ -9,12 +9,14 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var methodOverride = require("method-override");
 // app.use(logger('dev'));
 
 // For BodyParser
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.use(methodOverride("_method"));
 
 // For Passport
 app.use(session({ secret: process.env.PASSPORT_SECRET, resave: true, saveUninitialized:true})); // session secret
@@ -53,6 +55,7 @@ var instagramRoute = require('./app/routes/instagram');
 var twitterRoute = require('./app/routes/twitter');
 var youtubeRoute = require('./app/routes/youtube');
 var paymentsRoute = require('./app/routes/payments');
+var dashboardRoute = require('./app/routes/dashboard');
 
 app.use('/', indexRoute);
 app.use('/facebook', facebookRoute);
@@ -60,6 +63,8 @@ app.use('/instagram', instagramRoute);
 app.use('/twitter', twitterRoute);
 app.use('/youtube', youtubeRoute);
 app.use('/payments', paymentsRoute);
+app.use('/dashboard', dashboardRoute);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
