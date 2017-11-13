@@ -1,7 +1,7 @@
 /* jshint indent: 2 */
 
 module.exports = function (sequelize, DataTypes) {
-    return sequelize.define('TwitterAccounts', {
+    return sequelize.define('TwitterAccount', {
         id: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -26,7 +26,9 @@ module.exports = function (sequelize, DataTypes) {
             underscored: true,
             classMethods: {
                 associate: function (models) {
-                    models.TwitterAccounts.belongsTo(models.User);
+                    models.TwitterAccount.belongsTo(models.User);
+                    models.TwitterAccount.belongsTo(models.InfluencerType);
+                    models.TwitterAccount.belongsTo(models.ShoutoutCategory);
                 }
             }
     });

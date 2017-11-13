@@ -33,7 +33,7 @@ router.get('/', middlewares.isLoggedIn, function (req, res, next) {
 /* GET accounts page. */
 router.get('/accounts', middlewares.isLoggedIn, function (req, res, next) {
 
-    models.TwitterAccounts
+    models.TwitterAccount
     .findAll({
         where: {
             user_id: res.locals.currentUser.id,
@@ -82,7 +82,7 @@ router.get('/accounts/verify/twitter/:screen_name', middlewares.isLoggedIn, func
     req.session.twitterVerificationCode = req.session.twitterVerificationCode || cryptoRandomString(10);
 
     // find or create twitteraccount entry with user id and twitter username
-    models.TwitterAccounts
+    models.TwitterAccount
     .findOrCreate({
         where: {
             username: req.params.screen_name,
@@ -133,7 +133,7 @@ router.post('/accounts/verify/twitter/:screen_name/', middlewares.isLoggedIn, fu
         .then(user => {
 
             // get verification code from DB
-            models.TwitterAccounts
+            models.TwitterAccount
             .findOne({
                 where: {
                     username: req.params.screen_name,
@@ -175,7 +175,7 @@ router.post('/accounts/verify/twitter/:screen_name/', middlewares.isLoggedIn, fu
 /* DELETE twitter account */
 router.delete('/accounts/remove/twitter/:screen_name/', middlewares.isLoggedIn, function (req, res, next) {
 
-    models.TwitterAccounts
+    models.TwitterAccount
     .findOne({
         where: {
             username: req.params.screen_name,
@@ -195,5 +195,79 @@ router.delete('/accounts/remove/twitter/:screen_name/', middlewares.isLoggedIn, 
     });
 
 });
+
+/* GET account manage page. */
+router.get('/accounts/manage/twitter/:id', middlewares.isLoggedIn, function (req, res, next) {
+
+
+    var data = {};
+    models.TwitterAccount.findById(req.params.id)
+    .then(twitterAccount => {
+        data.twitter = twitterAccount;
+    })
+    .then(() => {
+        return models.ShoutoutCategory.findAll()
+    })
+    .then(categories => {
+        data.categories = categories;
+    })
+    .then(() => {
+        res.render('dashboard/accounts/manage', {
+            categories: data.categories,
+            twitter: data.twitter
+        });
+    })
+    .catch(error => {
+        console.log("Oops, something went wrong. " + error);
+    });
+
+});
+
+/* POST account manage page. */
+router.post('/accounts/manage/twitter/:id', middlewares.isLoggedIn, function (req, res, next) {
+
+    models.TwitterAccount.findById(req.params.id)
+    .then(twitterAccount => {
+        return twitterAccount.update({
+            shoutout_category_id: req.body.category
+        });
+    })
+    .then(() => {
+        res.redirect('back');
+    })
+    .catch(error => {
+        console.log("Oops, something went wrong. " + error);
+    });
+
+});
+
+/* GET shoutout categories page. */
+router.get('/admin/shoutout-categories/', middlewares.isLoggedIn, function (req, res, next) {
+
+    models.ShoutoutCategory
+    .findAll()
+    .then(categories => {
+        res.render('dashboard/admin/shoutout-categories/index', {
+            categories: categories
+        });
+    })
+    .catch(error => {
+        console.log("Oops, something went wrong. " + error);
+    });
+
+});
+
+/* GET shoutout categories page. */
+router.post('/admin/shoutout-categories/', middlewares.isLoggedIn, function (req, res, next) {
+
+    models.ShoutoutCategory
+    .create({ name: req.body.categoryname })
+    .then(category => {
+        res.redirect('back');
+    })
+    .catch(error => {
+        console.log("Oops, something went wrong. " + error);
+    });
+})
 
 module.exports = router;

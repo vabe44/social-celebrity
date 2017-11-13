@@ -4,22 +4,17 @@ Adding accounts is for influencers only, you do not need to add an account to bu
 
 <h2>Instagram</h2>
 <a href="/dashboard/accounts/add/instagram">Add New Instagram Account</a>
-
 <p>Your linked accounts:</p>
-
-
 
 <h2>Twitter</h2>
 <a href="/dashboard/accounts/add/twitter">Add New Twitter Account</a>
 
-<p>Your linked accounts:</p>
-<% if(twitterAccounts) { %>
+<p><strong>Your Linked Accounts:</strong></p>
+<% if(twitterAccounts.length > 0) { %>
 <ul>
     <% twitterAccounts.forEach(function(twitter){ %>
         <li>
-            <form id="delete-form" action="/dashboard/accounts/remove/twitter/<%= twitter.username %>?_method=DELETE" method="POST">
-                <%= twitter.username %> - <input type="submit" value="Remove">
-            </form>
+            <%= twitter.username %> - <a href="/dashboard/accounts/manage/twitter/<%= twitter.id %>"><button>Manage</button></a>
         </li>
     <% }); %>
 </ul>

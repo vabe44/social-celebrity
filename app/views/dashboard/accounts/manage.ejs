@@ -1,0 +1,20 @@
+<h1>Manage @<%= twitter.username %></h1>
+
+
+<p>Don't forget to set your account public!</p>
+
+<form id="managetwitteraccount" name="managetwitteraccount" method="post" action="/dashboard/accounts/manage/twitter/<%= twitter.id %>">
+
+    <label for="category">Category</label>
+    <select name="category"> <!--Supplement an id here instead of using 'name'-->
+        <% categories.forEach(function(category){ %>
+            <option <% if(category.id === twitter.shoutout_category_id) { %> selected <% } %> value="<%= category.id %>"><%= category.name %></option>
+        <% }); %>
+    </select>
+
+    <input class="btn" type="submit" value="Save" />
+</form>
+
+<form id="delete-form" action="/dashboard/accounts/remove/twitter/<%= twitter.username %>?_method=DELETE" method="POST">
+    <input type="submit" value="Remove Account">
+</form>

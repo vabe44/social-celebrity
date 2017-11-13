@@ -1,0 +1,20 @@
+<h1>Shoutout Categories</h1>
+
+<form id="add-shoutout-category" name="add-shoutout-category" method="post" action="/dashboard/admin/shoutout-categories">
+    <label for="categoryname">New Category</label>
+    <input class="text" name="categoryname" placeholder="Category Name" type="text" />
+    <input class="btn" type="submit" value="Add" />
+</form>
+
+<p><strong>Available categories:</strong></p>
+<% if(categories.length > 0) { %>
+<ul>
+    <% categories.forEach(function(category){ %>
+        <li>
+            <%= category.name %>
+        </li>
+    <% }); %>
+</ul>
+<% }  else { %>
+No categories added yet.
+<% } %>
