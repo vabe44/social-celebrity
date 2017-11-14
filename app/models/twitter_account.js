@@ -32,10 +32,10 @@ module.exports = function (sequelize, DataTypes) {
                 associate: function (models) {
                     models.TwitterAccount.belongsTo(models.User);
                     models.TwitterAccount.belongsTo(models.InfluencerType);
-                    models.TwitterAccount.belongsTo(models.ShoutoutCategory);
+                    models.TwitterAccount.belongsTo(models.Category);
                     models.TwitterAccount.belongsTo(models.Language);
                     models.TwitterAccount.belongsTo(models.Country);
-                    models.TwitterAccount.belongsTo(models.Ages);
+                    models.TwitterAccount.belongsTo(models.Age);
                     models.TwitterAccount.belongsTo(models.Sex);
                     models.TwitterAccount.belongsTo(models.Activity);
                 }

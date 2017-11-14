@@ -74,15 +74,6 @@ router.get('/privacy', function(req, res, next) {
   });
 });
 
-/* GET shoutouts page. */
-router.get('/shoutouts', function(req, res, next) {
-  res.render('shoutouts', {
-    title: "Shoutouts",
-    description: "Is this your first time buying followers for your profile? Our frequently asked questions page is regularly updated to answer the most common questions.",
-    page: req.path
-  });
-});
-
 /* GET terms page. */
 router.get('/terms', function(req, res, next) {
   res.render('terms', {

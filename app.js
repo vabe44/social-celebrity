@@ -56,6 +56,8 @@ var twitterRoute = require('./app/routes/twitter');
 var youtubeRoute = require('./app/routes/youtube');
 var paymentsRoute = require('./app/routes/payments');
 var dashboardRoute = require('./app/routes/dashboard');
+var shoutoutsRoute = require('./app/routes/shoutouts');
+var adminRoute = require('./app/routes/admin');
 
 app.use('/', indexRoute);
 app.use('/facebook', facebookRoute);
@@ -64,6 +66,8 @@ app.use('/twitter', twitterRoute);
 app.use('/youtube', youtubeRoute);
 app.use('/payments', paymentsRoute);
 app.use('/dashboard', dashboardRoute);
+app.use('/shoutouts', shoutoutsRoute);
+app.use('/admin', adminRoute);
 
 
 // catch 404 and forward to error handler

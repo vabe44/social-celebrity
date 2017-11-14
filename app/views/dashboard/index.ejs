@@ -9,6 +9,8 @@
         <h2>Dashboard</h2>
         <h5>Hurray! you are logged in.</h5>
 
+        <a href="/admin"><button>Admin</button></a>
+
         <p>
             <% if(currentUser.stripe_user_id !== null) { %>
                 Connected to Stripe: <%= currentUser.stripe_user_id %>
@@ -17,9 +19,7 @@
             <% } %>
         </p>
 
-        <a href="/dashboard/accounts"><button>Accounts</button></a>
-
-        <a href="/dashboard/admin"><button>Admin</button></a>
+        <a href="/dashboard/accounts"><button>My Accounts</button></a>
     </body>
 
 </html>
