@@ -1,7 +1,7 @@
 /* jshint indent: 2 */
 
 module.exports = function (sequelize, DataTypes) {
-    return sequelize.define('ShoutoutCategory', {
+    return sequelize.define('Sex', {
         id: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -13,7 +13,7 @@ module.exports = function (sequelize, DataTypes) {
             allowNull: true
         },
     }, {
-            tableName: 'shoutout_categories',
+            tableName: 'sexes',
             underscored: true
         });
 };

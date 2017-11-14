@@ -1,20 +1,47 @@
-<h1>Manage @<%= twitter.username %></h1>
+<h1>Manage @<%= data.twitter.username %></h1>
 
 
 <p>Don't forget to set your account public!</p>
 
-<form id="managetwitteraccount" name="managetwitteraccount" method="post" action="/dashboard/accounts/manage/twitter/<%= twitter.id %>">
+<form id="managetwitteraccount" name="managetwitteraccount" method="post" action="/dashboard/accounts/manage/twitter/<%= data.twitter.id %>">
 
     <label for="category">Category</label>
-    <select name="category"> <!--Supplement an id here instead of using 'name'-->
-        <% categories.forEach(function(category){ %>
-            <option <% if(category.id === twitter.shoutout_category_id) { %> selected <% } %> value="<%= category.id %>"><%= category.name %></option>
+    <select name="category">
+        <% data.categories.forEach(function(category){ %>
+            <option <% if(category.id === data.twitter.shoutout_category_id) { %> selected <% } %> value="<%= category.id %>"><%= category.name %></option>
+        <% }); %>
+    </select>
+
+    <br>
+
+    <label for="language">Language</label>
+    <select name="language">
+        <% data.languages.forEach(function(language){ %>
+            <option <% if(language.id === data.twitter.language_id) { %> selected <% } %> value="<%= language.id %>"><%= language.name %></option>
+        <% }); %>
+    </select>
+
+    <br>
+
+    <label for="country">Country</label>
+    <select name="country">
+        <% data.countries.forEach(function(country){ %>
+            <option <% if(country.id === data.twitter.country_id) { %> selected <% } %> value="<%= country.id %>"><%= country.name %></option>
+        <% }); %>
+    </select>
+
+    <br>
+
+    <label for="activity">Activity</label>
+    <select name="activity">
+        <% data.activities.forEach(function(activity){ %>
+            <option <% if(activity.id === data.twitter.activity_id) { %> selected <% } %> value="<%= activity.id %>"><%= activity.name %></option>
         <% }); %>
     </select>
 
     <input class="btn" type="submit" value="Save" />
 </form>
 
-<form id="delete-form" action="/dashboard/accounts/remove/twitter/<%= twitter.username %>?_method=DELETE" method="POST">
+<form id="delete-form" action="/dashboard/accounts/remove/twitter/<%= data.twitter.username %>?_method=DELETE" method="POST">
     <input type="submit" value="Remove Account">
 </form>

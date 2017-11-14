@@ -1,0 +1,20 @@
+<h1>Shoutout Sexes</h1>
+
+<form id="add-shoutout-sex" name="add-shoutout-sex" method="post" action="/dashboard/admin/shoutout/sexes">
+    <label for="sexname">New Sex</label>
+    <input class="text" name="sexname" placeholder="Sex Name" type="text" />
+    <input class="btn" type="submit" value="Add" />
+</form>
+
+<p><strong>Available sexes:</strong></p>
+<% if(sexes.length > 0) { %>
+<ul>
+    <% sexes.forEach(function(sex){ %>
+        <li>
+            <%= sex.name %>
+        </li>
+    <% }); %>
+</ul>
+<% }  else { %>
+No sexes added yet.
+<% } %>

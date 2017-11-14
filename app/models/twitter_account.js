@@ -12,6 +12,10 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.STRING,
             allowNull: false
         },
+        description: {
+            type: DataTypes.TEXT,
+            allowNull: true
+        },
         verification_code: {
             type: DataTypes.STRING,
             allowNull: true
@@ -29,6 +33,11 @@ module.exports = function (sequelize, DataTypes) {
                     models.TwitterAccount.belongsTo(models.User);
                     models.TwitterAccount.belongsTo(models.InfluencerType);
                     models.TwitterAccount.belongsTo(models.ShoutoutCategory);
+                    models.TwitterAccount.belongsTo(models.Language);
+                    models.TwitterAccount.belongsTo(models.Country);
+                    models.TwitterAccount.belongsTo(models.Ages);
+                    models.TwitterAccount.belongsTo(models.Sex);
+                    models.TwitterAccount.belongsTo(models.Activity);
                 }
             }
     });

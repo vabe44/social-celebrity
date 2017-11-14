@@ -1,0 +1,20 @@
+<h1>Shoutout Languages</h1>
+
+<form id="add-shoutout-language" name="add-shoutout-language" method="post" action="/dashboard/admin/shoutout/languages">
+    <label for="languagename">New Language</label>
+    <input class="text" name="languagename" placeholder="Language Name" type="text" />
+    <input class="btn" type="submit" value="Add" />
+</form>
+
+<p><strong>Available languages:</strong></p>
+<% if(languages.length > 0) { %>
+<ul>
+    <% languages.forEach(function(language){ %>
+        <li>
+            <%= language.name %>
+        </li>
+    <% }); %>
+</ul>
+<% }  else { %>
+No languages added yet.
+<% } %>

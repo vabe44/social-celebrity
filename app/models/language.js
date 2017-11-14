@@ -1,7 +1,7 @@
 /* jshint indent: 2 */
 
 module.exports = function (sequelize, DataTypes) {
-    return sequelize.define('SocialMedia', {
+    return sequelize.define('Language', {
         id: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -13,7 +13,7 @@ module.exports = function (sequelize, DataTypes) {
             allowNull: true
         },
     }, {
-            tableName: 'social_media',
+            tableName: 'languages',
             underscored: true
         });
 };

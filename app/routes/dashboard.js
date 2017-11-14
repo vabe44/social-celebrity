@@ -206,15 +206,32 @@ router.get('/accounts/manage/twitter/:id', middlewares.isLoggedIn, function (req
         data.twitter = twitterAccount;
     })
     .then(() => {
-        return models.ShoutoutCategory.findAll()
+        return models.Category.findAll()
     })
     .then(categories => {
         data.categories = categories;
     })
     .then(() => {
+        return models.Language.findAll()
+    })
+    .then(languages => {
+        data.languages = languages;
+    })
+    .then(() => {
+        return models.Country.findAll()
+    })
+    .then(countries => {
+        data.countries = countries;
+    })
+    .then(() => {
+        return models.Activity.findAll()
+    })
+    .then(activities => {
+        data.activities = activities;
+    })
+    .then(() => {
         res.render('dashboard/accounts/manage', {
-            categories: data.categories,
-            twitter: data.twitter
+            data: data
         });
     })
     .catch(error => {
@@ -241,13 +258,18 @@ router.post('/accounts/manage/twitter/:id', middlewares.isLoggedIn, function (re
 
 });
 
-/* GET shoutout categories page. */
-router.get('/admin/shoutout-categories/', middlewares.isLoggedIn, function (req, res, next) {
+/* GET admin index page. */
+router.get('/admin', middlewares.isLoggedIn, function (req, res, next) {
+    res.render('dashboard/admin/index');
+});
 
-    models.ShoutoutCategory
+/* GET shoutout categories page. */
+router.get('/admin/shoutout/categories/', middlewares.isLoggedIn, function (req, res, next) {
+
+    models.Category
     .findAll()
     .then(categories => {
-        res.render('dashboard/admin/shoutout-categories/index', {
+        res.render('dashboard/admin/shoutout/categories/index', {
             categories: categories
         });
     })
@@ -257,12 +279,157 @@ router.get('/admin/shoutout-categories/', middlewares.isLoggedIn, function (req,
 
 });
 
-/* GET shoutout categories page. */
-router.post('/admin/shoutout-categories/', middlewares.isLoggedIn, function (req, res, next) {
+/* POST shoutout categories page. */
+router.post('/admin/shoutout/categories/', middlewares.isLoggedIn, function (req, res, next) {
 
-    models.ShoutoutCategory
+    models.Category
     .create({ name: req.body.categoryname })
-    .then(category => {
+    .then(() => {
+        res.redirect('back');
+    })
+    .catch(error => {
+        console.log("Oops, something went wrong. " + error);
+    });
+})
+
+/* GET languages page. */
+router.get('/admin/shoutout/languages/', middlewares.isLoggedIn, function (req, res, next) {
+
+    models.Language
+    .findAll()
+    .then(languages => {
+        res.render('dashboard/admin/shoutout/languages/index', {
+            languages: languages
+        });
+    })
+    .catch(error => {
+        console.log("Oops, something went wrong. " + error);
+    });
+
+});
+
+/* POST languages page. */
+router.post('/admin/shoutout/categories/', middlewares.isLoggedIn, function (req, res, next) {
+
+    models.Language
+    .create({ name: req.body.languagename })
+    .then(() => {
+        res.redirect('back');
+    })
+    .catch(error => {
+        console.log("Oops, something went wrong. " + error);
+    });
+})
+
+/* GET countries page. */
+router.get('/admin/shoutout/countries/', middlewares.isLoggedIn, function (req, res, next) {
+
+    models.Country
+    .findAll()
+    .then(countries => {
+        res.render('dashboard/admin/shoutout/countries/index', {
+            countries: countries
+        });
+    })
+    .catch(error => {
+        console.log("Oops, something went wrong. " + error);
+    });
+
+});
+
+/* POST countries page. */
+router.post('/admin/shoutout/countries/', middlewares.isLoggedIn, function (req, res, next) {
+
+    models.Country
+    .create({ name: req.body.countryname })
+    .then(() => {
+        res.redirect('back');
+    })
+    .catch(error => {
+        console.log("Oops, something went wrong. " + error);
+    });
+})
+
+/* GET ages page. */
+router.get('/admin/shoutout/ages/', middlewares.isLoggedIn, function (req, res, next) {
+
+    models.Age
+    .findAll()
+    .then(ages => {
+        res.render('dashboard/admin/shoutout/ages/index', {
+            ages: ages
+        });
+    })
+    .catch(error => {
+        console.log("Oops, something went wrong. " + error);
+    });
+
+});
+
+/* POST ages page. */
+router.post('/admin/shoutout/ages/', middlewares.isLoggedIn, function (req, res, next) {
+
+    models.Age
+    .create({ name: req.body.agename })
+    .then(() => {
+        res.redirect('back');
+    })
+    .catch(error => {
+        console.log("Oops, something went wrong. " + error);
+    });
+})
+
+/* GET sexes page. */
+router.get('/admin/shoutout/sexes/', middlewares.isLoggedIn, function (req, res, next) {
+
+    models.Sex
+    .findAll()
+    .then(sexes => {
+        res.render('dashboard/admin/shoutout/sexes/index', {
+            sexes: sexes
+        });
+    })
+    .catch(error => {
+        console.log("Oops, something went wrong. " + error);
+    });
+
+});
+
+/* POST sexes page. */
+router.post('/admin/shoutout/sexes/', middlewares.isLoggedIn, function (req, res, next) {
+
+    models.Sex
+    .create({ name: req.body.sexname })
+    .then(() => {
+        res.redirect('back');
+    })
+    .catch(error => {
+        console.log("Oops, something went wrong. " + error);
+    });
+})
+
+/* GET activities page. */
+router.get('/admin/shoutout/activities/', middlewares.isLoggedIn, function (req, res, next) {
+
+    models.Activity
+    .findAll()
+    .then(activities => {
+        res.render('dashboard/admin/shoutout/activities/index', {
+            activities: activities
+        });
+    })
+    .catch(error => {
+        console.log("Oops, something went wrong. " + error);
+    });
+
+});
+
+/* POST activities page. */
+router.post('/admin/shoutout/activities/', middlewares.isLoggedIn, function (req, res, next) {
+
+    models.Activity
+    .create({ name: req.body.activityname })
+    .then(() => {
         res.redirect('back');
     })
     .catch(error => {
