@@ -46,7 +46,7 @@ app.use(function(req, res, next){
   res.locals.currentUser = req.user;
   next();
 });
-test
+
 // Routes
 var authRoute = require('./app/routes/auth.js')(app,passport);
 var indexRoute = require('./app/routes/index');
