@@ -13,7 +13,7 @@ module.exports = function (sequelize, DataTypes) {
             allowNull: true
         },
     }, {
-            tableName: 'shoutout_categories',
+            tableName: 'categories',
             underscored: true
         });
 };
