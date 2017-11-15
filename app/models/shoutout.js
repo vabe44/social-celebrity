@@ -8,8 +8,8 @@ module.exports = function (sequelize, DataTypes) {
             primaryKey: true,
             autoIncrement: true
         },
-        name: {
-            type: DataTypes.STRING,
+        description: {
+            type: DataTypes.TEXT,
             allowNull: true
         },
     }, {
@@ -21,5 +21,5 @@ module.exports = function (sequelize, DataTypes) {
                 models.Shoutout.belongsTo(models.TwitterAccount);
             }
         }
-});
+    });
 };

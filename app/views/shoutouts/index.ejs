@@ -1,3 +1,17 @@
 <h1>Buy shoutouts from Influencers</h1>
 
-Browse Instagram & Twitter influencers by category, followers and price
+<h3>Browse Instagram & Twitter influencers by category, followers and price</h3>
+
+<a href="/shoutouts/new"><button>Add Shoutout</button></a>
+
+<% if(shoutouts.length > 0) { %>
+<ul>
+    <% shoutouts.forEach(function(shoutout){ %>
+        <li>
+            <strong><%= shoutout.TwitterAccount.username %></strong> - <%= shoutout.description %> by <%= shoutout.User.email %>
+        </li>
+    <% }); %>
+</ul>
+<% }  else { %>
+<p>No shoutouts added yet.</p>
+<% } %>
