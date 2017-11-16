@@ -97,8 +97,14 @@ module.exports = function (passport, user) {
                         message: 'Incorrect password.'
                     });
                 }
-                var userinfo = user.get();
-                return done(null, userinfo);
+
+                user.update({
+                    last_login: Date.now()
+                })
+                .then(() => {
+                    var userinfo = user.get();
+                    return done(null, userinfo);
+                })
 
             }).catch(function (err) {
                 console.log("Error:", err);
