@@ -33,8 +33,7 @@ router.get('/', middlewares.isLoggedIn, function (req, res, next) {
 /* GET accounts page. */
 router.get('/accounts', middlewares.isLoggedIn, function (req, res, next) {
 
-    models.TwitterAccount
-    .findAll({
+    models.TwitterAccount.findAll({
         where: {
             user_id: res.locals.currentUser.id,
             verified: true

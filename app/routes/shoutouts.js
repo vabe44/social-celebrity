@@ -20,13 +20,14 @@ router.get('/', function (req, res, next) {
     });
 
 });
-
+ 
 /* POST shoutouts. */
 router.post('/', middlewares.isLoggedIn, function (req, res, next) {
 
     models.Shoutout
     .create({
         description: req.body.description,
+        price: req.body.price,
         user_id: res.locals.currentUser.id,
         twitter_account_id: req.body.account
     })
@@ -51,6 +52,27 @@ router.get('/new', middlewares.isLoggedIn, function (req, res, next) {
     .then(twitterAccounts => {
         res.render('shoutouts/new', {
             twitterAccounts: twitterAccounts
+        });
+    })
+    .catch(error => {
+        console.log("Oops, something went wrong. " + error);
+    });
+
+});
+
+/* GET show shoutout page. */
+router.get('/:id', function (req, res, next) {
+
+    models.Shoutout
+    .findOne({
+        where: {
+            id: req.params.id
+        },
+        include: [ models.TwitterAccount, models.User ]
+    })
+    .then(shoutout => {
+        res.render('shoutouts/show', {
+            shoutout: shoutout
         });
     })
     .catch(error => {

@@ -12,8 +12,7 @@ router.get('/likes', function (req, res, next) {
     title: "Buy YouTube Likes — Social-Celebrity.com",
     description: "If there's one thing we're experts in, it's helping businesses acquire quality YouTube likes. Here's everything you need to know before you buy.",
     page: req.baseUrl,
-    subpage: req.path,
-    stripeKeyPublishable: process.env.STRIPE_PUBLISHABLEKEY
+    subpage: req.path
   });
 });
 
@@ -23,8 +22,7 @@ router.get('/comments', function (req, res, next) {
     title: "Buy YouTube Comments — Social-Celebrity.com",
     description: "If there's one thing we're experts in, it's helping businesses acquire quality YouTube comments. Here's everything you need to know before you buy.",
     page: req.baseUrl,
-    subpage: req.path,
-    stripeKeyPublishable: process.env.STRIPE_PUBLISHABLEKEY
+    subpage: req.path
   });
 });
 
@@ -34,8 +32,7 @@ router.get('/subscribers', function (req, res, next) {
     title: "Buy YouTube Subscribers — Social-Celebrity.com",
     description: "If there's one thing we're experts in, it's helping businesses acquire quality YouTube subscribers. Here's everything you need to know before you buy.",
     page: req.baseUrl,
-    subpage: req.path,
-    stripeKeyPublishable: process.env.STRIPE_PUBLISHABLEKEY
+    subpage: req.path
   });
 });
 
@@ -45,8 +42,7 @@ router.get('/views', function (req, res, next) {
     title: "Buy YouTube Views — Social-Celebrity.com",
     description: "If there's one thing we're experts in, it's helping businesses acquire quality YouTube views. Here's everything you need to know before you buy.",
     page: req.baseUrl,
-    subpage: req.path,
-    stripeKeyPublishable: process.env.STRIPE_PUBLISHABLEKEY
+    subpage: req.path
   });
 });
 

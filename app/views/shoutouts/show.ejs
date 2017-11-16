@@ -1,0 +1,59 @@
+<h1>Buy shoutout from @<%= shoutout.TwitterAccount.username %></h1>
+
+<input name="shoutoutId" type="text" value="<%= shoutout.id %>" hidden>
+<input name="shoutoutPrice" type="number" value="<%= shoutout.price %>" hidden>
+<h3>Price: $<%= shoutout.price %></h3>
+
+<h3>Description:</h3>
+<p><%= shoutout.description %></p>
+
+<h3>Author:</h3>
+<strong><%= shoutout.User.email %></strong>
+<p>Member since: <%= shoutout.User.created_at %></p>
+
+<button id="buyButton">Buy</button>
+
+<!-- STRIPE  -->
+<script src="https://checkout.stripe.com/checkout.js"></script>
+<script type="text/javascript">
+
+    var handler = StripeCheckout.configure({
+        key: '<%= process.env.STRIPE_PUBLISHABLEKEY %>',
+        image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
+        locale: 'auto',
+        billingAddress: false,
+        shippingAddress: false,
+        zipCode: false,
+        bitcoin: true,
+        token: function handleToken(token) {
+
+            token.shoutoutId = document.getElementsByName("shoutoutId")[0].value;
+
+            fetch("/payments/shoutouts", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(token)
+            })
+            .then(output => {
+                console.log(Date.now());
+                console.log(`Output:`)
+                console.log(output);
+            });
+        }
+    });
+
+    document.getElementById("buyButton").addEventListener('click', function (e) {
+        // Open Checkout with further options:
+        handler.open({
+            name: "kaki",
+            description: "",
+            amount: Number(document.getElementsByName("shoutoutPrice")[0].value) * 100
+        });
+        e.preventDefault();
+    });
+
+    // Close Checkout on page navigation:
+    window.addEventListener('popstate', function () {
+        handler.close();
+    });
+</script>

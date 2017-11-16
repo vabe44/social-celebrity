@@ -12,6 +12,10 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.TEXT,
             allowNull: true
         },
+        price: {
+            type: DataTypes.DECIMAL,
+            allowNull: true
+        },
     }, {
         tableName: 'shoutouts',
         underscored: true,

@@ -1,6 +1,7 @@
 require('dotenv').config()
 const stripe = require("stripe")(process.env.STRIPE_SECRETKEY);
 var braintree = require("braintree");
+var models      = require("../models");
 
 var gateway = braintree.connect({
     environment:  braintree.Environment.Sandbox,
@@ -187,8 +188,66 @@ router.post("/webhook", function (request, response) {
     response.sendStatus(200);
     // Retrieve the request's body and parse it as JSON
     var event_json = request.body;
-    // console.log(event_json);
+    console.log(event_json);
     // Do something with event_json
+
+});
+
+/* POST route to buy shoutouts. */
+router.post("/shoutouts", function (req, res) {
+
+    models.Shoutout
+    .findOne({
+        where: {
+            id: req.body.shoutoutId
+        },
+        include: [ models.TwitterAccount, models.User ]
+    })
+    .then(shoutout => {
+
+        // bitcoin payment
+        if (req.body.object === "source") {
+            stripe.charges.create({
+                amount: shoutout.price * 100,
+                currency: "usd",
+                source: req.body.id,
+                destination: {
+                    amount: shoutout.price * 80,
+                    account: shoutout.User.stripe_user_id
+                }
+            }).then(charge => {
+                return charge;
+            });
+        }
+
+        // card payment
+        if (req.body.object === "token") {
+            stripe.customers.create({
+                email: req.body.email,
+                card: req.body.id
+            })
+            .then(customer => {
+                stripe.charges.create({
+                    amount: shoutout.price * 100,
+                    currency: "usd",
+                    customer: customer.id,
+                    destination: {
+                        amount: shoutout.price * 80,
+                        account: shoutout.User.stripe_user_id
+                    }
+                })
+                .then(charge => {
+                    return charge;
+                })
+            })
+        }
+    }).then(() => {
+        console.log('hello: ', Date.now());
+        res.send({isKaki: true});
+    })
+    .catch(error => {
+        console.log("Oops, something went wrong. " + error);
+    });
 
 });
 

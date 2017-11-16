@@ -3,7 +3,7 @@
 <script type="text/javascript">
 
     var handler = StripeCheckout.configure({
-        key: '<%= stripeKeyPublishable %>',
+        key: '<%= process.env.STRIPE_PUBLISHABLEKEY %>',
         image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
         locale: 'auto',
         billingAddress: false,
@@ -35,7 +35,7 @@
     });
 
     var handlerMonthly = StripeCheckout.configure({
-        key: '<%= stripeKeyPublishable %>',
+        key: '<%= process.env.STRIPE_PUBLISHABLEKEY %>',
         image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
         locale: 'auto',
         billingAddress: false,

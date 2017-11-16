@@ -12,8 +12,7 @@ router.get('/likes', function(req, res, next) {
     title: "Buy Facebook Likes — Social-Celebrity.com",
     description: "If there's one thing we're experts in, it's helping businesses acquire quality Facebook likes. Here's everything you need to know before you buy.",
     page: req.baseUrl,
-    subpage: req.path,
-    stripeKeyPublishable: process.env.STRIPE_PUBLISHABLEKEY
+    subpage: req.path
   });
 });
 
@@ -23,8 +22,7 @@ router.get('/followers', function(req, res, next) {
     title: "Buy Facebook Followers — Social-Celebrity.com",
     description: "If there's one thing we're experts in, it's helping businesses acquire quality Facebook followers. Here's everything you need to know before you buy.",
     page: req.baseUrl,
-    subpage: req.path,
-    stripeKeyPublishable: process.env.STRIPE_PUBLISHABLEKEY
+    subpage: req.path
   });
 });
 
@@ -34,8 +32,7 @@ router.get('/postlikes', function(req, res, next) {
     title: "Buy Facebook Postlikes — Social-Celebrity.com",
     description: "If there's one thing we're experts in, it's helping businesses acquire quality Facebook postlikes. Here's everything you need to know before you buy.",
     page: req.baseUrl,
-    subpage: req.path,
-    stripeKeyPublishable: process.env.STRIPE_PUBLISHABLEKEY
+    subpage: req.path
   });
 });
 
@@ -45,8 +42,7 @@ router.get('/ratings', function(req, res, next) {
     title: "Buy Facebook Ratings — Social-Celebrity.com",
     description: "If there's one thing we're experts in, it's helping businesses acquire quality Facebook ratings. Here's everything you need to know before you buy.",
     page: req.baseUrl,
-    subpage: req.path,
-    stripeKeyPublishable: process.env.STRIPE_PUBLISHABLEKEY
+    subpage: req.path
   });
 });
 
@@ -56,8 +52,7 @@ router.get('/shares', function(req, res, next) {
     title: "Buy Facebook Shares — Social-Celebrity.com",
     description: "If there's one thing we're experts in, it's helping businesses acquire quality Facebook shares. Here's everything you need to know before you buy.",
     page: req.baseUrl,
-    subpage: req.path,
-    stripeKeyPublishable: process.env.STRIPE_PUBLISHABLEKEY
+    subpage: req.path
   });
 });
 
@@ -67,8 +62,7 @@ router.get('/weblikes', function(req, res, next) {
     title: "Buy Facebook Weblikes — Social-Celebrity.com",
     description: "If there's one thing we're experts in, it's helping businesses acquire quality Facebook weblikes. Here's everything you need to know before you buy.",
     page: req.baseUrl,
-    subpage: req.path,
-    stripeKeyPublishable: process.env.STRIPE_PUBLISHABLEKEY
+    subpage: req.path
   });
 });
 

@@ -12,8 +12,7 @@ router.get('/followers', function (req, res, next) {
         title: "Buy Instagram Followers — Social-Celebrity.com",
         description: "If there's one thing we're experts in, it's helping businesses acquire quality Instagram followers. Here's everything you need to know before you buy.",
         page: req.baseUrl,
-        subpage: req.path,
-        stripeKeyPublishable: process.env.STRIPE_PUBLISHABLEKEY
+        subpage: req.path
     });
 });
 
@@ -23,8 +22,7 @@ router.get('/comments', function (req, res, next) {
         title: "Buy Instagram Comments — Social-Celebrity.com",
         description: "If there's one thing we're experts in, it's helping businesses acquire quality Instagram comments. Here's everything you need to know before you buy.",
         page: req.baseUrl,
-        subpage: req.path,
-        stripeKeyPublishable: process.env.STRIPE_PUBLISHABLEKEY
+        subpage: req.path
     });
 });
 
@@ -34,8 +32,7 @@ router.get('/likes', function (req, res, next) {
         title: "Buy Instagram Likes — Social-Celebrity.com",
         description: "If there's one thing we're experts in, it's helping businesses acquire quality Instagram likes. Here's everything you need to know before you buy.",
         page: req.baseUrl,
-        subpage: req.path,
-        stripeKeyPublishable: process.env.STRIPE_PUBLISHABLEKEY
+        subpage: req.path
     });
 });
 

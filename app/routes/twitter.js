@@ -12,8 +12,7 @@ router.get('/followers', function (req, res, next) {
         title: "Buy Twitter Followers — Social-Celebrity.com",
         description: "If there's one thing we're experts in, it's helping businesses acquire quality Twitter followers. Here's everything you need to know before you buy.",
         page: req.baseUrl,
-        subpage: req.path,
-        stripeKeyPublishable: process.env.STRIPE_PUBLISHABLEKEY
+        subpage: req.path
     });
 });
 
@@ -25,8 +24,7 @@ router.get('/followers/usa', function (req, res, next) {
         title: "Buy Twitter USA Followers — Social-Celebrity.com",
         description: "If there's one thing we're experts in, it's helping businesses acquire quality USA Twitter followers. Here's everything you need to know before you buy.",
         page: req.baseUrl,
-        subpage: req.path,
-        stripeKeyPublishable: process.env.STRIPE_PUBLISHABLEKEY
+        subpage: req.path
     });
 });
 
@@ -36,8 +34,7 @@ router.get('/likes', function (req, res, next) {
         title: "Buy Twitter Likes — Social-Celebrity.com",
         description: "If there's one thing we're experts in, it's helping businesses acquire quality Twitter likes. Here's everything you need to know before you buy.",
         page: req.baseUrl,
-        subpage: req.path,
-        stripeKeyPublishable: process.env.STRIPE_PUBLISHABLEKEY
+        subpage: req.path
     });
 });
 
@@ -47,8 +44,7 @@ router.get('/retweets', function (req, res, next) {
         title: "Buy Twitter Retweets — Social-Celebrity.com",
         description: "If there's one thing we're experts in, it's helping businesses acquire quality Twitter retweets. Here's everything you need to know before you buy.",
         page: req.baseUrl,
-        subpage: req.path,
-        stripeKeyPublishable: process.env.STRIPE_PUBLISHABLEKEY
+        subpage: req.path
     });
 });
 

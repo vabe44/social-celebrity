@@ -16,11 +16,15 @@
             <% if(currentUser.stripe_user_id !== null) { %>
                 Connected to Stripe: <%= currentUser.stripe_user_id %>
             <% } else { %>
-                <a href="<%= redirectUri %>">Connect to Stripe</a>
+                <a href="<%= redirectUri %>"><button>Connect to Stripe</button></a>
             <% } %>
         </p>
 
         <a href="/dashboard/accounts"><button>My Accounts</button></a>
+
+        <br><br>
+
+        <a href="/logout"><button>Sign out</button></a>
     </body>
 
 </html>
