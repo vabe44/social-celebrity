@@ -1,16 +1,55 @@
-<h1>Verify @<%= account.screen_name %> Account</h1>
+<% include ../../../partials/header %>
 
-<img src="<%= account.profile_image_url_https %>" alt="">
+<div id="container-bg">
 
-<h2>@<%= account.screen_name %></h2>
-<p><strong><%= account.followers_count %></strong> followers</p>
+	<div id="container2">
 
-<p>Please verify this account by placing “<%= twitterVerificationCode %>” in your twitter bio section, then click Verify.</p>
+        <% include ../../../partials/dashboard/nav %>
 
-<form id="verifytwitteraccount" name="verifytwitteraccount" method="post" action="/dashboard/accounts/verify/twitter/<%= account.screen_name %>">
-    <input class="text" name="user_id" type="text" value="<%= currentUser.id %>" hidden />
-    <input class="text" name="verification_code" type="text" value="<%= twitterVerificationCode %>" hidden />
-    <button>Verify</button>
-</form>
+        <div id="faq-spacer"></div>
 
-<button>Cancel</button>
+        <div class="content">
+                <div class="panel-header">
+                    <h2 class="text-center">Verify @<%= account.screen_name %> Account</h2>
+                </div>
+                <div class="panel-body">
+
+                    <div class="row">
+                        <div class="col-sm-1"></div>
+                        <div class="col-sm-10 text-center">
+
+                            <form class="form-horizontal" id="verifytwitteraccount" name="verifytwitteraccount" method="post" action="/dashboard/accounts/verify/twitter/<%= account.screen_name %>">
+                                <img style="width:150px;height: 150px;" src="<%= account.profile_image_url_https.replace('_normal.', '.') %>" class="img-circle">
+
+                                <h3>@<%= account.screen_name %></h3>
+
+                                <p><strong><%= account.followers_count %></strong> followers</p>
+                                    <div class="alert alert-warning" role="alert">
+                                        Please verify this account by placing “<%= twitterVerificationCode %>” in your twitter bio section, then click Verify.
+                                    </div>
+
+                                    <input class="text" name="user_id" type="text" value="<%= currentUser.id %>" hidden />
+                                    <input class="text" name="verification_code" type="text" value="<%= twitterVerificationCode %>" hidden />
+
+                                    <button class="btn btn-success">Verify</button>
+                                    <a href="/dashboard/accounts/add/twitter" class="btn btn-danger">Cancel</a>
+
+                            </form>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+
+	</div>
+	<!-- container2 -->
+
+  <% include ../../../partials/footer %>
+  <% include ../../../partials/sticky-sidebar-deps %>
+
+</body>
+</html>

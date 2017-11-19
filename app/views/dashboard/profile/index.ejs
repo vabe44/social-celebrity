@@ -1,0 +1,152 @@
+<% include ../../partials/header %>
+
+<div id="container-bg">
+
+	<div id="container2">
+
+        <% include ../../partials/dashboard/nav %>
+
+        <div id="faq-spacer"></div>
+
+        <div class="col-sm-12">
+
+            <h3 class="pagetitle">
+                Profile
+            </h3>
+
+            <p>
+                Manage your profile options on this page.
+            </p>
+
+        </div>
+
+        <br>
+
+        <div class="col-sm-12">
+
+            <div id="faqbox">
+
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-pills nav-justified" role="tablist" id="myTabs">
+                        <li role="presentation" class="active"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Profile Details</a></li>
+                        <li role="presentation"><a href="#password" aria-controls="password" role="tab" data-toggle="tab">Password Details</a></li>
+                        <li role="presentation"><a href="#payment" aria-controls="payment" role="tab" data-toggle="tab">Payment Details</a></li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+
+                        <div role="tabpanel" class="tab-pane active" id="profile">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="col-sm-12">
+
+                                        <br>
+
+                                        <form id="saveprofilesettings" name="saveprofilesettings" method="post" action="/dashboard/profile">
+
+                                            <div class="form-group">
+                                                <label for="username">Username</label>
+                                                <span class="form-control" name="username"><%= currentUser.username %></span>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="email">Email</label>
+                                                <span class="form-control" name="email"><%= currentUser.email %></span>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="registered">Date Registered</label>
+                                                <span class="form-control" name="registered"><%= currentUser.created_at.toDateString() %></span>
+                                            </div>
+
+                                            <button type="submit" class="btn btn-primary btn-block">Update</button>
+
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div role="tabpanel" class="tab-pane" id="password">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="col-sm-12">
+
+                                        <br>
+
+                                        <form id="savepasswordsettings" name="savepasswordsettings" method="post" action="/dashboard/profile">
+
+                                            <div class="form-group">
+                                                <label for="currentpassword">Current Password</label>
+                                                <input type="password" class="form-control" name="currentpassword" required>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="newpassword">New Password</label>
+                                                <input type="password" class="form-control" name="newpassword" required>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="confirmpassword">Confirm Password</label>
+                                                <input type="password" class="form-control" name="confirmpassword" required>
+                                            </div>
+
+                                            <button type="submit" class="btn btn-primary btn-block">Update</button>
+
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div role="tabpanel" class="tab-pane" id="payment">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="col-sm-12">
+
+                                        <br>
+
+                                        <p>Stripe details here</p>
+
+                                        <p>Stripe details here</p>
+
+                                        <p>Stripe details here</p>
+
+                                        <p>Stripe details here</p>
+
+                                        <p>Stripe details here</p>
+
+                                        <p>Stripe details here</p>
+
+                                        <p>Stripe details here</p>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                <br>
+
+            </div>
+
+        </div>
+
+	</div>
+	<!-- container2 -->
+
+    <script>
+    $('#myTabs a').click(function (e) {
+    e.preventDefault()
+    $(this).tab('show')
+    })
+    </script>
+
+    <% include ../../partials/footer %>
+
+</body>
+</html>

@@ -1,23 +1,103 @@
-<h1>Accounts</h1>
+<% include ../../partials/header %>
 
-Adding accounts is for influencers only, you do not need to add an account to buy shoutouts or tweets.
+<div id="container-bg">
 
-<h2>Instagram</h2>
-<a href="/dashboard/accounts/add/instagram"><button>Add Instagram Account</button></a>
-<p>Your linked accounts:</p>
+	<div id="container2">
 
-<h2>Twitter</h2>
-<a href="/dashboard/accounts/add/twitter"><button>Add Twitter Account</button></a>
+        <% include ../../partials/dashboard/nav %>
 
-<p><strong>Your Linked Accounts:</strong></p>
-<% if(twitterAccounts.length > 0) { %>
-<ul>
-    <% twitterAccounts.forEach(function(twitter){ %>
-        <li>
-            <%= twitter.username %> - <a href="/dashboard/accounts/manage/twitter/<%= twitter.id %>"><button>Manage</button></a>
-        </li>
-    <% }); %>
-</ul>
-<% }  else { %>
-You have no linked accounts.
-<% } %>
+		<div id="faq-spacer"></div>
+
+		<div id="leftpage">
+
+            <h3 class="pagetitle">Accounts</h3>
+
+            <p>
+                Adding accounts is for influencers only, you do not need to add an account to buy shoutouts or tweets.
+            </p>
+
+            <br>
+
+		     	<div id="faqbox">
+                    <h3>
+                        <strong>
+                            Instagram
+                        </strong>
+                         <a href="/dashboard/accounts/add/instagram">
+                            <span class="glyphicon glyphicon-plus pull-right" aria-hidden="true"></span>
+                        </a>
+                    </h3>
+
+                    <% if(typeof missingProperty !== 'undefined' && instagramAccounts.length > 0) { %>
+                    <div class="row">
+                        <div class="col-sm-12 clearfix">
+                            <div class="col-sm-12">
+                                <ul class="list-group">
+                                    <% instagramAccounts.forEach(function(instagram){ %>
+                                        <li class="list-group-item">
+                                            <strong>@<%= instagram.username %></strong>
+                                            <a href="/dashboard/accounts/manage/instagram/<%= instagram.id %>">
+                                                <span class="glyphicon glyphicon-wrench pull-right" aria-hidden="true"></span>
+                                            </a>
+                                        </li>
+                                    <% }); %>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <% }  else { %>
+                    <p>
+                        <br>
+                        You have no linked accounts.
+                    </p>
+                    <% } %>
+		     	</div>
+
+		     	<div id="faqbox">
+                    <h3>
+                        <strong>
+                            Twitter
+                        </strong>
+                         <a href="/dashboard/accounts/add/twitter">
+                            <span class="glyphicon glyphicon-plus pull-right" aria-hidden="true"></span>
+                        </a>
+                    </h3>
+                    <br>
+                    <% if(twitterAccounts.length > 0) { %>
+                    <div class="row">
+                        <div class="col-sm-12 clearfix">
+                            <div class="col-sm-12">
+                                <ul class="list-group">
+                                    <% twitterAccounts.forEach(function(twitter){ %>
+                                        <li class="list-group-item">
+                                            <strong>@<%= twitter.username %></strong>
+                                            <a href="/dashboard/accounts/manage/twitter/<%= twitter.id %>">
+                                                <span class="glyphicon glyphicon-wrench pull-right" aria-hidden="true"></span>
+                                            </a>
+                                        </li>
+                                    <% }); %>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <% }  else { %>
+                    <p class="page-p">
+                        <br>
+                        You have no linked accounts.
+                    </p>
+                    <% } %>
+		     	</div>
+            </div>
+
+            <div id="rightpage">
+                    <% include ../../partials/scrolling-sidebar %>
+            </div>
+
+	</div>
+	<!-- container2 -->
+
+  <% include ../../partials/footer %>
+  <% include ../../partials/sticky-sidebar-deps %>
+
+</body>
+</html>

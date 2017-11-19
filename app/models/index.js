@@ -7,6 +7,7 @@ var env = process.env.NODE_ENV || "development";
 var config = require(path.join(__dirname, '..', 'config', 'config.json'))[env];
 var sequelize = new Sequelize(config.database, config.username, config.password, config);
 var db = {};
+var bCrypt = require('bcrypt-nodejs');
 
 const CLASSMETHODS = 'classMethods';
 const ASSOCIATE = 'associate';
@@ -33,5 +34,13 @@ Object.keys(db).forEach(function (modelName) {
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
+
+db.User.prototype.comparePassword  = function(candidatePassword) {
+    return bCrypt.compareSync(candidatePassword, this.password);
+};
+
+db.User.prototype.generateHash = function (password) {
+    return bCrypt.hashSync(password, bCrypt.genSaltSync(8), null);
+};
 
 module.exports = db;

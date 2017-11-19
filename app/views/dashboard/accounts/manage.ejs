@@ -1,47 +1,138 @@
-<h1>Manage @<%= data.twitter.username %></h1>
+<% include ../../partials/header %>
+
+<div id="container-bg">
 
 
-<p>Don't forget to set your account public!</p>
+	<div id="container2">
 
-<form id="managetwitteraccount" name="managetwitteraccount" method="post" action="/dashboard/accounts/manage/twitter/<%= data.twitter.id %>">
+        <% include ../../partials/dashboard/nav %>
 
-    <label for="category">Category</label>
-    <select name="category">
-        <% data.categories.forEach(function(category){ %>
-            <option <% if(category.id === data.twitter.shoutout_category_id) { %> selected <% } %> value="<%= category.id %>"><%= category.name %></option>
-        <% }); %>
-    </select>
+        <div id="faq-spacer"></div>
 
-    <br>
+        <div id="leftpage">
 
-    <label for="language">Language</label>
-    <select name="language">
-        <% data.languages.forEach(function(language){ %>
-            <option <% if(language.id === data.twitter.language_id) { %> selected <% } %> value="<%= language.id %>"><%= language.name %></option>
-        <% }); %>
-    </select>
+        <h3 class="pagetitle">
+            @<%= data.twitter.username %>
+        </h3>
 
-    <br>
+        <p>
+            Manage your account options on this page.
+        </p>
 
-    <label for="country">Country</label>
-    <select name="country">
-        <% data.countries.forEach(function(country){ %>
-            <option <% if(country.id === data.twitter.country_id) { %> selected <% } %> value="<%= country.id %>"><%= country.name %></option>
-        <% }); %>
-    </select>
+        <br>
 
-    <br>
+            <div id="faqbox">
+                <h3>
 
-    <label for="activity">Activity</label>
-    <select name="activity">
-        <% data.activities.forEach(function(activity){ %>
-            <option <% if(activity.id === data.twitter.activity_id) { %> selected <% } %> value="<%= activity.id %>"><%= activity.name %></option>
-        <% }); %>
-    </select>
+                    <div class="row">
+                        <div class="col-sm-12 ">
+                            <div class="col-sm-11 pull-left">
 
-    <input class="btn" type="submit" value="Save" />
-</form>
+                                <strong>
+                                    Options
+                                </strong>
 
-<form id="delete-form" action="/dashboard/accounts/remove/twitter/<%= data.twitter.username %>?_method=DELETE" method="POST">
-    <input type="submit" value="Remove Account">
-</form>
+                            </div>
+
+                            <div class="col-sm-1">
+
+                                <form class="form-inline" id="delete-form" action="/dashboard/accounts/remove/twitter/<%= data.twitter.username %>?_method=DELETE" method="POST">
+                                    <button type="button" class="btn btn-link">
+                                        <span class="glyphicon glyphicon-trash pull-right" aria-hidden="true"></span>
+                                    </button>
+                                </form>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </h3>
+
+                <br>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="col-sm-12">
+
+                            <form id="managetwitteraccount" name="managetwitteraccount" method="post" action="/dashboard/accounts/manage/twitter/<%= data.twitter.id %>">
+
+                                <div class="form-group">
+                                    <label for="category">Category</label>
+                                    <select class="form-control" name="category">
+                                        <% data.categories.forEach(function(category){ %>
+                                            <option <% if(category.id === data.twitter.shoutout_category_id) { %> selected <% } %> value="<%= category.id %>"><%= category.name %></option>
+                                        <% }); %>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="language">Language</label>
+                                    <select class="form-control" name="language">
+                                        <% data.languages.forEach(function(language){ %>
+                                            <option <% if(language.id === data.twitter.language_id) { %> selected <% } %> value="<%= language.id %>"><%= language.name %></option>
+                                        <% }); %>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="country">Country</label>
+                                    <select class="form-control" name="country">
+                                        <% data.countries.forEach(function(country){ %>
+                                            <option <% if(country.id === data.twitter.country_id) { %> selected <% } %> value="<%= country.id %>"><%= country.name %></option>
+                                        <% }); %>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="age">Age</label>
+                                    <select class="form-control" name="age">
+                                        <% data.ages.forEach(function(Age){ %>
+                                            <option <% if(age.id === data.twitter.age_id) { %> selected <% } %> value="<%= age.id %>"><%= age.name %></option>
+                                        <% }); %>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="sex">Sex</label>
+                                    <select class="form-control" name="sex">
+                                        <% data.sexes.forEach(function(sex){ %>
+                                            <option <% if(sex.id === data.twitter.sex_id) { %> selected <% } %> value="<%= sex.id %>"><%= sex.name %></option>
+                                        <% }); %>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="activity">Activity</label>
+                                    <select class="form-control" name="activity">
+                                        <% data.activities.forEach(function(activity){ %>
+                                            <option <% if(activity.id === data.twitter.activity_id) { %> selected <% } %> value="<%= activity.id %>"><%= activity.name %></option>
+                                        <% }); %>
+                                    </select>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary btn-block">Save</button>
+
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div id="rightpage">
+                <% include ../../partials/scrolling-sidebar %>
+        </div>
+
+	</div>
+	<!-- container2 -->
+
+  <% include ../../partials/footer %>
+  <% include ../../partials/sticky-sidebar-deps %>
+
+</body>
+</html>

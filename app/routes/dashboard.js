@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var middlewares = require("../middlewares");
 var models      = require("../models");
+var assert = require('assert');
 var OAuth = require('client-oauth2');
 // Configure the OAuth 2.0 Client
 var oauth = new OAuth({
@@ -22,11 +23,16 @@ var twitter = new Twitter({
   });
 
 const cryptoRandomString = require('crypto-random-string');
+var bCrypt = require('bcrypt-nodejs');
 
 /* GET dashboard page. */
 router.get('/', middlewares.isLoggedIn, function (req, res, next) {
     res.render('dashboard/index', {
-        redirectUri: oauth.code.getUri()
+        redirectUri: oauth.code.getUri(),
+        title: "Accounts — Social-Celebrity.com",
+        description: "",
+        page: req.baseUrl,
+        subpage: req.path
     });
 });
 
@@ -41,7 +47,11 @@ router.get('/accounts', middlewares.isLoggedIn, function (req, res, next) {
     })
     .then(twitterAccounts => {
         res.render('dashboard/accounts/index', {
-            twitterAccounts: twitterAccounts
+            twitterAccounts: twitterAccounts,
+            title: "Accounts — Social-Celebrity.com",
+            description: "",
+            page: req.baseUrl,
+            subpage: req.path
         });
     })
     .catch(error => {
@@ -52,7 +62,12 @@ router.get('/accounts', middlewares.isLoggedIn, function (req, res, next) {
 
 /* GET add twitter account page. */
 router.get('/accounts/add/twitter', middlewares.isLoggedIn, function (req, res, next) {
-    res.render('dashboard/accounts/add/twitter');
+    res.render('dashboard/accounts/add/twitter', {
+        title: "Add Account — Social-Celebrity.com",
+        description: "",
+        page: req.baseUrl,
+        subpage: req.path
+    });
 });
 
 /* POST add twitter account page. */
@@ -113,7 +128,11 @@ router.get('/accounts/verify/twitter/:screen_name', middlewares.isLoggedIn, func
         if(account) {
             res.render('dashboard/accounts/verify/twitter', {
                 account: account,
-                twitterVerificationCode: req.session.twitterVerificationCode
+                twitterVerificationCode: req.session.twitterVerificationCode,
+                title: "Verify Account — Social-Celebrity.com",
+                description: "",
+                page: req.baseUrl,
+                subpage: req.path
             });
         }
     });
@@ -203,26 +222,26 @@ router.get('/accounts/manage/twitter/:id', middlewares.isLoggedIn, function (req
     models.TwitterAccount.findById(req.params.id)
     .then(twitterAccount => {
         data.twitter = twitterAccount;
-    })
-    .then(() => {
         return models.Category.findAll()
     })
     .then(categories => {
         data.categories = categories;
-    })
-    .then(() => {
         return models.Language.findAll()
     })
     .then(languages => {
         data.languages = languages;
-    })
-    .then(() => {
         return models.Country.findAll()
     })
     .then(countries => {
         data.countries = countries;
+        return models.Age.findAll()
     })
-    .then(() => {
+    .then(ages => {
+        data.ages = ages;
+        return models.Sex.findAll()
+    })
+    .then(sexes => {
+        data.sexes = sexes;
         return models.Activity.findAll()
     })
     .then(activities => {
@@ -230,7 +249,11 @@ router.get('/accounts/manage/twitter/:id', middlewares.isLoggedIn, function (req
     })
     .then(() => {
         res.render('dashboard/accounts/manage', {
-            data: data
+            data: data,
+            title: "Accounts — Social-Celebrity.com",
+            description: "",
+            page: req.baseUrl,
+            subpage: req.path
         });
     })
     .catch(error => {
@@ -246,6 +269,47 @@ router.post('/accounts/manage/twitter/:id', middlewares.isLoggedIn, function (re
     .then(twitterAccount => {
         return twitterAccount.update({
             shoutout_category_id: req.body.category
+        });
+    })
+    .then(() => {
+        res.redirect('back');
+    })
+    .catch(error => {
+        console.log("Oops, something went wrong. " + error);
+    });
+
+});
+
+/* GET profile page. */
+router.get('/profile', middlewares.isLoggedIn, function (req, res, next) {
+    res.render('dashboard/profile', {
+        title: "Profile — Social-Celebrity.com",
+        description: "",
+        page: req.baseUrl,
+        subpage: req.path
+    });
+});
+
+/* GET profile page. */
+router.post('/profile', middlewares.isLoggedIn, function (req, res, next) {
+
+    var currentPassword = req.body.currentpassword;
+    var newPassword = req.body.newpassword;
+    var confirmPassword = req.body.confirmpassword;
+
+    models.User.findById(res.locals.currentUser.id)
+    .then(user => {
+
+        if(!user.comparePassword(currentPassword)) {
+            throw new Error("Incorrect Password");
+        }
+
+        if(newPassword !== confirmPassword) {
+            throw new Error("Password confirmation failed");
+        }
+
+        return user.update({
+            password: user.generateHash(newPassword)
         });
     })
     .then(() => {

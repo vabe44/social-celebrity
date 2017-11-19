@@ -1119,7 +1119,7 @@ a.cta2:hover {
 	-moz-border-radius: 10px;
 	border-radius: 10px;
 	overflow:auto;
-	padding-bottom:80px;
+	padding-bottom:40px;
 	border-bottom:4px solid #dadee5;
     z-index:2;
     margin-bottom:25px;
@@ -1433,7 +1433,7 @@ a.cta2:hover {
 	margin-top:10px;
 }
 #faqbox {
-	width:605px;
+	width:auto;
 	min-height:207px;
 	height:auto;
 	background:#FFF;
@@ -1441,8 +1441,7 @@ a.cta2:hover {
 	-moz-border-radius: 10px;
 	border-radius: 10px;
 	border:1px solid #e5e7ea;
-	margin-bottom:30px;
-	padding-bottom:15px;
+	padding: 0px;
 }
 #scrollingsidebar2 {
 	width:293px;
