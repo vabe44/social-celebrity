@@ -1,34 +1,70 @@
-<div class="ui middle aligned center aligned grid">
-  <div class="column">
-    <h2 class="ui teal header">
-      <div class="content">
-        Log-in to your account
-      </div>
-    </h2>
-    <form class="ui large form" id="login" name="login" method="post" action="/login">
-      <div class="ui stacked segment">
-        <div class="field">
-          <div class="ui left icon input">
-            <i class="user icon"></i>
-            <input type="text" name="email" placeholder="E-mail address">
-          </div>
+<% include partials/header %>
+
+<div id="container-bg">
+
+	<div id="container2">
+
+        <div id="faq-spacer"></div>
+
+                <div class="content">
+
+                    <div class="col-xs-12">
+
+                        <h3 class="pagetitle">Login</h3>
+
+                        <p class="lead">
+                            Enter your email and password to log in.
+                        </p>
+
+                    </div>
+
+                    <div class="col-xs-12">&nbsp;</div>
+
+                    <div class="col-xs-12">
+                        <form id="login" name="login" method="post" action="/login">
+
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" class="form-control" name="email">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" name="password">
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-block">Log in</button>
+
+                        </form>
+                    </div>
+
+                    <div class="col-xs-12">&nbsp;</div>
+
+                    <div class="col-xs-6">
+                        <p>
+                          <strong>
+                            Forgot your password? <a href="/dashboard/forgot">Reset here</a>
+                          </strong>
+                        </p>
+                    </div>
+
+                    <div class="col-xs-6">
+                        <p class="pull-right">
+                          <strong>
+                            New to us? <a href="/signup">Sign Up</a>
+                          </strong>
+                        </p>
+                    </div>
+
+                </div>
+
         </div>
-        <div class="field">
-          <div class="ui left icon input">
-            <i class="lock icon"></i>
-            <input type="password" name="password" placeholder="Password">
-          </div>
-        </div>
-        <!-- <div class="ui fluid large teal submit button">Login</div> -->
-        <button>Login</button>
-      </div>
 
-      <div class="ui error message"></div>
+	</div>
+	<!-- container2 -->
 
-    </form>
+  <% include partials/footer %>
+  <% include partials/sticky-sidebar-deps %>
 
-    <div class="ui message">
-      New to us? <a href="/signup">Sign Up</a>
-    </div>
-  </div>
-</div>
+</body>
+</html>

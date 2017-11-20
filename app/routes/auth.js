@@ -2,7 +2,12 @@ module.exports = function(app, passport) {
 
     /* GET signup page. */
     app.get('/signup', function (req, res, next) {
-        res.render('signup');
+        res.render('signup', {
+            title: "Signup — Social-Celebrity.com",
+            description: "",
+            page: req.baseUrl,
+            subpage: req.path,
+        });
     });
 
     /* POST signup page. */
@@ -14,7 +19,12 @@ module.exports = function(app, passport) {
 
     /* GET login page. */
     app.get('/login', function (req, res, next) {
-        res.render('login');
+        res.render('login', {
+            title: "Login — Social-Celebrity.com",
+            description: "",
+            page: req.baseUrl,
+            subpage: req.path,
+        });
     });
 
     /* POST login page. */

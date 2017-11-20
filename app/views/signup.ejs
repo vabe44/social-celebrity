@@ -1,19 +1,54 @@
-<!DOCTYPE html>
-<html>
+<% include partials/header %>
 
-<head>
-    <title></title>
-</head>
+<div id="container-bg">
 
-<body>
-    <form id="signup" name="signup" method="post" action="/signup">
-        <label for="email">Email Address</label>
-        <input class="text" name="email" type="email" />
-        <label for="password">Password</label>
-        <input name="password" type="password" />
-        <input class="btn" type="submit" value="Sign Up" />
-    </form>
+	<div id="container2">
+
+        <div id="faq-spacer"></div>
+
+                <div class="content">
+
+                    <div class="col-xs-12">
+
+                        <h3 class="pagetitle">Signup</h3>
+
+                        <p class="lead">
+                            Enter your email and password to sign up.
+                        </p>
+
+                    </div>
+
+                    <div class="col-xs-12">&nbsp;</div>
+
+                    <div class="col-xs-12">
+                        <form id="signup" name="signup" method="post" action="/signup">
+
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" class="form-control" name="email">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" name="password">
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-block">Sign up</button>
+
+                        </form>
+                    </div>
+
+                    <div class="col-xs-12">&nbsp;</div>
+
+                </div>
+
+        </div>
+
+	</div>
+	<!-- container2 -->
+
+  <% include partials/footer %>
+  <% include partials/sticky-sidebar-deps %>
 
 </body>
-
 </html>
