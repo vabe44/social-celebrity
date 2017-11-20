@@ -10,6 +10,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var methodOverride = require("method-override");
+var nodemailer = require('nodemailer');
+var flash = require('express-flash');
 // app.use(logger('dev'));
 
 // For BodyParser
@@ -27,6 +29,9 @@ app.use(passport.session()); // persistent login sessions
 app.set('views', path.join(__dirname, '/app/views'));
 app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, '/app/public')));
+
+// For Flash Messages
+app.use(flash());
 
 // Models
 var models = require("./app/models");

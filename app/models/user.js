@@ -22,6 +22,12 @@ module.exports = function (sequelize, Sequelize) {
             type: Sequelize.STRING,
             allowNull: false
         },
+        reset_password_token : {
+            type: Sequelize.STRING
+        },
+        reset_password_expires : {
+            type: Sequelize.DATE
+        },
         last_login: {
             type: Sequelize.DATE
         },
