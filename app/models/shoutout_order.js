@@ -1,28 +1,24 @@
 /* jshint indent: 2 */
 
 module.exports = function (sequelize, DataTypes) {
-    return sequelize.define('Shoutout', {
+    return sequelize.define('ShoutoutOrder', {
         id: {
             type: DataTypes.INTEGER,
             allowNull: false,
             primaryKey: true,
             autoIncrement: true
         },
-        description: {
-            type: DataTypes.TEXT,
-            allowNull: true
-        },
-        price: {
-            type: DataTypes.DECIMAL(10, 2),
+        stripe_tx_id: {
+            type: DataTypes.STRING,
             allowNull: true
         },
     }, {
-        tableName: 'shoutouts',
+        tableName: 'shoutout_orders',
         underscored: true,
         classMethods: {
             associate: function (models) {
-                models.Shoutout.belongsTo(models.User);
-                models.Shoutout.belongsTo(models.TwitterAccount);
+                models.ShoutoutOrder.belongsTo(models.User);
+                models.ShoutoutOrder.belongsTo(models.Shoutout);
             }
         }
     });

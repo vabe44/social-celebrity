@@ -34,7 +34,12 @@ module.exports = function (sequelize, Sequelize) {
         status: {
             type: Sequelize.ENUM('active', 'inactive'),
             defaultValue: 'active'
-        }
+        },
+        balance: {
+            type: Sequelize.DECIMAL(10, 2),
+            allowNull: false,
+            defaultValue: 0
+        },
     }, {
         underscored: true
     });

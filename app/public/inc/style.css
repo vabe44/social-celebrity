@@ -1423,14 +1423,15 @@ a.cta2:hover {
 	width:623px;
 	min-height:200px;
 	float:left;
-	margin-top:10px;
-	margin-left:32px;
+	/* margin-top:10px; */
+	margin-left:15px;
 }
 #rightpage {
 	width:298px;
 	min-height:200px;
-	float:left;
-	margin-top:10px;
+    float: right;
+    /* margin-top: 10px; */
+    margin-right: 15px;
 }
 #faqbox {
 	width:auto;
@@ -2463,3 +2464,10 @@ input[type="radio"]:checked + label span {
   vertical-align: middle;
 }
 /* vertical center end */
+
+.shoutout-info {
+    padding: 1em;
+    border-radius: 6px;
+    letter-spacing: -.5px;
+    margin: 0 0 1em 0;
+}

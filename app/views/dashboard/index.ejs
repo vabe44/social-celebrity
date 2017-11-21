@@ -10,7 +10,7 @@
 
         <div class="content">
             <div class="col-xs-12">
-                <h3 class="pagetitle">Welcome, <%= currentUser.email %></h3>
+                <h3 class="pagetitle">Welcome, <%= currentUser.username %></h3>
                 <p>If you are looking to sell shoutouts, please
                     <a href="/accounts">add new account</a> on accounts page!</p>
             </div>
@@ -18,7 +18,7 @@
 
             <div class="bg-info col-xs-12">
                 <div class="col-xs-12 col-sm-6 text-center">
-                    <h2>$0.00</h2>
+                    <h2>$<%= currentUser.balance %></h2>
                     <small>available balance</small>
                     <br>
                     <p>

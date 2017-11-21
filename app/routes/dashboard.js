@@ -303,7 +303,7 @@ router.post('/profile', middlewares.isLoggedIn, function (req, res, next) {
     models.User.findById(res.locals.currentUser.id)
     .then(user => {
 
-        if(!user.comparePassword(currentPassword)) {
+        if(!models.User.comparePassword(currentPassword)) {
             throw new Error("Incorrect Password");
         }
 
@@ -312,11 +312,36 @@ router.post('/profile', middlewares.isLoggedIn, function (req, res, next) {
         }
 
         return user.update({
-            password: user.generateHash(newPassword)
+            password: models.User.generateHash(newPassword)
         });
     })
     .then(() => {
         res.redirect('back');
+    })
+    .catch(error => {
+        console.log("Oops, something went wrong. " + error);
+    });
+
+});
+
+/* GET orders page. */
+router.get('/orders', middlewares.isLoggedIn, function (req, res, next) {
+
+    models.ShoutoutOrder
+    .findAll({
+        where: {
+            user_id: res.locals.currentUser.id
+        },
+        include: [{ all: true, nested: true }]
+    })
+    .then(orders => {
+        res.render('dashboard/orders', {
+            orders,
+            title: "Orders — Social-Celebrity.com",
+            description: "",
+            page: req.baseUrl,
+            subpage: req.path,
+        });
     })
     .catch(error => {
         console.log("Oops, something went wrong. " + error);
@@ -449,7 +474,7 @@ router.post('/profile/reset/:token', function (req, res, next) {
         }
 
         return user.update({
-            password: user.generateHash(req.body.newpassword),
+            password: models.User.generateHash(req.body.newpassword),
             reset_password_token: null,
             reset_password_expires: null
         });

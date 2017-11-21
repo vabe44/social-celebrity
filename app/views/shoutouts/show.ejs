@@ -1,17 +1,174 @@
-<h1>Buy shoutout from @<%= shoutout.TwitterAccount.username %></h1>
+<% include ../partials/header %>
 
-<input name="shoutoutId" type="text" value="<%= shoutout.id %>" hidden>
-<input name="shoutoutPrice" type="number" value="<%= shoutout.price %>" hidden>
-<h3>Price: $<%= shoutout.price %></h3>
+<div id="container-bg">
 
-<h3>Description:</h3>
-<p><%= shoutout.description %></p>
+	<div id="container2">
 
-<h3>Author:</h3>
-<strong><%= shoutout.User.email %></strong>
-<p>Member since: <%= shoutout.User.created_at %></p>
+        <div class="row" style="width:983px;margin:0px;padding-top:15px;">
 
-<button id="buyButton">Buy</button>
+            <div class="col-sm-8">
+                <div class="col-xs-12 bg-info shoutout-info">
+                    <div class="col-sm-5 col-md-5 col-lg-4">
+                        <img style="height: 150px;width: 150px" class="img-circle img-responsive" src="<%= shoutout.twitter.profile_image_url_https.replace('_normal.', '.') %>" alt="shoutout on <%= shoutout.TwitterAccount.username %>" title="shoutout on <%= shoutout.TwitterAccount.username %>">
+                    </div>
+
+                    <div class="col-sm-7 col-md-7 col-lg-8">
+                        <div class="pull-left">
+                            <h2>
+                                <%= shoutout.TwitterAccount.username %>
+                            </h2>
+                            <p>
+                                <small>followers:</small> <%= shoutout.twitter.followers_count %>
+                            </p>
+                            <p>
+                                <small>score:</small> 7.64
+                            </p>
+                            <p>
+                                <small>success rate:</small> 0%
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="clearfix"></div>
+                <br>
+
+                <div class="col-xs-12">
+                    <div class="row">
+                        <div class="panel panel-default">
+
+                            <div class="panel-heading">
+                                Description & Demographics
+                            </div>
+
+                            <div class="panel-body">
+
+                                <div>
+                                    <p>
+                                        <%= shoutout.description %>
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <p>
+                                        Language: English<br>
+                                        Country: United States<br>
+                                        Age: 17-24<br>
+                                        Gender: Women<br>
+                                        Activity: Afternoon (1pm to 6pm)
+                                    </p>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <div class="panel panel-success">
+                    <div class="panel-heading">Pricing $<%= shoutout.price %></div>
+                    <div class="panel-body">
+                            <p>1 hr shoutout - $25</p>
+                            <p>2 hr shoutout - $35</p>
+                            <p>3 hr shoutout - $45</p>
+                            <p>Permanent shoutout - $75</p>
+                    </div>
+
+                    <button id="buyButton">Buy</button>
+
+                </div>
+
+            </div>
+
+            <div class="col-sm-4 pull-right">
+                <div class="panel panel-info">
+                    <div class="panel-heading">Recent Media</div>
+                    <div class="panel-body" style="padding-bottom:0px;">
+
+                        <% if(typeof shoutout.twitter.tweets.statuses !== 'undefined' && shoutout.twitter.tweets.statuses.length > 0) { %>
+                            <% shoutout.twitter.tweets.statuses.forEach(function(tweet){ %>
+                                <div class="col-sm-6 col-xs-4">
+                                    <div style="position:relative;overflow:hidden;padding-bottom:100%;">
+                                        <img class="img-rounded img-responsive" src="<%= tweet.entities.media[0].media_url_https %>" style="position:absolute;">
+                                    </div>
+                                    <br>
+                                </div>
+                            <% }); %>
+                        <% }  else { %>
+                            <p>
+                                <br>
+                                No media found.
+                            </p>
+                        <% } %>
+
+                    </div>
+                </div>
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">Author</div>
+                    <div class="panel-body">
+                        <h4><%= shoutout.User.username %></h4>
+                        <p>
+                            <small>Member Since <%= shoutout.User.created_at %></small>
+                        </p>
+                        <p>
+                            <small>Last Active <%= shoutout.User.last_login %></small>
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div> <!-- row -->
+
+	</div> <!-- container2 -->
+
+
+    <% include ../partials/footer %>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+                <h1>Buy shoutout from @<%= shoutout.TwitterAccount.username %></h1>
+
+                <input name="shoutoutId" type="text" value="<%= shoutout.id %>" hidden>
+                <input name="shoutoutPrice" type="number" value="<%= shoutout.price %>" hidden>
+                <h3>Price: $<%= shoutout.price %></h3>
+
+                <h3>Description:</h3>
+                <p><%= shoutout.description %></p>
+
+                <h3>Author:</h3>
+                <strong><%= shoutout.User.username %></strong>
+                <p>Member since: <%= shoutout.User.created_at %></p>
+
+                <button id="buyButton">Buy</button>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <!-- STRIPE  -->
 <script src="https://checkout.stripe.com/checkout.js"></script>
@@ -28,16 +185,22 @@
         token: function handleToken(token) {
 
             token.shoutoutId = document.getElementsByName("shoutoutId")[0].value;
+            token.userId = '<%= locals.currentUser.id %>';
 
             fetch("/payments/shoutouts", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(token)
             })
-            .then(output => {
-                console.log(Date.now());
-                console.log(`Output:`)
-                console.log(output);
+            .then(response => {
+                return response.json();
+            })
+            .then(response => {
+                var charge = JSON.parse(response);
+                console.log(charge);
+            })
+            .catch(error => {
+                console.log("Oops, something went wrong. " + error);
             });
         }
     });

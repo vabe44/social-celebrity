@@ -1,0 +1,155 @@
+<% include ../../partials/header %>
+
+<div id="container-bg">
+
+	<div id="container2">
+
+        <% include ../../partials/dashboard/nav %>
+
+        <div id="faq-spacer"></div>
+
+        <div class="col-sm-12">
+
+            <h3 class="pagetitle">
+                Orders
+            </h3>
+
+            <p>
+                You can see your order history here.
+            </p>
+
+        </div>
+
+        <br>
+
+        <div class="col-sm-12">
+
+            <div id="faqbox">
+
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-pills nav-justified" role="tablist" id="myTabs">
+                        <li role="presentation" class="active"><a href="#byuser" aria-controls="byuser" role="tab" data-toggle="tab">Ordered By You</a></li>
+                        <li role="presentation"><a href="#fromuser" aria-controls="fromuser" role="tab" data-toggle="tab">Orders From You</a></li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+
+                        <div role="tabpanel" class="tab-pane active" id="byuser">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="col-sm-12">
+
+                                        <br>
+
+                                        <% if(typeof orders !== 'undefined' && orders.length > 0) { %>
+                                            <div class="row">
+                                                <div class="col-sm-12 clearfix">
+                                                    <div class="col-sm-12">
+
+                                                        <table class="table table-hover">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>#</th>
+                                                                    <th>First Name</th>
+                                                                    <th>Last Name</th>
+                                                                    <th>Username</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <th scope="row">1</th>
+                                                                    <td>Mark</td>
+                                                                    <td>Otto</td>
+                                                                    <td>@mdo</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th scope="row">2</th>
+                                                                    <td>Jacob</td>
+                                                                    <td>Thornton</td>
+                                                                    <td>@fat</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th scope="row">3</th>
+                                                                    <td>Larry</td>
+                                                                    <td>the Bird</td>
+                                                                    <td>@twitter</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+
+
+
+                                                        <ul class="list-group">
+                                                            <% orders.forEach(function(order){ %>
+                                                                <li class="list-group-item">
+                                                                    <strong>Shoutout @<%= order.Shoutout.TwitterAccount.username %> from <%= order.Shoutout.User.username %></strong>
+                                                                    <a href="/dashboard/orders/<%= order.id %>">
+                                                                        <span class="glyphicon glyphicon-link pull-right" aria-hidden="true"></span>
+                                                                    </a>
+                                                                </li>
+                                                            <% }); %>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <% }  else { %>
+                                            <p>
+                                                <br>
+                                                You have no orders.
+                                            </p>
+                                        <% } %>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div role="tabpanel" class="tab-pane" id="fromuser">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="col-sm-12">
+
+                                        <br>
+
+                                        <p>Stripe details here</p>
+
+                                        <p>Stripe details here</p>
+
+                                        <p>Stripe details here</p>
+
+                                        <p>Stripe details here</p>
+
+                                        <p>Stripe details here</p>
+
+                                        <p>Stripe details here</p>
+
+                                        <p>Stripe details here</p>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                <br>
+
+            </div>
+
+        </div>
+
+	</div>
+	<!-- container2 -->
+
+    <script>
+    $('#myTabs a').click(function (e) {
+    e.preventDefault()
+    $(this).tab('show')
+    })
+    </script>
+
+    <% include ../../partials/footer %>
+
+</body>
+</html>

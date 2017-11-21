@@ -3,9 +3,7 @@ module.exports = {
         if (req.isAuthenticated()) {
             return next();
         } else {
-            req.session.previousUrl = req.originalUrl;
             res.redirect('/login');
         }
-        
     }
 }

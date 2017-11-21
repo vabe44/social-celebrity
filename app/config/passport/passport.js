@@ -1,3 +1,6 @@
+var models = require("../../models");
+const Op = models.Sequelize.Op;
+
 //load bcrypt
 var bCrypt = require('bcrypt-nodejs');
 
@@ -30,20 +33,24 @@ module.exports = function (passport, user) {
         function (req, email, password, done) {
             User.findOne({
                 where: {
-                    email: email
+                    [Op.or]: [
+                        {email: email},
+                        {username: req.body.username}
+                    ]
                 }
             }).then(function (user) {
 
                 if (user) {
                     return done(null, false, {
-                        message: 'That email is already taken'
+                        message: 'That email and/or username is already taken'
                     });
                 } else {
-                    var userPassword = user.generateHash(password);
+                    var userPassword = models.User.generateHash(password);
 
                     var data = {
                         email: email,
-                        password: userPassword
+                        password: userPassword,
+                        username: req.body.username
                     };
 
                     User.create(data).then(function (newUser, created) {

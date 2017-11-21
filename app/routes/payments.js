@@ -1,7 +1,9 @@
 require('dotenv').config()
+var models      = require("../models");
+var middlewares = require("../middlewares");
+
 const stripe = require("stripe")(process.env.STRIPE_SECRETKEY);
 var braintree = require("braintree");
-var models      = require("../models");
 
 var gateway = braintree.connect({
     environment:  braintree.Environment.Sandbox,
@@ -194,7 +196,7 @@ router.post("/webhook", function (request, response) {
 });
 
 /* POST route to buy shoutouts. */
-router.post("/shoutouts", function (req, res) {
+router.post("/shoutouts", function (req, res, next) {
 
     models.Shoutout
     .findOne({
@@ -207,43 +209,64 @@ router.post("/shoutouts", function (req, res) {
 
         // bitcoin payment
         if (req.body.object === "source") {
-            stripe.charges.create({
+
+            return stripe.charges.create({
                 amount: shoutout.price * 100,
                 currency: "usd",
                 source: req.body.id,
                 destination: {
                     amount: shoutout.price * 80,
                     account: shoutout.User.stripe_user_id
-                }
-            }).then(charge => {
-                return charge;
+                },
+                description: `Shoutout from @${shoutout.TwitterAccount.username}`,
+                metadata: {
+                    seller: shoutout.User.username,
+                    account: shoutout.TwitterAccount.username,
+                    shoutout: "Check out this cool "
+                },
             });
+
         }
 
         // card payment
         if (req.body.object === "token") {
+
             stripe.customers.create({
                 email: req.body.email,
                 card: req.body.id
             })
             .then(customer => {
-                stripe.charges.create({
+                return stripe.charges.create({
                     amount: shoutout.price * 100,
                     currency: "usd",
                     customer: customer.id,
                     destination: {
                         amount: shoutout.price * 80,
                         account: shoutout.User.stripe_user_id
-                    }
-                })
-                .then(charge => {
-                    return charge;
-                })
-            })
+                    },
+                    description: `Shoutout from @${shoutout.TwitterAccount.username}`,
+                    metadata: {
+                        seller: shoutout.User.username,
+                        account: shoutout.TwitterAccount.username,
+                        shoutout: "Check out this cool "
+                    },
+                });
+            });
+
         }
-    }).then(() => {
-        console.log('hello: ', Date.now());
-        res.send({isKaki: true});
+
+    }).then(charge => {
+
+        return models.ShoutoutOrder
+        .create({
+            user_id: req.body.userId,
+            shoutout_id: req.body.shoutoutId,
+            stripe_tx_id: charge.id
+        });
+
+    })
+    .then(charge => {
+        res.json(charge);
     })
     .catch(error => {
         console.log("Oops, something went wrong. " + error);

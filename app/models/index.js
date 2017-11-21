@@ -35,11 +35,11 @@ Object.keys(db).forEach(function (modelName) {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-db.User.prototype.comparePassword  = function(candidatePassword) {
+db.User.comparePassword  = function(candidatePassword) {
     return bCrypt.compareSync(candidatePassword, this.password);
 };
 
-db.User.prototype.generateHash = function (password) {
+db.User.generateHash = function (password) {
     return bCrypt.hashSync(password, bCrypt.genSaltSync(8), null);
 };
 

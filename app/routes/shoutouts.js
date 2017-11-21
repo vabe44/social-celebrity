@@ -1,10 +1,19 @@
+require('dotenv').config()
 var express = require('express');
 var router = express.Router();
 var middlewares = require("../middlewares");
 var models      = require("../models");
+var Twitter = require('twitter');
+var twitter = new Twitter({
+    consumer_key: process.env.TWITTER_CONSUMER_KEY,
+    consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+    access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
+    access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
+  });
+var Promise = require("bluebird");
 
 /* GET shoutouts page. */
-router.get('/', function (req, res, next) {
+router.get('/', middlewares.isLoggedIn, function (req, res, next) {
 
     models.Shoutout
     .findAll({
@@ -20,7 +29,7 @@ router.get('/', function (req, res, next) {
     });
 
 });
- 
+
 /* POST shoutouts. */
 router.post('/', middlewares.isLoggedIn, function (req, res, next) {
 
@@ -61,7 +70,7 @@ router.get('/new', middlewares.isLoggedIn, function (req, res, next) {
 });
 
 /* GET show shoutout page. */
-router.get('/:id', function (req, res, next) {
+router.get('/:id', middlewares.isLoggedIn, function (req, res, next) {
 
     models.Shoutout
     .findOne({
@@ -71,9 +80,29 @@ router.get('/:id', function (req, res, next) {
         include: [ models.TwitterAccount, models.User ]
     })
     .then(shoutout => {
-        res.render('shoutouts/show', {
-            shoutout: shoutout
-        });
+
+        Promise.join(
+            twitter.get('users/show', {screen_name: shoutout.TwitterAccount.username}),
+            twitter.get('search/tweets', {
+                from: shoutout.TwitterAccount.username,
+                filter: "images",
+                include_entities: 1,
+                count: 6
+            }),
+
+            function(account, tweets) {
+                shoutout.twitter = account;
+                shoutout.twitter.tweets = tweets;
+                res.render('shoutouts/show', {
+                    shoutout,
+                    title: "Orders — Social-Celebrity.com",
+                    description: "",
+                    page: req.baseUrl,
+                    subpage: req.path,
+                });
+
+            }
+        )
     })
     .catch(error => {
         console.log("Oops, something went wrong. " + error);
