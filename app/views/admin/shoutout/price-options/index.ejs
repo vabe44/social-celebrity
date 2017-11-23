@@ -1,0 +1,20 @@
+<h1>Shoutout Price Options</h1>
+
+<form id="add-shoutout-price-option" name="add-shoutout-price-option" method="post" action="/admin/shoutout/price-options">
+    <label for="optionname">New Option</label>
+    <input class="text" name="optionname" placeholder="Option Name" type="text" />
+    <input class="btn" type="submit" value="Add" />
+</form>
+
+<p><strong>Available options:</strong></p>
+<% if(options.length > 0) { %>
+<ul>
+    <% options.forEach(function(option){ %>
+        <li>
+            <%= option.name %>
+        </li>
+    <% }); %>
+</ul>
+<% }  else { %>
+No options added yet.
+<% } %>

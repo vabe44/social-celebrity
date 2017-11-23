@@ -1,0 +1,89 @@
+<% include ../partials/header %>
+
+<div id="container-bg">
+
+	<div id="container2">
+
+        <div id="faq-spacer"></div>
+
+                <div class="content">
+
+                    <div class="col-xs-12">
+
+                        <h3 class="pagetitle">Edit Your Shoutout</h3>
+
+                        <p class="lead">
+                            You can edit the description and the pricing of your shoutout here.
+                        </p>
+
+                    </div>
+
+                    <div class="col-xs-12">&nbsp;</div>
+
+                    <div class="col-xs-12">
+                        <form id="editshoutout" name="editshoutout" class="form-horizontal" method="post" action="/shoutouts/<%= shoutout.id %>/?_method=PUT">
+
+                            <div class="form-group">
+                                <label for="description" class="col-sm-3 control-label">Description</label>
+                                <div class="col-sm-9">
+                                    <textarea class="form-control" rows="3" name="description"><%= shoutout.description %></textarea>
+                                </div>
+                            </div>
+
+                            <% if(priceOptions.length > 0) { %>
+
+                                <% priceOptions.forEach(function(option){ %>
+                                    <div class="form-group">
+
+                                        <label for="option<%= option.id %>" class="col-sm-3 control-label">
+                                            <%= option.name %>
+                                        </label>
+
+                                        <div class="col-sm-7">
+                                            <input
+                                                type="number"
+                                                class="form-control"
+                                                id="price-option-input-<%= option.id %>"
+                                                name="price-option-input-<%= option.id %>"
+                                                placeholder="Enter the price you want to charge"
+                                                value="<%= option.price %>"
+                                                step="1"
+                                            >
+                                        </div>
+
+                                        <div class="col-sm-1">
+                                            <input
+                                                type="checkbox"
+                                                id="price-option-toggle-<%= option.id %>"
+                                                name="price-option-toggle-<%= option.id %>"
+                                                data-toggle="toggle"
+                                                data-on="Enabled"
+                                                data-off="Disabled"
+                                                <% if(option.price){ %> checked <% } %>
+                                            >
+                                        </div>
+
+                                    </div>
+                                <% }); %>
+
+                            <% }  else { %>
+                                <p>No price options available.</p>
+                            <% } %>
+
+                            <button type="submit" class="btn btn-primary btn-block">Update</button>
+
+                        </form>
+                    </div>
+
+                </div>
+
+        </div>
+
+	</div>
+	<!-- container2 -->
+
+  <% include ../partials/footer %>
+  <% include ../partials/sticky-sidebar-deps %>
+
+</body>
+</html>

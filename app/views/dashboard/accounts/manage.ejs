@@ -12,7 +12,7 @@
         <div id="leftpage">
 
         <h3 class="pagetitle">
-            @<%= data.twitter.username %>
+            @<%= twitter.username %>
         </h3>
 
         <p>
@@ -36,7 +36,7 @@
 
                             <div class="col-sm-1">
 
-                                <form class="form-inline" id="delete-form" action="/dashboard/accounts/remove/twitter/<%= data.twitter.username %>?_method=DELETE" method="POST">
+                                <form class="form-inline" id="delete-form" action="/dashboard/accounts/remove/twitter/<%= twitter.username %>?_method=DELETE" method="POST">
                                     <button type="button" class="btn btn-link">
                                         <span class="glyphicon glyphicon-trash pull-right" aria-hidden="true"></span>
                                     </button>
@@ -56,13 +56,13 @@
                     <div class="col-sm-12">
                         <div class="col-sm-12">
 
-                            <form id="managetwitteraccount" name="managetwitteraccount" method="post" action="/dashboard/accounts/manage/twitter/<%= data.twitter.id %>">
+                            <form id="managetwitteraccount" name="managetwitteraccount" method="post" action="/dashboard/accounts/manage/twitter/<%= twitter.id %>">
 
                                 <div class="form-group">
                                     <label for="category">Category</label>
                                     <select class="form-control" name="category">
-                                        <% data.categories.forEach(function(category){ %>
-                                            <option <% if(category.id === data.twitter.shoutout_category_id) { %> selected <% } %> value="<%= category.id %>"><%= category.name %></option>
+                                        <% categories.forEach(function(category){ %>
+                                            <option <% if(category.id === twitter.shoutout_category_id) { %> selected <% } %> value="<%= category.id %>"><%= category.name %></option>
                                         <% }); %>
                                     </select>
                                 </div>
@@ -70,8 +70,8 @@
                                 <div class="form-group">
                                     <label for="language">Language</label>
                                     <select class="form-control" name="language">
-                                        <% data.languages.forEach(function(language){ %>
-                                            <option <% if(language.id === data.twitter.language_id) { %> selected <% } %> value="<%= language.id %>"><%= language.name %></option>
+                                        <% languages.forEach(function(language){ %>
+                                            <option <% if(language.id === twitter.language_id) { %> selected <% } %> value="<%= language.id %>"><%= language.name %></option>
                                         <% }); %>
                                     </select>
                                 </div>
@@ -79,8 +79,8 @@
                                 <div class="form-group">
                                     <label for="country">Country</label>
                                     <select class="form-control" name="country">
-                                        <% data.countries.forEach(function(country){ %>
-                                            <option <% if(country.id === data.twitter.country_id) { %> selected <% } %> value="<%= country.id %>"><%= country.name %></option>
+                                        <% countries.forEach(function(country){ %>
+                                            <option <% if(country.id === twitter.country_id) { %> selected <% } %> value="<%= country.id %>"><%= country.name %></option>
                                         <% }); %>
                                     </select>
                                 </div>
@@ -88,8 +88,8 @@
                                 <div class="form-group">
                                     <label for="age">Age</label>
                                     <select class="form-control" name="age">
-                                        <% data.ages.forEach(function(Age){ %>
-                                            <option <% if(age.id === data.twitter.age_id) { %> selected <% } %> value="<%= age.id %>"><%= age.name %></option>
+                                        <% ages.forEach(function(Age){ %>
+                                            <option <% if(age.id === twitter.age_id) { %> selected <% } %> value="<%= age.id %>"><%= age.name %></option>
                                         <% }); %>
                                     </select>
                                 </div>
@@ -97,8 +97,8 @@
                                 <div class="form-group">
                                     <label for="sex">Sex</label>
                                     <select class="form-control" name="sex">
-                                        <% data.sexes.forEach(function(sex){ %>
-                                            <option <% if(sex.id === data.twitter.sex_id) { %> selected <% } %> value="<%= sex.id %>"><%= sex.name %></option>
+                                        <% sexes.forEach(function(sex){ %>
+                                            <option <% if(sex.id === twitter.sex_id) { %> selected <% } %> value="<%= sex.id %>"><%= sex.name %></option>
                                         <% }); %>
                                     </select>
                                 </div>
@@ -106,8 +106,8 @@
                                 <div class="form-group">
                                     <label for="activity">Activity</label>
                                     <select class="form-control" name="activity">
-                                        <% data.activities.forEach(function(activity){ %>
-                                            <option <% if(activity.id === data.twitter.activity_id) { %> selected <% } %> value="<%= activity.id %>"><%= activity.name %></option>
+                                        <% activities.forEach(function(activity){ %>
+                                            <option <% if(activity.id === twitter.activity_id) { %> selected <% } %> value="<%= activity.id %>"><%= activity.name %></option>
                                         <% }); %>
                                     </select>
                                 </div>

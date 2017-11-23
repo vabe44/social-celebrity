@@ -2301,7 +2301,7 @@ li ol > li:before {
 	border-radius: 15px;
 	border:1px solid #cee8bf;
 }
-input[type="radio"] {
+#radios > div input[type="radio"] {
     display:none;
 }
 input[type="radio"] + label span {

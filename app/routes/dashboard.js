@@ -26,7 +26,7 @@ var twitter = new Twitter({
 
 const cryptoRandomString = require('crypto-random-string');
 var nodemailer = require('nodemailer');
-
+var Promise = require("bluebird");
 
 /* GET dashboard page. */
 router.get('/', middlewares.isLoggedIn, function (req, res, next) {
@@ -220,45 +220,32 @@ router.delete('/accounts/remove/twitter/:screen_name/', middlewares.isLoggedIn, 
 /* GET account manage page. */
 router.get('/accounts/manage/twitter/:id', middlewares.isLoggedIn, function (req, res, next) {
 
+    Promise.join(
+        models.TwitterAccount.findById(req.params.id),
+        models.Category.findAll(),
+        models.Language.findAll(),
+        models.Country.findAll(),
+        models.Age.findAll(),
+        models.Sex.findAll(),
+        models.Activity.findAll(),
 
-    var data = {};
-    models.TwitterAccount.findById(req.params.id)
-    .then(twitterAccount => {
-        data.twitter = twitterAccount;
-        return models.Category.findAll()
-    })
-    .then(categories => {
-        data.categories = categories;
-        return models.Language.findAll()
-    })
-    .then(languages => {
-        data.languages = languages;
-        return models.Country.findAll()
-    })
-    .then(countries => {
-        data.countries = countries;
-        return models.Age.findAll()
-    })
-    .then(ages => {
-        data.ages = ages;
-        return models.Sex.findAll()
-    })
-    .then(sexes => {
-        data.sexes = sexes;
-        return models.Activity.findAll()
-    })
-    .then(activities => {
-        data.activities = activities;
-    })
-    .then(() => {
-        res.render('dashboard/accounts/manage', {
-            data: data,
-            title: "Accounts — Social-Celebrity.com",
-            description: "",
-            page: req.baseUrl,
-            subpage: req.path
-        });
-    })
+        function(twitter, categories, languages, countries, ages, sexes, activities) {
+            res.render('dashboard/accounts/manage', {
+                twitter,
+                categories,
+                languages,
+                countries,
+                ages,
+                sexes,
+                activities,
+                title: "Accounts — Social-Celebrity.com",
+                description: "",
+                page: req.baseUrl,
+                subpage: req.path
+            });
+
+        }
+    )
     .catch(error => {
         console.log("Oops, something went wrong. " + error);
     });
@@ -271,7 +258,12 @@ router.post('/accounts/manage/twitter/:id', middlewares.isLoggedIn, function (re
     models.TwitterAccount.findById(req.params.id)
     .then(twitterAccount => {
         return twitterAccount.update({
-            shoutout_category_id: req.body.category
+            category_id: req.body.category,
+            language_id: req.body.language,
+            country_id: req.body.country,
+            age_id: req.body.age,
+            sex_id: req.body.sex,
+            activity_id: req.body.activity,
         });
     })
     .then(() => {

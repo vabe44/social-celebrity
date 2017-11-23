@@ -52,11 +52,25 @@
 
                                 <div>
                                     <p>
-                                        Language: English<br>
-                                        Country: United States<br>
-                                        Age: 17-24<br>
-                                        Gender: Women<br>
-                                        Activity: Afternoon (1pm to 6pm)
+                                        <% if(shoutout.TwitterAccount.Language) { %>
+                                            Language: <%= shoutout.TwitterAccount.Language.name %><br>
+                                        <% } %>
+
+                                        <% if(shoutout.TwitterAccount.Country) { %>
+                                            Country: <%= shoutout.TwitterAccount.Country.name %><br>
+                                        <% } %>
+
+                                        <% if(shoutout.TwitterAccount.Age) { %>
+                                            Age: <%= shoutout.TwitterAccount.Age.name %><br>
+                                        <% } %>
+
+                                        <% if(shoutout.TwitterAccount.Gender) { %>
+                                            Gender: <%= shoutout.TwitterAccount.Sex.name %><br>
+                                        <% } %>
+
+                                        <% if(shoutout.TwitterAccount.Activity) { %>
+                                            Activity: <%= shoutout.TwitterAccount.Activity.name %>
+                                        <% } %>
                                     </p>
                                 </div>
 
@@ -69,15 +83,27 @@
                 <div class="clearfix"></div>
 
                 <div class="panel panel-success">
-                    <div class="panel-heading">Pricing $<%= shoutout.price %></div>
+                    <div class="panel-heading">Pricing</div>
                     <div class="panel-body">
-                            <p>1 hr shoutout - $25</p>
-                            <p>2 hr shoutout - $35</p>
-                            <p>3 hr shoutout - $45</p>
-                            <p>Permanent shoutout - $75</p>
+                        <% if(shoutout.ShoutoutPriceOptions.length > 0) { %>
+
+                            <% shoutout.ShoutoutPriceOptions.forEach(function(option){ %>
+
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="price-option-radio" id="option-<%= option.id %>" value="<%= option.id %>" data-price="<%= option.ShoutoutPrice.price %>" data-description="<%= option.name %>">
+                                        <%= `${option.name} - $${option.ShoutoutPrice.price}` %>
+                                    </label>
+                                </div>
+
+                            <% }); %>
+
+                        <% }  else { %>
+                            <p>No price options available.</p>
+                        <% } %>
                     </div>
 
-                    <button id="buyButton">Buy</button>
+                    <button id="buyButton" class="btn btn-success btn-block">Buy Now</button>
 
                 </div>
 
@@ -129,94 +155,56 @@
 
     <% include ../partials/footer %>
 
+    <!-- STRIPE  -->
+    <script src="https://checkout.stripe.com/checkout.js"></script>
+    <script type="text/javascript">
+
+        var handler = StripeCheckout.configure({
+            key: '<%= process.env.STRIPE_PUBLISHABLEKEY %>',
+            image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
+            locale: 'auto',
+            billingAddress: false,
+            shippingAddress: false,
+            zipCode: false,
+            bitcoin: true,
+            token: function handleToken(token) {
+
+                token.shoutoutId = document.getElementsByName("shoutoutId")[0].value;
+                token.userId = '<%= locals.currentUser.id %>';
+
+                fetch("/payments/shoutouts", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(token)
+                })
+                .then(response => {
+                    return response.json();
+                })
+                .then(response => {
+                    var charge = JSON.parse(response);
+                    console.log(charge);
+                })
+                .catch(error => {
+                    console.log("Oops, something went wrong. " + error);
+                });
+            }
+        });
+
+        document.getElementById("buyButton").addEventListener('click', function (e) {
+            // Open Checkout with further options:
+            handler.open({
+                name: "<%= shoutout.TwitterAccount.username %>",
+                description: $("input[name='price-option-radio']:checked").attr("data-description"),
+                amount: Number($("input[name='price-option-radio']:checked").attr("data-price")) * 100
+            });
+            e.preventDefault();
+        });
+
+        // Close Checkout on page navigation:
+        window.addEventListener('popstate', function () {
+            handler.close();
+        });
+    </script>
+
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-                <h1>Buy shoutout from @<%= shoutout.TwitterAccount.username %></h1>
-
-                <input name="shoutoutId" type="text" value="<%= shoutout.id %>" hidden>
-                <input name="shoutoutPrice" type="number" value="<%= shoutout.price %>" hidden>
-                <h3>Price: $<%= shoutout.price %></h3>
-
-                <h3>Description:</h3>
-                <p><%= shoutout.description %></p>
-
-                <h3>Author:</h3>
-                <strong><%= shoutout.User.username %></strong>
-                <p>Member since: <%= shoutout.User.created_at %></p>
-
-                <button id="buyButton">Buy</button>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- STRIPE  -->
-<script src="https://checkout.stripe.com/checkout.js"></script>
-<script type="text/javascript">
-
-    var handler = StripeCheckout.configure({
-        key: '<%= process.env.STRIPE_PUBLISHABLEKEY %>',
-        image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
-        locale: 'auto',
-        billingAddress: false,
-        shippingAddress: false,
-        zipCode: false,
-        bitcoin: true,
-        token: function handleToken(token) {
-
-            token.shoutoutId = document.getElementsByName("shoutoutId")[0].value;
-            token.userId = '<%= locals.currentUser.id %>';
-
-            fetch("/payments/shoutouts", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(token)
-            })
-            .then(response => {
-                return response.json();
-            })
-            .then(response => {
-                var charge = JSON.parse(response);
-                console.log(charge);
-            })
-            .catch(error => {
-                console.log("Oops, something went wrong. " + error);
-            });
-        }
-    });
-
-    document.getElementById("buyButton").addEventListener('click', function (e) {
-        // Open Checkout with further options:
-        handler.open({
-            name: "kaki",
-            description: "",
-            amount: Number(document.getElementsByName("shoutoutPrice")[0].value) * 100
-        });
-        e.preventDefault();
-    });
-
-    // Close Checkout on page navigation:
-    window.addEventListener('popstate', function () {
-        handler.close();
-    });
-</script>

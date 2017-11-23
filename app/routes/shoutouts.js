@@ -69,7 +69,7 @@ router.get('/new', middlewares.isLoggedIn, function (req, res, next) {
 
 });
 
-/* GET show shoutout page. */
+/* SHOW - shows more info about one shoutout. */
 router.get('/:id', middlewares.isLoggedIn, function (req, res, next) {
 
     models.Shoutout
@@ -77,7 +77,7 @@ router.get('/:id', middlewares.isLoggedIn, function (req, res, next) {
         where: {
             id: req.params.id
         },
-        include: [ models.TwitterAccount, models.User ]
+        include: [{ all: true, nested: true }]
     })
     .then(shoutout => {
 
@@ -104,6 +104,109 @@ router.get('/:id', middlewares.isLoggedIn, function (req, res, next) {
             }
         )
     })
+    .catch(error => {
+        console.log("Oops, something went wrong. " + error);
+    });
+
+});
+
+// EDIT qol route
+router.get("/:id/edit", middlewares.isLoggedIn, function (req, res, next) {
+
+    Promise.join(
+        models.Shoutout.findOne({ where: { id: req.params.id }, include: [{ all: true }] }),
+        models.ShoutoutPriceOption.findAll(),
+
+        function(shoutout, priceOptions) {
+
+            priceOptions.forEach(option => {
+
+                let result = shoutout.ShoutoutPriceOptions.find(price => price.id === option.id);
+                if(result) option.price = result.ShoutoutPrice.price;
+
+            });
+
+            res.render('shoutouts/edit', {
+                shoutout,
+                priceOptions,
+                title: "Edit Shoutout — Social-Celebrity.com",
+                description: "",
+                page: req.baseUrl,
+                subpage: req.path,
+            });
+
+        }
+    )
+    .catch(error => {
+        console.log("Oops, something went wrong. " + error);
+    });
+
+});
+
+// UPDATE campground route
+router.put("/:id", function (req, res, next) {
+
+    Promise.join(
+        models.Shoutout.findOne({ where: { id: req.params.id }, include: [{ all: true }] }),
+        models.ShoutoutPriceOption.findAll(),
+
+        function(shoutout, priceOptions) {
+
+            // update description
+            shoutout.update({
+                description: req.body.description
+            })
+
+            // update prices
+            priceOptions.forEach(option => {
+
+                let toggle = req.body[`price-option-toggle-${option.id}`];
+                let price = req.body[`price-option-input-${option.id}`];
+
+                // price enabled, have to create or update price
+                if(toggle === 'on') {
+                    console.log(price);
+
+                    // find or create the price
+                    models.ShoutoutPrice
+                    .findOrCreate({
+                        where: {
+                            shoutout_id: shoutout.id,
+                            shoutout_price_option_id: option.id
+                        }
+                    })
+                    .spread((shoutoutPrice, created) => {
+
+                        // update the price
+                        shoutoutPrice.update({
+                            price: Number(price)
+                        })
+
+                    })
+                // price is disabled, delete it
+                } else {
+
+                    models.ShoutoutPrice.findOne({
+                        where: {
+                            shoutout_id: shoutout.id,
+                            shoutout_price_option_id: option.id
+                        }
+                    })
+                    .then(shoutoutPrice => {
+
+                        if(shoutoutPrice) {
+                            shoutoutPrice.destroy();
+                        }
+
+                    })
+
+                }
+
+            });
+
+            res.redirect(`/shoutouts/${req.params.id}/edit`);
+        }
+    )
     .catch(error => {
         console.log("Oops, something went wrong. " + error);
     });

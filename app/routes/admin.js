@@ -35,7 +35,7 @@ router.post('/shoutout/categories/', middlewares.isLoggedIn, function (req, res,
     .catch(error => {
         console.log("Oops, something went wrong. " + error);
     });
-})
+});
 
 /* GET languages page. */
 router.get('/shoutout/languages/', middlewares.isLoggedIn, function (req, res, next) {
@@ -54,7 +54,7 @@ router.get('/shoutout/languages/', middlewares.isLoggedIn, function (req, res, n
 });
 
 /* POST languages page. */
-router.post('/shoutout/categories/', middlewares.isLoggedIn, function (req, res, next) {
+router.post('/shoutout/languages/', middlewares.isLoggedIn, function (req, res, next) {
 
     models.Language
     .create({ name: req.body.languagename })
@@ -64,7 +64,7 @@ router.post('/shoutout/categories/', middlewares.isLoggedIn, function (req, res,
     .catch(error => {
         console.log("Oops, something went wrong. " + error);
     });
-})
+});
 
 /* GET countries page. */
 router.get('/shoutout/countries/', middlewares.isLoggedIn, function (req, res, next) {
@@ -93,7 +93,7 @@ router.post('/shoutout/countries/', middlewares.isLoggedIn, function (req, res, 
     .catch(error => {
         console.log("Oops, something went wrong. " + error);
     });
-})
+});
 
 /* GET ages page. */
 router.get('/shoutout/ages/', middlewares.isLoggedIn, function (req, res, next) {
@@ -122,7 +122,7 @@ router.post('/shoutout/ages/', middlewares.isLoggedIn, function (req, res, next)
     .catch(error => {
         console.log("Oops, something went wrong. " + error);
     });
-})
+});
 
 /* GET sexes page. */
 router.get('/shoutout/sexes/', middlewares.isLoggedIn, function (req, res, next) {
@@ -151,7 +151,7 @@ router.post('/shoutout/sexes/', middlewares.isLoggedIn, function (req, res, next
     .catch(error => {
         console.log("Oops, something went wrong. " + error);
     });
-})
+});
 
 /* GET activities page. */
 router.get('/shoutout/activities/', middlewares.isLoggedIn, function (req, res, next) {
@@ -180,6 +180,35 @@ router.post('/shoutout/activities/', middlewares.isLoggedIn, function (req, res,
     .catch(error => {
         console.log("Oops, something went wrong. " + error);
     });
-})
+});
+
+/* GET price options page. */
+router.get('/shoutout/price-options/', middlewares.isLoggedIn, function (req, res, next) {
+
+    models.ShoutoutPriceOption
+    .findAll()
+    .then(options => {
+        res.render('admin/shoutout/price-options/index', {
+            options
+        });
+    })
+    .catch(error => {
+        console.log("Oops, something went wrong. " + error);
+    });
+
+});
+
+/* POST price options page. */
+router.post('/shoutout/price-options/', middlewares.isLoggedIn, function (req, res, next) {
+
+    models.ShoutoutPriceOption
+    .create({ name: req.body.optionname })
+    .then(() => {
+        res.redirect('back');
+    })
+    .catch(error => {
+        console.log("Oops, something went wrong. " + error);
+    });
+});
 
 module.exports = router;
