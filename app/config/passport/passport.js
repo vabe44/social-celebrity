@@ -86,7 +86,7 @@ module.exports = function (passport, user) {
                 where: {
                     email: email
                 }
-            }).then(function (user) {
+            }).then(user => {
 
                 if (!user) {
                     return done(null, false, {
@@ -108,7 +108,7 @@ module.exports = function (passport, user) {
                     return done(null, userinfo);
                 })
 
-            }).catch(function (err) {
+            }).catch(err => {
                 console.log("Error:", err);
                 return done(null, false, {
                     message: 'Something went wrong with your Signin'

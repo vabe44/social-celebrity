@@ -327,6 +327,7 @@ router.get('/orders', middlewares.isLoggedIn, function (req, res, next) {
         include: [{ all: true, nested: true }]
     })
     .then(orders => {
+        console.log(orders);
         res.render('dashboard/orders', {
             orders,
             title: "Orders — Social-Celebrity.com",

@@ -14,6 +14,7 @@ var gateway = braintree.connect({
 
 var express = require('express');
 var router = express.Router();
+var Promise = require("bluebird");
 
 // BRAINTREE
 router.get("/client_token", function (req, res) {
@@ -198,79 +199,107 @@ router.post("/webhook", function (request, response) {
 /* POST route to buy shoutouts. */
 router.post("/shoutouts", function (req, res, next) {
 
-    models.Shoutout
-    .findOne({
-        where: {
-            id: req.body.shoutoutId
-        },
-        include: [ models.TwitterAccount, models.User ]
-    })
-    .then(shoutout => {
+    Promise.join(
 
-        // bitcoin payment
-        if (req.body.object === "source") {
+        models.Shoutout.findOne({ where: { id: req.body.shoutoutId }, include: [{ all: true, nested: true }] }),
+        models.ShoutoutPrice.findOne({
+            where: {
+                shoutout_id: req.body.shoutoutId,
+                shoutout_price_option_id: req.body.priceOptionId
+            },
+            include: [{ all: true, nested: true }]
+        }),
 
-            return stripe.charges.create({
-                amount: shoutout.price * 100,
-                currency: "usd",
-                source: req.body.id,
-                destination: {
-                    amount: shoutout.price * 80,
-                    account: shoutout.User.stripe_user_id
-                },
-                description: `Shoutout from @${shoutout.TwitterAccount.username}`,
-                metadata: {
-                    seller: shoutout.User.username,
-                    account: shoutout.TwitterAccount.username,
-                    shoutout: "Check out this cool "
-                },
-            });
+        function(shoutout, shoutoutPrice) {
 
-        }
-
-        // card payment
-        if (req.body.object === "token") {
-
-            stripe.customers.create({
-                email: req.body.email,
-                card: req.body.id
-            })
-            .then(customer => {
+            // bitcoin payment
+            if (req.body.object === "source") {
                 return stripe.charges.create({
-                    amount: shoutout.price * 100,
+                    amount: shoutoutPrice.price * 100,
                     currency: "usd",
-                    customer: customer.id,
+                    source: req.body.id,
                     destination: {
-                        amount: shoutout.price * 80,
+                        amount: shoutoutPrice.price * 80,
                         account: shoutout.User.stripe_user_id
                     },
                     description: `Shoutout from @${shoutout.TwitterAccount.username}`,
                     metadata: {
                         seller: shoutout.User.username,
                         account: shoutout.TwitterAccount.username,
-                        shoutout: "Check out this cool "
+                        caption: req.body.shoutoutCaption,
+                        mediaLink: req.body.shoutoutMediaLink,
+                        publishTime: req.body.shoutoutPublishTime
                     },
+                })
+                .then(charge => {
+                    return models.ShoutoutOrder
+                    .create({
+                        user_id: req.body.userId,
+                        shoutout_id: req.body.shoutoutId,
+                        stripe_tx_id: charge.id,
+                        caption: req.body.shoutoutCaption,
+                        media_link: req.body.shoutoutMediaLink,
+                        publish_time: req.body.shoutoutPublishTime,
+                        price_option: req.body.priceOptionName,
+                        price: shoutoutPrice.price
+                    });
+                })
+                .then(charge => {
+                    res.json(charge);
+                })
+                .catch(error => {
+                    console.log("Oops, something went wrong. " + error);
                 });
-            });
+            }
+
+            // card payment
+            if (req.body.object === "token") {
+                stripe.customers.create({
+                    email: req.body.email,
+                    card: req.body.id
+                })
+                .then(customer => {
+                    return stripe.charges.create({
+                        amount: shoutoutPrice.price * 100,
+                        currency: "usd",
+                        customer: customer.id,
+                        destination: {
+                            amount: shoutoutPrice.price * 80,
+                            account: shoutout.User.stripe_user_id
+                        },
+                        description: `Shoutout from @${shoutout.TwitterAccount.username}`,
+                        metadata: {
+                            seller: shoutout.User.username,
+                            account: shoutout.TwitterAccount.username,
+                            caption: req.body.shoutoutCaption,
+                            mediaLink: req.body.shoutoutMediaLink,
+                            publishTime: req.body.shoutoutPublishTime
+                        },
+                    });
+                })
+                .then(charge => {
+                    return models.ShoutoutOrder
+                    .create({
+                        user_id: req.body.userId,
+                        shoutout_id: req.body.shoutoutId,
+                        stripe_tx_id: charge.id,
+                        caption: req.body.shoutoutCaption,
+                        media_link: req.body.shoutoutMediaLink,
+                        publish_time: req.body.shoutoutPublishTime,
+                        price_option: req.body.priceOptionName,
+                        price: shoutoutPrice.price
+                    });
+                })
+                .then(charge => {
+                    res.json(charge);
+                })
+                .catch(error => {
+                    console.log("Oops, something went wrong. " + error);
+                });
+            }
 
         }
-
-    }).then(charge => {
-
-        return models.ShoutoutOrder
-        .create({
-            user_id: req.body.userId,
-            shoutout_id: req.body.shoutoutId,
-            stripe_tx_id: charge.id
-        });
-
-    })
-    .then(charge => {
-        res.json(charge);
-    })
-    .catch(error => {
-        console.log("Oops, something went wrong. " + error);
-    });
+    )
 
 });
 

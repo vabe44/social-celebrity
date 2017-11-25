@@ -9,8 +9,22 @@ module.exports = function (sequelize, DataTypes) {
             autoIncrement: true
         },
         stripe_tx_id: {
-            type: DataTypes.STRING,
-            allowNull: true
+            type: DataTypes.STRING
+        },
+        caption: {
+            type: DataTypes.TEXT
+        },
+        media_link: {
+            type: DataTypes.TEXT
+        },
+        publish_time: {
+            type: DataTypes.DATE
+        },
+        price: {
+            type: DataTypes.DECIMAL(10, 2)
+        },
+        price_option: {
+            type: DataTypes.TEXT
         },
     }, {
         tableName: 'shoutout_orders',

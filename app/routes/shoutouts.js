@@ -11,6 +11,7 @@ var twitter = new Twitter({
     access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
   });
 var Promise = require("bluebird");
+var moment = require('moment');
 
 /* GET shoutouts page. */
 router.get('/', middlewares.isLoggedIn, function (req, res, next) {
@@ -95,6 +96,7 @@ router.get('/:id', middlewares.isLoggedIn, function (req, res, next) {
                 shoutout.twitter.tweets = tweets;
                 res.render('shoutouts/show', {
                     shoutout,
+                    moment,
                     title: "Orders — Social-Celebrity.com",
                     description: "",
                     page: req.baseUrl,

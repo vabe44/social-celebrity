@@ -91,12 +91,42 @@
 
                                 <div class="radio">
                                     <label>
-                                        <input type="radio" name="price-option-radio" id="option-<%= option.id %>" value="<%= option.id %>" data-price="<%= option.ShoutoutPrice.price %>" data-description="<%= option.name %>">
-                                        <%= `${option.name} - $${option.ShoutoutPrice.price}` %>
+                                        <input type="radio" name="priceOptionRadio" id="option-<%= option.id %>" value="<%= option.id %>" data-price="<%= option.ShoutoutPrice.price %>" data-description="<%= option.name %>">
+                                        <strong>
+                                            <%= `${option.name} - $${option.ShoutoutPrice.price}` %>
+                                        </strong>
                                     </label>
                                 </div>
 
                             <% }); %>
+
+                            <br>
+
+                            <div class="form-group">
+                                <label for="shoutoutCaption" class="col-sm-3 control-label">Caption</label>
+                                <textarea class="form-control" rows="2" id="shoutoutCaption" name="shoutoutCaption" placeholder="The caption of your shoutout"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="shoutoutMediaLink" class="col-sm-3 control-label">Photo/Video</label>
+                                <input type="text" class="form-control" id="shoutoutMediaLink" name="shoutoutMediaLink" placeholder="Link to photo/video for the shoutout">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="description" class="col-sm-12 control-label">Publish Time</label>
+                                <div class="input-group date" id="shoutoutPublishTime">
+                                    <input type="text" class="form-control" name="publishTimeInput" placeholder="Preferred shoutout publish time" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-time"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <script type="text/javascript">
+                                $(function () {
+                                    $('#shoutoutPublishTime').datetimepicker();
+                                });
+                            </script>
+
 
                         <% }  else { %>
                             <p>No price options available.</p>
@@ -138,10 +168,10 @@
                     <div class="panel-body">
                         <h4><%= shoutout.User.username %></h4>
                         <p>
-                            <small>Member Since <%= shoutout.User.created_at %></small>
+                            <small>Member Since <%= moment(shoutout.User.created_at).format('LL'); %></small>
                         </p>
                         <p>
-                            <small>Last Active <%= shoutout.User.last_login %></small>
+                            <small>Last Active <%= moment(shoutout.User.last_login).from(moment.now()); %></small>
                         </p>
                     </div>
                 </div>
@@ -169,8 +199,13 @@
             bitcoin: true,
             token: function handleToken(token) {
 
-                token.shoutoutId = document.getElementsByName("shoutoutId")[0].value;
                 token.userId = '<%= locals.currentUser.id %>';
+                token.shoutoutId = '<%= shoutout.id %>';
+                token.priceOptionId = document.querySelector('input[name="priceOptionRadio"]:checked').value;
+                token.priceOptionName = document.querySelector('input[name="priceOptionRadio"]:checked').dataset.description;
+                token.shoutoutCaption = document.getElementById("shoutoutCaption").value;
+                token.shoutoutMediaLink = document.getElementById("shoutoutMediaLink").value;
+                token.shoutoutPublishTime = moment(document.getElementsByName("publishTimeInput").value).format('YYYY-MM-DD hh:mm:ss');
 
                 fetch("/payments/shoutouts", {
                     method: "POST",
@@ -194,8 +229,8 @@
             // Open Checkout with further options:
             handler.open({
                 name: "<%= shoutout.TwitterAccount.username %>",
-                description: $("input[name='price-option-radio']:checked").attr("data-description"),
-                amount: Number($("input[name='price-option-radio']:checked").attr("data-price")) * 100
+                description: document.querySelector('input[name="priceOptionRadio"]:checked').dataset.description,
+                amount: Number(document.querySelector('input[name="priceOptionRadio"]:checked').dataset.price) * 100
             });
             e.preventDefault();
         });

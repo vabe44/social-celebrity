@@ -50,46 +50,48 @@
                                                         <table class="table table-hover">
                                                             <thead>
                                                                 <tr>
-                                                                    <th>#</th>
-                                                                    <th>First Name</th>
-                                                                    <th>Last Name</th>
-                                                                    <th>Username</th>
+                                                                    <th>From</th>
+                                                                    <th>Caption</th>
+                                                                    <th>Media</th>
+                                                                    <th>Price option</th>
+                                                                    <th>Price</th>
+                                                                    <th>Publish time</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                <tr>
-                                                                    <th scope="row">1</th>
-                                                                    <td>Mark</td>
-                                                                    <td>Otto</td>
-                                                                    <td>@mdo</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th scope="row">2</th>
-                                                                    <td>Jacob</td>
-                                                                    <td>Thornton</td>
-                                                                    <td>@fat</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th scope="row">3</th>
-                                                                    <td>Larry</td>
-                                                                    <td>the Bird</td>
-                                                                    <td>@twitter</td>
-                                                                </tr>
+
+                                                                <% orders.forEach(function(order){ %>
+                                                                    <tr>
+                                                                        <th scope="row">
+                                                                            <%= order.Shoutout.TwitterAccount.username %>
+                                                                        </th>
+
+                                                                        <td>
+                                                                            <%= order.caption %>
+                                                                        </td>
+
+                                                                        <td>
+                                                                            <%= order.media_link %>
+                                                                        </td>
+
+                                                                        <td>
+                                                                            <%= order.price_option %>
+                                                                        </td>
+
+                                                                        <td>
+                                                                            <%= order.price %>
+                                                                        </td>
+
+                                                                        <td>
+                                                                            <%= order.publish_time %>
+                                                                        </td>
+
+                                                                    </tr>
+                                                                <% }); %>
+
                                                             </tbody>
                                                         </table>
 
-
-
-                                                        <ul class="list-group">
-                                                            <% orders.forEach(function(order){ %>
-                                                                <li class="list-group-item">
-                                                                    <strong>Shoutout @<%= order.Shoutout.TwitterAccount.username %> from <%= order.Shoutout.User.username %></strong>
-                                                                    <a href="/dashboard/orders/<%= order.id %>">
-                                                                        <span class="glyphicon glyphicon-link pull-right" aria-hidden="true"></span>
-                                                                    </a>
-                                                                </li>
-                                                            <% }); %>
-                                                        </ul>
                                                     </div>
                                                 </div>
                                             </div>
