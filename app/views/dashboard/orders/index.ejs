@@ -42,7 +42,7 @@
 
                                         <br>
 
-                                        <% if(typeof orders !== 'undefined' && orders.length > 0) { %>
+                                        <% if(typeof orderedByYou !== 'undefined' && orderedByYou.length > 0) { %>
                                             <div class="row">
                                                 <div class="col-sm-12 clearfix">
                                                     <div class="col-sm-12">
@@ -50,7 +50,7 @@
                                                         <table class="table table-hover">
                                                             <thead>
                                                                 <tr>
-                                                                    <th>From</th>
+                                                                    <th>Account</th>
                                                                     <th>Caption</th>
                                                                     <th>Media</th>
                                                                     <th>Price option</th>
@@ -60,7 +60,7 @@
                                                             </thead>
                                                             <tbody>
 
-                                                                <% orders.forEach(function(order){ %>
+                                                                <% orderedByYou.forEach(function(order){ %>
                                                                     <tr>
                                                                         <th scope="row">
                                                                             <%= order.Shoutout.TwitterAccount.username %>
@@ -83,7 +83,7 @@
                                                                         </td>
 
                                                                         <td>
-                                                                            <%= order.publish_time %>
+                                                                            <%= moment(order.publish_time).from(moment.now()); %>
                                                                         </td>
 
                                                                     </tr>
@@ -114,19 +114,65 @@
 
                                         <br>
 
-                                        <p>Stripe details here</p>
+                                        <% if(typeof orderedFromYou !== 'undefined' && orderedFromYou.length) { %>
+                                            <div class="row">
+                                                <div class="col-sm-12 clearfix">
+                                                    <div class="col-sm-12">
 
-                                        <p>Stripe details here</p>
+                                                        <table class="table table-hover">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Account</th>
+                                                                    <th>Caption</th>
+                                                                    <th>Media</th>
+                                                                    <th>Price option</th>
+                                                                    <th>Price</th>
+                                                                    <th>Publish time</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
 
-                                        <p>Stripe details here</p>
+                                                                <% orderedFromYou.forEach(function(order){ %>
+                                                                    <tr>
+                                                                        <th scope="row">
+                                                                            <%= order.Shoutout.TwitterAccount.username %>
+                                                                        </th>
 
-                                        <p>Stripe details here</p>
+                                                                        <td>
+                                                                            <%= order.caption %>
+                                                                        </td>
 
-                                        <p>Stripe details here</p>
+                                                                        <td>
+                                                                            <%= order.media_link %>
+                                                                        </td>
 
-                                        <p>Stripe details here</p>
+                                                                        <td>
+                                                                            <%= order.price_option %>
+                                                                        </td>
 
-                                        <p>Stripe details here</p>
+                                                                        <td>
+                                                                            <%= order.price %>
+                                                                        </td>
+
+                                                                        <td>
+                                                                            <%= moment(order.publish_time).from(moment.now()); %>
+                                                                        </td>
+
+                                                                    </tr>
+                                                                <% }); %>
+
+                                                            </tbody>
+                                                        </table>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <% }  else { %>
+                                            <p>
+                                                <br>
+                                                You have no orders.
+                                            </p>
+                                        <% } %>
 
                                     </div>
                                 </div>

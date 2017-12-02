@@ -71,46 +71,39 @@ router.get('/new', middlewares.isLoggedIn, function (req, res, next) {
 });
 
 /* SHOW - shows more info about one shoutout. */
-router.get('/:id', middlewares.isLoggedIn, function (req, res, next) {
+router.get('/:id', middlewares.isLoggedIn, middlewares.asyncMiddleware(async (req, res, next) => {
 
-    models.Shoutout
-    .findOne({
+
+    let shoutout = await models.Shoutout.findOne({ where: { id: req.params.id }, include: [{ all: true, nested: true }]});
+    const favorited = await models.ShoutoutFavorite.findOne({
         where: {
-            id: req.params.id
-        },
-        include: [{ all: true, nested: true }]
-    })
-    .then(shoutout => {
-
-        Promise.join(
-            twitter.get('users/show', {screen_name: shoutout.TwitterAccount.username}),
-            twitter.get('search/tweets', {
-                from: shoutout.TwitterAccount.username,
-                filter: "images",
-                include_entities: 1,
-                count: 6
-            }),
-
-            function(account, tweets) {
-                shoutout.twitter = account;
-                shoutout.twitter.tweets = tweets;
-                res.render('shoutouts/show', {
-                    shoutout,
-                    moment,
-                    title: "Orders — Social-Celebrity.com",
-                    description: "",
-                    page: req.baseUrl,
-                    subpage: req.path,
-                });
-
-            }
-        )
-    })
-    .catch(error => {
-        console.log("Oops, something went wrong. " + error);
+            user_id: res.locals.currentUser.id,
+            shoutout_id: req.params.id
+        }
     });
 
-});
+    const account = await twitter.get('users/show', {screen_name: shoutout.TwitterAccount.username});
+    const tweets = await twitter.get('search/tweets', {
+        from: shoutout.TwitterAccount.username,
+        filter: "images",
+        include_entities: 1,
+        count: 6
+    });
+
+    shoutout.favorited = favorited;
+    shoutout.twitter = account;
+    shoutout.twitter.tweets = tweets;
+
+    res.render('shoutouts/show', {
+        shoutout,
+        moment,
+        title: "Shoutout — Social-Celebrity.com",
+        description: "",
+        page: req.baseUrl,
+        subpage: req.path,
+    });
+
+}));
 
 // EDIT qol route
 router.get("/:id/edit", middlewares.isLoggedIn, function (req, res, next) {
@@ -214,5 +207,30 @@ router.put("/:id", function (req, res, next) {
     });
 
 });
+
+/* POST shoutouts. */
+router.post('/favorite', middlewares.isLoggedIn, middlewares.asyncMiddleware(async (req, res, next) => {
+
+    const result = await models.ShoutoutFavorite.findOrCreate({
+        where: {
+            user_id: res.locals.currentUser.id,
+            shoutout_id: req.body.shoutoutId
+        }
+    })
+    .spread((favorite, created) => {
+
+        if(created) {
+            return "created";
+        } else {
+            return favorite.destroy().then(() => {
+                return "deleted";
+            });
+        }
+
+    });
+
+    res.json({ result: result });
+
+}));
 
 module.exports = router;

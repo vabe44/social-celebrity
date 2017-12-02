@@ -1,0 +1,94 @@
+<% include ../../partials/header %>
+
+<div id="container-bg">
+
+	<div id="container2">
+
+        <% include ../../partials/dashboard/nav %>
+
+        <div id="faq-spacer"></div>
+
+        <div class="col-sm-12">
+
+            <h3 class="pagetitle">
+                Favorites
+            </h3>
+
+            <p>
+                You can see your favorite shoutouts here.
+            </p>
+
+            <br>
+
+        </div>
+
+        <br>
+
+        <div class="col-sm-12">
+
+            <div id="faqbox">
+
+                <% if(typeof favorites !== 'undefined' && favorites.length > 0) { %>
+                    <div class="row">
+                        <div class="col-sm-12 clearfix">
+                            <div class="col-sm-12">
+
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Account</th>
+                                            <th>Seller</th>
+                                            <th class="text-right">View</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <% favorites.forEach(function(favorite){ %>
+
+                                                <tr>
+                                                    <th scope="row">
+                                                        <%= favorite.Shoutout.TwitterAccount.username %>
+                                                    </th>
+
+                                                    <td>
+                                                        <%= favorite.Shoutout.User.username %>
+                                                    </td>
+
+                                                    <td class="text-right">
+                                                        <a class="btn btn-default" href="/shoutouts/<%= favorite.Shoutout.id %>" role="button">Link</a>
+                                                    </td>
+                                                </tr>
+
+                                        <% }); %>
+
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                <% }  else { %>
+                    <p>
+                        <br>
+                        You have no favorites.
+                    </p>
+                <% } %>
+
+            </div>
+
+        </div>
+
+	</div>
+	<!-- container2 -->
+
+    <script>
+    $('#myTabs a').click(function (e) {
+    e.preventDefault()
+    $(this).tab('show')
+    })
+    </script>
+
+    <% include ../../partials/footer %>
+
+</body>
+</html>

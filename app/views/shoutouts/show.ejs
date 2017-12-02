@@ -27,6 +27,9 @@
                                 <small>success rate:</small> 0%
                             </p>
                         </div>
+                        <div class="pull-right">
+                            <span class="glyphicon <%= shoutout.favorited ? 'glyphicon-heart' : 'glyphicon-heart-empty' %>" onclick="favorite(this)" aria-hidden="true" style="font-size:26px;color:#d50000;"></span>
+                        </div>
                     </div>
 
                 </div>
@@ -168,10 +171,10 @@
                     <div class="panel-body">
                         <h4><%= shoutout.User.username %></h4>
                         <p>
-                            <small>Member Since <%= moment(shoutout.User.created_at).format('LL'); %></small>
+                            <small>Member since <%= moment(shoutout.User.created_at).format('LL'); %></small>
                         </p>
                         <p>
-                            <small>Last Active <%= moment(shoutout.User.last_login).from(moment.now()); %></small>
+                            <small>Last active <%= moment(shoutout.User.last_login).from(moment.now()); %></small>
                         </p>
                     </div>
                 </div>
@@ -182,6 +185,35 @@
 
 	</div> <!-- container2 -->
 
+    <script>
+        function favorite(sender) {
+            fetch("/shoutouts/favorite", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                credentials: "same-origin",
+                body: JSON.stringify(
+                    {shoutoutId: "<%= shoutout.id %>"}
+                )
+            })
+            .then(response => {
+                return response.json();
+            })
+            .then(response => {
+                if(response.result === "created") {
+                    sender.classList.add("glyphicon-heart");
+                    sender.classList.remove("glyphicon-heart-empty");
+                }
+                if(response.result === "deleted") {
+                    sender.classList.remove("glyphicon-heart");
+                    sender.classList.add("glyphicon-heart-empty");
+                }
+                console.log(response);
+            })
+            .catch(error => {
+                console.log("Oops, something went wrong. " + error);
+            });
+        }
+    </script>
 
     <% include ../partials/footer %>
 

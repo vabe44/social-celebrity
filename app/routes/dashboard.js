@@ -27,6 +27,7 @@ var twitter = new Twitter({
 const cryptoRandomString = require('crypto-random-string');
 var nodemailer = require('nodemailer');
 var Promise = require("bluebird");
+var moment = require('moment');
 
 /* GET dashboard page. */
 router.get('/', middlewares.isLoggedIn, function (req, res, next) {
@@ -316,31 +317,51 @@ router.post('/profile', middlewares.isLoggedIn, function (req, res, next) {
 
 });
 
-/* GET orders page. */
-router.get('/orders', middlewares.isLoggedIn, function (req, res, next) {
+/* GET favorites page. */
+router.get('/favorites', middlewares.isLoggedIn, middlewares.asyncMiddleware(async (req, res, next) => {
 
-    models.ShoutoutOrder
-    .findAll({
-        where: {
-            user_id: res.locals.currentUser.id
-        },
+    const favorites = await models.ShoutoutFavorite.findAll({
+        where: { user_id: res.locals.currentUser.id },
         include: [{ all: true, nested: true }]
-    })
-    .then(orders => {
-        console.log(orders);
-        res.render('dashboard/orders', {
-            orders,
-            title: "Orders — Social-Celebrity.com",
-            description: "",
-            page: req.baseUrl,
-            subpage: req.path,
-        });
-    })
-    .catch(error => {
-        console.log("Oops, something went wrong. " + error);
     });
 
-});
+    res.render('dashboard/favorites', {
+        favorites,
+        title: "Favorites — Social-Celebrity.com",
+        description: "",
+        page: req.baseUrl,
+        subpage: req.path,
+    });
+
+}));
+
+/* GET orders page. */
+router.get('/orders', middlewares.isLoggedIn, middlewares.asyncMiddleware(async (req, res, next) => {
+
+    const orderedByYou = await models.ShoutoutOrder.findAll({
+        where: { user_id: res.locals.currentUser.id },
+        include: [{ all: true, nested: true }]
+    });
+
+    const orderedFromYou = await models.ShoutoutOrder.findAll({
+        include: [{
+            model: models.Shoutout,
+            where: { user_id: res.locals.currentUser.id },
+            include: [{ model: models.TwitterAccount }]
+        }]
+    });
+
+    res.render('dashboard/orders', {
+        orderedByYou,
+        orderedFromYou,
+        moment,
+        title: "Orders — Social-Celebrity.com",
+        description: "",
+        page: req.baseUrl,
+        subpage: req.path,
+    });
+
+}));
 
 /* GET profile page. */
 router.get('/forgot', function (req, res, next) {

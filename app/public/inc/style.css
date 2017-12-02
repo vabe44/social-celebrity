@@ -2471,3 +2471,12 @@ input[type="radio"]:checked + label span {
     letter-spacing: -.5px;
     margin: 0 0 1em 0;
 }
+
+#secondnav a:hover {
+    color: white;
+    text-decoration: none;
+}
+
+a:hover {
+	text-decoration: none;
+}
