@@ -28,17 +28,32 @@ const cryptoRandomString = require('crypto-random-string');
 var nodemailer = require('nodemailer');
 var Promise = require("bluebird");
 var moment = require('moment');
+var request = require('request');
 
 /* GET dashboard page. */
-router.get('/', middlewares.isLoggedIn, function (req, res, next) {
-    res.render('dashboard/index', {
-        redirectUri: oauth.code.getUri(),
+router.get('/', middlewares.isLoggedIn, middlewares.asyncMiddleware(async (req, res, next) => {
+
+    const placedOrders = await models.ShoutoutOrder.count({ where: { user_id: res.locals.currentUser.id }});
+    const soldShoutouts = await models.ShoutoutOrder.findAll({
+        include: [{
+            model: models.Shoutout,
+            where: { user_id: res.locals.currentUser.id },
+            include: [{ model: models.TwitterAccount }]
+        }]
+    });
+
+    const totalEarned = soldShoutouts.reduce((s, a) => s + Number(a.price), 0);
+
+    res.render('dashboard/home/index', {
+        placedOrders,
+        soldShoutouts,
+        totalEarned,
         title: "Accounts — Social-Celebrity.com",
         description: "",
         page: req.baseUrl,
         subpage: req.path
     });
-});
+}));
 
 /* GET accounts page. */
 router.get('/accounts', middlewares.isLoggedIn, function (req, res, next) {
@@ -279,6 +294,7 @@ router.post('/accounts/manage/twitter/:id', middlewares.isLoggedIn, function (re
 /* GET profile page. */
 router.get('/profile', middlewares.isLoggedIn, function (req, res, next) {
     res.render('dashboard/profile', {
+        redirectUri: oauth.code.getUri(),
         title: "Profile — Social-Celebrity.com",
         description: "",
         page: req.baseUrl,
@@ -549,5 +565,20 @@ router.post('/profile/reset/:token', function (req, res, next) {
     });
 
 });
+
+/* POST profile payment details. */
+router.post('/profile/payment-details', middlewares.isLoggedIn, middlewares.asyncMiddleware(async (req, res, next) => {
+
+    const result = await request.post({
+      url: 'https://connect.stripe.com/oauth/deauthorize',
+      formData: {
+        client_id: process.env.STRIPE_CLIENTID,
+        stripe_user_id: res.locals.currentUser.stripe_user_id,
+      },
+      headers: {'Authorization': process.env.STRIPE_SECRETKEY},
+    });
+    res.redirect('back');
+
+}));
 
 module.exports = router;

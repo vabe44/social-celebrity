@@ -80,17 +80,17 @@
 
                                             <div class="form-group">
                                                 <label for="currentpassword">Current Password</label>
-                                                <input type="password" class="form-control" name="currentpassword" required>
+                                                <input type="password" class="form-control" name="currentpassword" autocomplete="off" required>
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="newpassword">New Password</label>
-                                                <input type="password" class="form-control" name="newpassword" required>
+                                                <input type="password" class="form-control" name="newpassword" autocomplete="off" required>
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="confirmpassword">Confirm Password</label>
-                                                <input type="password" class="form-control" name="confirmpassword" required>
+                                                <input type="password" class="form-control" name="confirmpassword" autocomplete="off" required>
                                             </div>
 
                                             <button type="submit" class="btn btn-primary btn-block">Update</button>
@@ -109,19 +109,18 @@
 
                                         <br>
 
-                                        <p>Stripe details here</p>
-
-                                        <p>Stripe details here</p>
-
-                                        <p>Stripe details here</p>
-
-                                        <p>Stripe details here</p>
-
-                                        <p>Stripe details here</p>
-
-                                        <p>Stripe details here</p>
-
-                                        <p>Stripe details here</p>
+                                        <% if(currentUser.stripe_user_id) { %>
+                                            <p>
+                                                Connected to Stripe: <%= currentUser.stripe_user_id %>
+                                            </p>
+                                            <form action="/dashboard/profile/payment-details" method="post">
+                                                <p>
+                                                    <button type="button" class="btn btn-danger">Revoke Access</button>
+                                                </p>
+                                            </form>
+                                        <% } else { %>
+                                            <a href="<%= redirectUri %>"><button type="button" class="btn btn-success">Connect to Stripe</button></a>
+                                        <% } %>
 
                                     </div>
                                 </div>
