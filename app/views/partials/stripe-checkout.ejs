@@ -1,5 +1,5 @@
 <!-- STRIPE  -->
-<script src="https://checkout.stripe.com/checkout.js" async></script>
+<script src="https://checkout.stripe.com/checkout.js" ></script>
 <script type="text/javascript">
 
     var handler = StripeCheckout.configure({
@@ -24,13 +24,21 @@
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(token)
             })
-            .then(output => {
-                if (output.status === 200) {
+            .then(response => {
+                return response.json();
+            })
+            .then(response => {
+                console.log(response);
+                if (response.status === "succeeded") {
                     window.location.href = "/success";
                 } else {
                     alert('An error occured. Please try again.');
                 }
+            })
+            .catch(error => {
+                console.log("Oops, something went wrong. " + error);
             });
+
         }
     });
 
@@ -55,12 +63,19 @@
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(token)
             })
-            .then(output => {
-                if (output.status === 200) {
+            .then(response => {
+                return response.json();
+            })
+            .then(response => {
+                console.log(response);
+                if (response.status === "active") {
                     window.location.href = "/success";
                 } else {
                     alert('An error occured. Please try again.');
                 }
+            })
+            .catch(error => {
+                console.log("Oops, something went wrong. " + error);
             });
         }
     });

@@ -67,11 +67,11 @@ res.render("charge"));
 
 // STRIPE
 /* POST route to receive purchase form data and create charge request. */
-router.post("/charge", (req, res) => {
+router.post("/charge", middlewares.asyncMiddleware(async (req, res, next) => {
 
     // bitcoin payment
     if (req.body.object === "source") {
-        stripe.charges.create({
+        const charge = await stripe.charges.create({
             amount: req.body.PAYAMOUNT,
             currency: "usd",
             description: `${req.body.PAYQUANTITY} ${req.body.PAYITEM} to ${req.body.PAYURL}`,
@@ -81,8 +81,8 @@ router.post("/charge", (req, res) => {
                 url: req.body.PAYURL
             },
             source: req.body.id
-        })
-        .then(charge => res.render("charge"));
+        });
+        res.json({status: charge.status});
     }
 
     // card payment
@@ -91,23 +91,23 @@ router.post("/charge", (req, res) => {
         //  one time charge
         if (req.body.PAYINTERVAL === "onetime") {
 
-            stripe.customers.create({
+            const customer = await stripe.customers.create({
                 email: req.body.email,
                 card: req.body.id
-            })
-            .then(customer =>
-                stripe.charges.create({
-                    amount: req.body.PAYAMOUNT,
-                    description: `${req.body.PAYQUANTITY} ${req.body.PAYITEM} to ${req.body.PAYURL}`,
-                    metadata: {
-                        item: req.body.PAYITEM,
-                        quantity: req.body.PAYQUANTITY,
-                        url: req.body.PAYURL
-                    },
-                    currency: "usd",
-                    customer: customer.id
-                }))
-            .then(charge => res.render("charge"));
+            });
+
+            const charge = await stripe.charges.create({
+                amount: req.body.PAYAMOUNT,
+                description: `${req.body.PAYQUANTITY} ${req.body.PAYITEM} to ${req.body.PAYURL}`,
+                metadata: {
+                    item: req.body.PAYITEM,
+                    quantity: req.body.PAYQUANTITY,
+                    url: req.body.PAYURL
+                },
+                currency: "usd",
+                customer: customer.id
+            });
+            res.json({status: charge.status});
         }
 
         // recurring payment
@@ -152,7 +152,9 @@ router.post("/charge", (req, res) => {
                                         url: req.body.PAYURL
                                     },
                                 }))
-                            .then(charge => res.render("charge"));
+                            .then(subscription => {
+                                res.json({status: subscription.status});
+                            });
                         }
                     } else {
                         // plan already exists, subscribe the customer
@@ -177,13 +179,15 @@ router.post("/charge", (req, res) => {
                                 },
                             }
                         ))
-                        .then(charge => res.render("charge"));
+                        .then(subscription => {
+                            res.json({status: subscription.status});
+                        });
                     }
                 }
             )
         }
     }
-});
+}));
 
 /* POST route to receive webhooks from Stripe to finalize charge. */
 router.post("/webhook", function (request, response) {
