@@ -5,6 +5,7 @@ var middlewares = require("../middlewares");
 var models      = require("../models");
 const Op = models.Sequelize.Op;
 var assert = require('assert');
+const stripe = require("stripe")(process.env.STRIPE_SECRETKEY);
 var OAuth = require('client-oauth2');
 // Configure the OAuth 2.0 Client
 var oauth = new OAuth({
@@ -109,6 +110,8 @@ router.get('/accounts/add/instagram', middlewares.isLoggedIn, function (req, res
 /* POST add twitter account page. */
 router.post('/accounts/add/twitter', middlewares.isLoggedIn, function (req, res, next) {
 
+
+
     // check if account exists and pull data
     twitter.get('users/show', {screen_name: req.body.username},  function(error, account, response) {
         if(error) {
@@ -140,12 +143,25 @@ router.post('/accounts/add/instagram', middlewares.isLoggedIn, middlewares.async
 }));
 
 /* GET twitter account verification page. */
-router.get('/accounts/verify/twitter/:screen_name', middlewares.isLoggedIn, function (req, res, next) {
+router.get('/accounts/verify/twitter/:screen_name', middlewares.isLoggedIn, middlewares.asyncMiddleware(async (req, res, next) => {
 
     // create random string for verification
     // check if account exists on twitter and pull data
     // check if account is already added and verified by someone to DB
     // if not, add or find row with user id, twitter username, and a verification code to DB
+
+    const duplicate = models.TwitterAccount.findOne({
+        where: {
+            username: req.params.screen_name,
+            verified: true,
+            type: "twitter",
+        }
+    });
+
+    if(duplicate) {
+        req.flash("error", "Account already added and verified by someone else.");
+        res.redirect('back');
+    }
 
     req.session.twitterVerificationCode = req.session.twitterVerificationCode || cryptoRandomString(10);
 
@@ -192,7 +208,7 @@ router.get('/accounts/verify/twitter/:screen_name', middlewares.isLoggedIn, func
         }
     });
 
-});
+}));
 
 /* GET instagram account verification page. */
 router.get('/accounts/verify/instagram/:username', middlewares.isLoggedIn, middlewares.asyncMiddleware(async (req, res, next) => {
@@ -201,6 +217,19 @@ router.get('/accounts/verify/instagram/:username', middlewares.isLoggedIn, middl
     // check if account exists on twitter and pull data
     // check if account is already added and verified by someone to DB
     // if not, add or find row with user id, twitter username, and a verification code to DB
+
+    const duplicate = models.TwitterAccount.findOne({
+        where: {
+            username: req.params.screen_name,
+            verified: true,
+            type: "instagram",
+        }
+    });
+
+    if(duplicate) {
+        req.flash("error", "Account already added and verified by someone else.");
+        res.redirect('back');
+    }
 
     req.session.instagramVerificationCode = req.session.instagramVerificationCode || cryptoRandomString(10);
 
@@ -584,7 +613,22 @@ router.get('/orders', middlewares.isLoggedIn, middlewares.asyncMiddleware(async 
 
 }));
 
-/* GET profile page. */
+/* GET balance page. */
+router.get('/balance', middlewares.isLoggedIn, middlewares.asyncMiddleware(async (req, res, next) => {
+
+    const balance = await stripe.balance.retrieve({
+        stripe_account: res.locals.currentUser.stripe_user_id
+    });
+
+    res.render('dashboard/balance', {
+        title: "Balance — Social-Celebrity.com",
+        description: "",
+        page: req.baseUrl,
+        subpage: req.path
+    });
+}));
+
+/* GET forgot password page. */
 router.get('/forgot', function (req, res, next) {
     res.render('forgot', {
         title: "Forgot Password — Social-Celebrity.com",
@@ -774,14 +818,20 @@ router.post('/profile/reset/:token', function (req, res, next) {
 /* POST profile payment details. */
 router.post('/profile/payment-details', middlewares.isLoggedIn, middlewares.asyncMiddleware(async (req, res, next) => {
 
-    const result = await request.post({
+    const result = request.post({
       url: 'https://connect.stripe.com/oauth/deauthorize',
       formData: {
         client_id: process.env.STRIPE_CLIENTID,
         stripe_user_id: res.locals.currentUser.stripe_user_id,
       },
-      headers: {'Authorization': process.env.STRIPE_SECRETKEY},
+      headers: {'Authorization': 'Bearer '+process.env.STRIPE_SECRETKEY},
     });
+
+    if(result.response.statusMessage === "OK") {
+        const user = await models.User.findById(res.locals.currentUser.id);
+        const update = user.update({ stripe_user_id: null });
+    }
+
     res.redirect('back');
 
 }));

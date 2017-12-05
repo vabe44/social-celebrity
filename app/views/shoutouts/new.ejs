@@ -1,26 +1,58 @@
-<h1>Add New Shoutout</h1>
+<% include ../partials/header %>
 
-<form id="add-shoutout" name="add-shoutout" method="post" action="/shoutouts">
+<div id="container-bg">
 
-    <label for="account">Account</label><br>
-    <select name="account">
-        <% twitterAccounts.forEach(function(account){ %>
-            <option value="<%= account.id %>"><%= account.username %></option>
-        <% }); %>
-    </select>
+	<div id="container2">
 
-<br><br>
+        <div id="faq-spacer"></div>
 
-    <label for="description">Description</label><br>
-    <textarea name="description" rows="3">
-    </textarea>
+                <div class="content">
 
-<br><br>
+                    <div class="col-xs-12">
 
-    <label for="price">Price</label><br>
-    <input name="price" type="number">
+                        <h3 class="pagetitle">Add New Shoutout</h3>
 
-<br><br>
+                        <p class="lead">
+                            You can offer a new shoutout from your unused accounts here.
+                        </p>
 
-    <input class="btn" type="submit" value="Add" />
-</form>
+                    </div>
+
+                    <div class="col-xs-12">&nbsp;</div>
+
+                    <div class="col-xs-12">
+                        <form id="add-shoutout" name="add-shoutout" method="post" action="/shoutouts">
+
+                            <div class="form-group">
+                                <label for="account" class="control-label">Account</label><br>
+                                <select name="account" class="form-control">
+                                    <% accounts.forEach(function(account){ %>
+                                        <% if(!account.Shoutout){ %>
+                                            <option value="<%= account.id %>"><%= account.username %></option>
+                                        <% } %>
+                                    <% }); %>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="description" class="control-label">Description</label>
+                                <textarea class="form-control" rows="3" name="description"></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-block">Add</button>
+
+                        </form>
+                    </div>
+
+                </div>
+
+        </div>
+
+	</div>
+	<!-- container2 -->
+
+  <% include ../partials/footer %>
+  <% include ../partials/sticky-sidebar-deps %>
+
+</body>
+</html>

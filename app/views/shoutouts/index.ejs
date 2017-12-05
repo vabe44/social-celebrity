@@ -1,17 +1,77 @@
-<h1>Buy shoutouts from Influencers</h1>
+<% include ../partials/header %>
 
-<h3>Browse Instagram & Twitter influencers by category, followers and price</h3>
+<div id="container-bg">
 
-<a href="/shoutouts/new"><button>Add Shoutout</button></a>
+	<div id="container2">
 
-<% if(shoutouts.length > 0) { %>
-<ul>
-    <% shoutouts.forEach(function(shoutout){ %>
-        <li>
-            <strong><%= shoutout.TwitterAccount.username %></strong> - <%= shoutout.description %> by <%= shoutout.User.email %> <a href="/shoutouts/<%= shoutout.id %>"><button>View</button></a>
-        </li>
-    <% }); %>
-</ul>
-<% }  else { %>
-<p>No shoutouts added yet.</p>
-<% } %>
+        <% include ../partials/dashboard/nav %>
+
+        <div id="faq-spacer"></div>
+
+        <div class="col-sm-12">
+
+            <h3 class="pagetitle">
+                Shoutouts
+            </h3>
+
+            <p>
+                Browse Instagram & Twitter influencers by category, followers and price
+            </p>
+
+            <p>
+                <a class="btn btn-success btn-block" href="/shoutouts/new" role="button">Add Shoutout</a>
+            </p>
+
+            <br>
+
+        </div>
+
+        <br>
+
+        <div class="col-sm-12">
+
+            <div id="faqbox">
+
+                <% if(shoutouts.length > 0) { %>
+                    <table id="table" class="table table-bordered table-intel">
+                        <thead>
+                            <tr>
+                                <th class="filter">Account</th>
+                                <th class="filter">Followers</th>
+                                <th class="filter">Price</th>
+                                <th class="filter">Reviews</th>
+                                <th class="filter">Type</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <% shoutouts.forEach(function(shoutout){ %>
+                                <tr>
+                                    <td><%= shoutout.TwitterAccount.username %></td>
+                                    <td><%= shoutout.followers %></td>
+                                    <td>$<%= shoutout.ShoutoutPriceOptions[0].ShoutoutPrice.price %></td>
+                                    <td><%= shoutout.ShoutoutReviews.length %></td>
+                                    <td><%= shoutout.TwitterAccount.type %></td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                <% }  else { %>
+                    <p>No shoutouts added yet.</p>
+                <% } %>
+
+            </div>
+
+        </div>
+
+	</div>
+	<!-- container2 -->
+
+    <script>
+        $('table').excelTableFilter();
+    </script>
+
+    <% include ../partials/footer %>
+
+</body>
+</html>

@@ -12,10 +12,6 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.TEXT,
             allowNull: true
         },
-        price: {
-            type: DataTypes.DECIMAL(10, 2),
-            allowNull: true
-        },
     }, {
         tableName: 'shoutouts',
         underscored: true,
@@ -24,6 +20,7 @@ module.exports = function (sequelize, DataTypes) {
                 models.Shoutout.belongsTo(models.User);
                 models.Shoutout.belongsTo(models.TwitterAccount);
                 models.Shoutout.hasMany(models.ShoutoutReview);
+                models.Shoutout.belongsToMany(models.ShoutoutPriceOption, {through: 'ShoutoutPrice'});
             }
         }
     });

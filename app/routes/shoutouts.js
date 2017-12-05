@@ -12,12 +12,41 @@ var twitter = new Twitter({
   });
 var Promise = require("bluebird");
 var moment = require('moment');
+var asyncRequest = require('async-request');
 
 /* GET shoutouts page. */
 router.get('/', middlewares.asyncMiddleware(async (req, res, next) => {
 
-    const shoutouts = await models.Shoutout.findAll({ include: [ models.User, models.TwitterAccount ]});
-    res.render('shoutouts/index', { shoutouts });
+    const shoutouts = await models.Shoutout.findAll({
+        include: [{ all: true, nested: true }]
+    });
+
+    // get followers
+    for (let shoutout of shoutouts) {
+
+        if(shoutout.TwitterAccount.type === "twitter") {
+            // check if account exists and pull data
+            const account = await twitter.get('users/show', {screen_name: shoutout.TwitterAccount.username});
+            if(account) shoutout.followers = account.followers_count;
+        }
+
+        if(shoutout.TwitterAccount.type === "instagram") {
+            // check if account exists and pull data
+            const json = await asyncRequest('https://igpi.ga/' + shoutout.TwitterAccount.username + '/?__a=1', {
+                headers: { 'Referer': req.hostname }
+            });
+            const instagram = JSON.parse(json.body);
+            if(instagram.user) shoutout.followers = instagram.user.followed_by.count;
+        }
+    }
+
+    res.render('shoutouts/index', {
+        shoutouts,
+        title: "Shoutouts — Social-Celebrity.com",
+        description: "",
+        page: req.baseUrl,
+        subpage: req.path,
+    });
 
 }));
 
@@ -26,7 +55,6 @@ router.post('/', middlewares.isLoggedIn, middlewares.asyncMiddleware(async (req,
 
     const shoutout = await models.Shoutout.create({
         description: req.body.description,
-        price: req.body.price,
         user_id: res.locals.currentUser.id,
         twitter_account_id: req.body.account
     });
@@ -37,8 +65,26 @@ router.post('/', middlewares.isLoggedIn, middlewares.asyncMiddleware(async (req,
 /* GET new shoutouts page. */
 router.get('/new', middlewares.isLoggedIn, middlewares.asyncMiddleware(async (req, res, next) => {
 
-    const twitter = await models.TwitterAccount.findAll({ where: { user_id: res.locals.currentUser.id } });
-    res.render('shoutouts/new', { twitterAccounts });
+    if(!res.locals.currentUser.stripe_user_id) {
+        req.flash("error", "You need to link a Stripe account to your profile first.");
+        res.redirect('/dashboard/profile');
+    }
+
+    const accounts = await models.TwitterAccount.findAll({
+        where: {
+            user_id: res.locals.currentUser.id,
+            verified: true,
+        },
+        include: [{ all: true, nested: true }]
+    });
+
+    res.render('shoutouts/new', {
+        accounts,
+        title: "Shoutouts — Social-Celebrity.com",
+        description: "",
+        page: req.baseUrl,
+        subpage: req.path,
+    });
 
 }));
 
@@ -82,7 +128,7 @@ router.get('/:id', middlewares.asyncMiddleware(async (req, res, next) => {
 
 }));
 
-// EDIT qol route
+// EDIT shoutout route
 router.get("/:id/edit", middlewares.isLoggedIn, function (req, res, next) {
 
     Promise.join(
@@ -115,7 +161,7 @@ router.get("/:id/edit", middlewares.isLoggedIn, function (req, res, next) {
 
 });
 
-// UPDATE campground route
+// UPDATE shoutout route
 router.put("/:id", function (req, res, next) {
 
     Promise.join(

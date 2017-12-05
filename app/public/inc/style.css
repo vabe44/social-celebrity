@@ -1537,14 +1537,14 @@ a.cta2:hover {
     font-size: 18px;
     line-height: 29px;
     margin-left: 29px;
-    width: 544px;
+    /* width: 544px; */
     color:#878787;
 }
 #faqbox p > a {
     font-family: Helvetica;
     font-size: 18px;
     line-height: 29px;
-    width: 544px;
+    /* width: 544px; */
     color:#00b4ff;
     text-decoration:none;
 }
@@ -2479,4 +2479,9 @@ input[type="radio"]:checked + label span {
 
 a:hover {
 	text-decoration: none;
+}
+
+.flash.container {
+	max-width: 985px;
+	padding: 0;
 }

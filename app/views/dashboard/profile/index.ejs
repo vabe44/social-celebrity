@@ -109,13 +109,21 @@
 
                                         <br>
 
+                                        <p>
+                                            You need a Stripe account to receive payments.
+                                            You can register or connect your account using the link below.
+                                        </p>
+
+                                        <br>
+
                                         <% if(currentUser.stripe_user_id) { %>
                                             <p>
                                                 Connected to Stripe: <%= currentUser.stripe_user_id %>
                                             </p>
                                             <form action="/dashboard/profile/payment-details" method="post">
                                                 <p>
-                                                    <button type="button" class="btn btn-danger">Revoke Access</button>
+                                                    <input type="checkbox" name="asd" id="asd" hidden>
+                                                    <button class="btn btn-danger" type="submit">Revoke Access</button>
                                                 </p>
                                             </form>
                                         <% } else { %>

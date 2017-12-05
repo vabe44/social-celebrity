@@ -43,6 +43,7 @@ module.exports = function (sequelize, DataTypes) {
                     models.TwitterAccount.belongsTo(models.Age);
                     models.TwitterAccount.belongsTo(models.Sex);
                     models.TwitterAccount.belongsTo(models.Activity);
+                    models.TwitterAccount.hasOne(models.Shoutout);
                 }
             }
     });
