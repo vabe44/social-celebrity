@@ -40,6 +40,11 @@ module.exports = function (sequelize, Sequelize) {
             allowNull: false,
             defaultValue: 0
         },
+        role: {
+            type: Sequelize.ENUM('user', 'admin'),
+            allowNull: false,
+            defaultValue: 'user',
+        },
     }, {
         underscored: true
     });

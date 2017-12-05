@@ -4,12 +4,12 @@ var middlewares = require("../middlewares");
 var models      = require("../models");
 
 /* GET admin index page. */
-router.get('/', middlewares.isLoggedIn, function (req, res, next) {
+router.get('/', middlewares.isAdmin, function (req, res, next) {
     res.render('admin/index');
 });
 
 /* GET shoutout categories page. */
-router.get('/shoutout/categories/', middlewares.isLoggedIn, function (req, res, next) {
+router.get('/shoutout/categories/', middlewares.isAdmin, function (req, res, next) {
 
     models.Category
     .findAll()
@@ -25,7 +25,7 @@ router.get('/shoutout/categories/', middlewares.isLoggedIn, function (req, res, 
 });
 
 /* POST shoutout categories page. */
-router.post('/shoutout/categories/', middlewares.isLoggedIn, function (req, res, next) {
+router.post('/shoutout/categories/', middlewares.isAdmin, function (req, res, next) {
 
     models.Category
     .create({ name: req.body.categoryname })
@@ -38,7 +38,7 @@ router.post('/shoutout/categories/', middlewares.isLoggedIn, function (req, res,
 });
 
 /* GET languages page. */
-router.get('/shoutout/languages/', middlewares.isLoggedIn, function (req, res, next) {
+router.get('/shoutout/languages/', middlewares.isAdmin, function (req, res, next) {
 
     models.Language
     .findAll()
@@ -54,7 +54,7 @@ router.get('/shoutout/languages/', middlewares.isLoggedIn, function (req, res, n
 });
 
 /* POST languages page. */
-router.post('/shoutout/languages/', middlewares.isLoggedIn, function (req, res, next) {
+router.post('/shoutout/languages/', middlewares.isAdmin, function (req, res, next) {
 
     models.Language
     .create({ name: req.body.languagename })
@@ -67,7 +67,7 @@ router.post('/shoutout/languages/', middlewares.isLoggedIn, function (req, res, 
 });
 
 /* GET countries page. */
-router.get('/shoutout/countries/', middlewares.isLoggedIn, function (req, res, next) {
+router.get('/shoutout/countries/', middlewares.isAdmin, function (req, res, next) {
 
     models.Country
     .findAll()
@@ -83,7 +83,7 @@ router.get('/shoutout/countries/', middlewares.isLoggedIn, function (req, res, n
 });
 
 /* POST countries page. */
-router.post('/shoutout/countries/', middlewares.isLoggedIn, function (req, res, next) {
+router.post('/shoutout/countries/', middlewares.isAdmin, function (req, res, next) {
 
     models.Country
     .create({ name: req.body.countryname })
@@ -96,7 +96,7 @@ router.post('/shoutout/countries/', middlewares.isLoggedIn, function (req, res, 
 });
 
 /* GET ages page. */
-router.get('/shoutout/ages/', middlewares.isLoggedIn, function (req, res, next) {
+router.get('/shoutout/ages/', middlewares.isAdmin, function (req, res, next) {
 
     models.Age
     .findAll()
@@ -112,7 +112,7 @@ router.get('/shoutout/ages/', middlewares.isLoggedIn, function (req, res, next) 
 });
 
 /* POST ages page. */
-router.post('/shoutout/ages/', middlewares.isLoggedIn, function (req, res, next) {
+router.post('/shoutout/ages/', middlewares.isAdmin, function (req, res, next) {
 
     models.Age
     .create({ name: req.body.agename })
@@ -125,7 +125,7 @@ router.post('/shoutout/ages/', middlewares.isLoggedIn, function (req, res, next)
 });
 
 /* GET sexes page. */
-router.get('/shoutout/sexes/', middlewares.isLoggedIn, function (req, res, next) {
+router.get('/shoutout/sexes/', middlewares.isAdmin, function (req, res, next) {
 
     models.Sex
     .findAll()
@@ -141,7 +141,7 @@ router.get('/shoutout/sexes/', middlewares.isLoggedIn, function (req, res, next)
 });
 
 /* POST sexes page. */
-router.post('/shoutout/sexes/', middlewares.isLoggedIn, function (req, res, next) {
+router.post('/shoutout/sexes/', middlewares.isAdmin, function (req, res, next) {
 
     models.Sex
     .create({ name: req.body.sexname })
@@ -154,7 +154,7 @@ router.post('/shoutout/sexes/', middlewares.isLoggedIn, function (req, res, next
 });
 
 /* GET activities page. */
-router.get('/shoutout/activities/', middlewares.isLoggedIn, function (req, res, next) {
+router.get('/shoutout/activities/', middlewares.isAdmin, function (req, res, next) {
 
     models.Activity
     .findAll()
@@ -170,7 +170,7 @@ router.get('/shoutout/activities/', middlewares.isLoggedIn, function (req, res, 
 });
 
 /* POST activities page. */
-router.post('/shoutout/activities/', middlewares.isLoggedIn, function (req, res, next) {
+router.post('/shoutout/activities/', middlewares.isAdmin, function (req, res, next) {
 
     models.Activity
     .create({ name: req.body.activityname })
@@ -183,7 +183,7 @@ router.post('/shoutout/activities/', middlewares.isLoggedIn, function (req, res,
 });
 
 /* GET price options page. */
-router.get('/shoutout/price-options/', middlewares.isLoggedIn, function (req, res, next) {
+router.get('/shoutout/price-options/', middlewares.isAdmin, function (req, res, next) {
 
     models.ShoutoutPriceOption
     .findAll()
@@ -199,7 +199,7 @@ router.get('/shoutout/price-options/', middlewares.isLoggedIn, function (req, re
 });
 
 /* POST price options page. */
-router.post('/shoutout/price-options/', middlewares.isLoggedIn, function (req, res, next) {
+router.post('/shoutout/price-options/', middlewares.isAdmin, function (req, res, next) {
 
     models.ShoutoutPriceOption
     .create({ name: req.body.optionname })
