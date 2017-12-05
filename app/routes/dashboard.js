@@ -29,6 +29,7 @@ var nodemailer = require('nodemailer');
 var Promise = require("bluebird");
 var moment = require('moment');
 var request = require('request');
+var asyncRequest = require('async-request');
 
 /* GET dashboard page. */
 router.get('/', middlewares.isLoggedIn, middlewares.asyncMiddleware(async (req, res, next) => {
@@ -56,32 +57,48 @@ router.get('/', middlewares.isLoggedIn, middlewares.asyncMiddleware(async (req, 
 }));
 
 /* GET accounts page. */
-router.get('/accounts', middlewares.isLoggedIn, function (req, res, next) {
+router.get('/accounts', middlewares.isLoggedIn, middlewares.asyncMiddleware(async (req, res, next) => {
 
-    models.TwitterAccount.findAll({
+    const twitterAccounts = await models.TwitterAccount.findAll({
         where: {
             user_id: res.locals.currentUser.id,
-            verified: true
+            verified: true,
+            type: 'twitter',
         }
-    })
-    .then(twitterAccounts => {
-        res.render('dashboard/accounts/index', {
-            twitterAccounts: twitterAccounts,
-            title: "Accounts — Social-Celebrity.com",
-            description: "",
-            page: req.baseUrl,
-            subpage: req.path
-        });
-    })
-    .catch(error => {
-        console.log("Oops, something went wrong. " + error);
     });
 
-});
+    const instagramAccounts = await models.TwitterAccount.findAll({
+        where: {
+            user_id: res.locals.currentUser.id,
+            verified: true,
+            type: 'instagram',
+        }
+    });
+
+    res.render('dashboard/accounts/index', {
+        twitterAccounts,
+        instagramAccounts,
+        title: "Accounts — Social-Celebrity.com",
+        description: "",
+        page: req.baseUrl,
+        subpage: req.path
+    });
+
+}));
 
 /* GET add twitter account page. */
 router.get('/accounts/add/twitter', middlewares.isLoggedIn, function (req, res, next) {
     res.render('dashboard/accounts/add/twitter', {
+        title: "Add Account — Social-Celebrity.com",
+        description: "",
+        page: req.baseUrl,
+        subpage: req.path
+    });
+});
+
+/* GET add instagram account page. */
+router.get('/accounts/add/instagram', middlewares.isLoggedIn, function (req, res, next) {
+    res.render('dashboard/accounts/add/instagram', {
         title: "Add Account — Social-Celebrity.com",
         description: "",
         page: req.baseUrl,
@@ -95,7 +112,7 @@ router.post('/accounts/add/twitter', middlewares.isLoggedIn, function (req, res,
     // check if account exists and pull data
     twitter.get('users/show', {screen_name: req.body.username},  function(error, account, response) {
         if(error) {
-            console.log(error[0].message);
+            req.flash("error", error[0].message);
         }
 
         if(account) {
@@ -103,6 +120,24 @@ router.post('/accounts/add/twitter', middlewares.isLoggedIn, function (req, res,
         }
     });
 });
+
+/* POST add instagram account page. */
+router.post('/accounts/add/instagram', middlewares.isLoggedIn, middlewares.asyncMiddleware(async (req, res, next) => {
+
+    // check if account exists and pull data
+    const json = await asyncRequest('https://igpi.ga/' + req.body.username + '/?__a=1', {
+        headers: { 'Referer': req.hostname }
+    });
+
+    const instagram = JSON.parse(json.body);
+
+    if(instagram.desc === "Failed to fetch from Instagram.") {
+        req.flash("error", instagram.desc);
+    }
+
+    res.redirect('/dashboard/accounts/verify/instagram/'+instagram.user.username);
+
+}));
 
 /* GET twitter account verification page. */
 router.get('/accounts/verify/twitter/:screen_name', middlewares.isLoggedIn, function (req, res, next) {
@@ -119,7 +154,8 @@ router.get('/accounts/verify/twitter/:screen_name', middlewares.isLoggedIn, func
     .findOrCreate({
         where: {
             username: req.params.screen_name,
-            user_id: res.locals.currentUser.id
+            user_id: res.locals.currentUser.id,
+            type: "twitter",
         }
     })
     .spread((twitterAccount, created) => {
@@ -133,7 +169,7 @@ router.get('/accounts/verify/twitter/:screen_name', middlewares.isLoggedIn, func
                 console.log('Verification code updated!');
             })
             .catch(error => {
-                console.log("Oops, something went wrong. " + error);
+                req.flash("error", error);
             });
         }
 
@@ -141,12 +177,12 @@ router.get('/accounts/verify/twitter/:screen_name', middlewares.isLoggedIn, func
 
     twitter.get('users/show', {screen_name: req.params.screen_name},  function(error, account, response) {
         if(error) {
-            console.log(error[0].message);
+            req.flash("error", error[0].message);
         }
 
         if(account) {
             res.render('dashboard/accounts/verify/twitter', {
-                account: account,
+                account,
                 twitterVerificationCode: req.session.twitterVerificationCode,
                 title: "Verify Account — Social-Celebrity.com",
                 description: "",
@@ -157,6 +193,64 @@ router.get('/accounts/verify/twitter/:screen_name', middlewares.isLoggedIn, func
     });
 
 });
+
+/* GET instagram account verification page. */
+router.get('/accounts/verify/instagram/:username', middlewares.isLoggedIn, middlewares.asyncMiddleware(async (req, res, next) => {
+
+    // create random string for verification
+    // check if account exists on twitter and pull data
+    // check if account is already added and verified by someone to DB
+    // if not, add or find row with user id, twitter username, and a verification code to DB
+
+    req.session.instagramVerificationCode = req.session.instagramVerificationCode || cryptoRandomString(10);
+
+    // find or create twitteraccount entry with user id and twitter username
+    models.TwitterAccount
+    .findOrCreate({
+        where: {
+            username: req.params.username,
+            user_id: res.locals.currentUser.id,
+            type: "instagram"
+        }
+    })
+    .spread((twitterAccount, created) => {
+
+        // if verification code is changed because of new session
+        if(twitterAccount.verification_code !== req.session.instagramVerificationCode) {
+            // update the verification code value in the DB
+            twitterAccount.update({
+                verification_code: req.session.instagramVerificationCode
+            }).then(twitterAccount =>{
+                console.log('Verification code updated!');
+            })
+            .catch(error => {
+                req.flash("error", error);
+            });
+        }
+
+    });
+
+    // check if account exists and pull data
+    const json = await asyncRequest('https://igpi.ga/' + req.params.username + '/?__a=1', {
+        headers: { 'Referer': req.hostname }
+    });
+
+    const instagram = JSON.parse(json.body);
+
+    if(instagram.desc === "Failed to fetch from Instagram.") {
+        req.flash("error", instagram.desc);
+    }
+
+    res.render('dashboard/accounts/verify/instagram', {
+        instagram,
+        instagramVerificationCode: req.session.instagramVerificationCode,
+        title: "Verify Account — Social-Celebrity.com",
+        description: "",
+        page: req.baseUrl,
+        subpage: req.path
+    });
+
+}));
 
 /* POST twitter account verification page. */
 router.post('/accounts/verify/twitter/:screen_name/', middlewares.isLoggedIn, function (req, res, next) {
@@ -174,7 +268,8 @@ router.post('/accounts/verify/twitter/:screen_name/', middlewares.isLoggedIn, fu
             .findOne({
                 where: {
                     username: req.params.screen_name,
-                    user_id: res.locals.currentUser.id
+                    user_id: res.locals.currentUser.id,
+                    type: "twitter",
                 }
             })
             .then(twitterAccount => {
@@ -209,6 +304,44 @@ router.post('/accounts/verify/twitter/:screen_name/', middlewares.isLoggedIn, fu
 
 });
 
+/* POST instagram account verification page. */
+router.post('/accounts/verify/instagram/:username/', middlewares.isLoggedIn, middlewares.asyncMiddleware(async (req, res, next) => {
+
+    // check if current user and payload data matches then get the code from DB
+    // NEED TO CHECK HERE IF BIO CONTAINS CODE THEN VERIFY
+    if(req.body.user_id == res.locals.currentUser.id && req.body.verification_code == req.session.instagramVerificationCode) {
+
+        // get instagram user info
+        const json = await asyncRequest('https://igpi.ga/' + req.params.username + '/?__a=1', {
+            headers: { 'Referer': req.hostname }
+        });
+
+        const instagram = JSON.parse(json.body);
+
+        if(instagram.desc === "Failed to fetch from Instagram.") {
+            req.flash("error", instagram.desc);
+        }
+
+        const twitterAccount = await models.TwitterAccount.findOne({
+            where: {
+                username: req.params.username,
+                user_id: res.locals.currentUser.id,
+                type: "instagram",
+            }
+        });
+
+        if(instagram.user.biography.includes(twitterAccount.verification_code)) {
+            const result = await twitterAccount.update({ verified: true });
+            req.flash("success", "Verification successfully completed!");
+            res.redirect('/dashboard/accounts');
+        } else {
+            req.flash("error", "Verification failed.");
+            res.redirect('back');
+        }
+    }
+
+}));
+
 /* DELETE twitter account */
 router.delete('/accounts/remove/twitter/:screen_name/', middlewares.isLoggedIn, function (req, res, next) {
 
@@ -217,7 +350,8 @@ router.delete('/accounts/remove/twitter/:screen_name/', middlewares.isLoggedIn, 
         where: {
             username: req.params.screen_name,
             user_id: res.locals.currentUser.id,
-            verified: true
+            verified: true,
+            type: "twitter",
         }
     })
     .then(twitterAccount => {
@@ -233,7 +367,25 @@ router.delete('/accounts/remove/twitter/:screen_name/', middlewares.isLoggedIn, 
 
 });
 
-/* GET account manage page. */
+/* DELETE instagram account */
+router.delete('/accounts/remove/instagram/:username/', middlewares.isLoggedIn, middlewares.asyncMiddleware(async (req, res, next) => {
+
+    const instagramAccount = await models.TwitterAccount.findOne({
+        where: {
+            username: req.params.username,
+            user_id: res.locals.currentUser.id,
+            verified: true,
+            type: "instagram",
+        }
+    });
+
+    instagramAccount.destroy();
+
+    res.redirect('/dashboard/accounts');
+
+}));
+
+/* GET twitter account manage page. */
 router.get('/accounts/manage/twitter/:id', middlewares.isLoggedIn, function (req, res, next) {
 
     Promise.join(
@@ -246,7 +398,7 @@ router.get('/accounts/manage/twitter/:id', middlewares.isLoggedIn, function (req
         models.Activity.findAll(),
 
         function(twitter, categories, languages, countries, ages, sexes, activities) {
-            res.render('dashboard/accounts/manage', {
+            res.render('dashboard/accounts/manage/twitter', {
                 twitter,
                 categories,
                 languages,
@@ -263,12 +415,47 @@ router.get('/accounts/manage/twitter/:id', middlewares.isLoggedIn, function (req
         }
     )
     .catch(error => {
-        console.log("Oops, something went wrong. " + error);
+        req.flash("error", error);
     });
 
 });
 
-/* POST account manage page. */
+/* GET instagram account manage page. */
+router.get('/accounts/manage/instagram/:id', middlewares.isLoggedIn, function (req, res, next) {
+
+    Promise.join(
+        models.TwitterAccount.findById(req.params.id),
+        models.Category.findAll(),
+        models.Language.findAll(),
+        models.Country.findAll(),
+        models.Age.findAll(),
+        models.Sex.findAll(),
+        models.Activity.findAll(),
+
+        function(instagram, categories, languages, countries, ages, sexes, activities) {
+            res.render('dashboard/accounts/manage/instagram', {
+                instagram,
+                categories,
+                languages,
+                countries,
+                ages,
+                sexes,
+                activities,
+                title: "Accounts — Social-Celebrity.com",
+                description: "",
+                page: req.baseUrl,
+                subpage: req.path
+            });
+
+        }
+    )
+    .catch(error => {
+        req.flash("error", error);
+    });
+
+});
+
+/* POST twitter account manage page. */
 router.post('/accounts/manage/twitter/:id', middlewares.isLoggedIn, function (req, res, next) {
 
     models.TwitterAccount.findById(req.params.id)
@@ -290,6 +477,24 @@ router.post('/accounts/manage/twitter/:id', middlewares.isLoggedIn, function (re
     });
 
 });
+
+/* POST instagram account manage page. */
+router.post('/accounts/manage/instagram/:id', middlewares.isLoggedIn, middlewares.asyncMiddleware(async (req, res, next) => {
+
+    const instagram = await models.TwitterAccount.findById(req.params.id);
+
+    const result = instagram.update({
+        category_id: req.body.category,
+        language_id: req.body.language,
+        country_id: req.body.country,
+        age_id: req.body.age,
+        sex_id: req.body.sex,
+        activity_id: req.body.activity,
+    });
+
+    res.redirect('back');
+
+}));
 
 /* GET profile page. */
 router.get('/profile', middlewares.isLoggedIn, function (req, res, next) {

@@ -12,6 +12,11 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.STRING,
             allowNull: false
         },
+        type: {
+            type: DataTypes.ENUM('twitter', 'instagram', 'unknown'),
+            allowNull: false,
+            defaultValue: 'unknown'
+        },
         description: {
             type: DataTypes.TEXT,
             allowNull: true

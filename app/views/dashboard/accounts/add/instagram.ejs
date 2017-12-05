@@ -1,0 +1,53 @@
+<% include ../../../partials/header %>
+
+<div id="container-bg">
+
+	<div id="container2">
+
+        <% include ../../../partials/dashboard/nav %>
+
+        <div id="faq-spacer"></div>
+
+                <div class="content">
+
+                    <div class="col-xs-12">
+
+                        <h3 class="pagetitle">Add Instagram Account</h3>
+
+                        <p class="lead">
+                            Don't forget to set your account public!
+                        </p>
+
+                    </div>
+
+                    <div class="col-xs-12">&nbsp;</div>
+
+                    <div class="col-xs-12">
+                        <form id="addinstagramaccount" name="addinstagramaccount" method="post" action="/dashboard/accounts/add/instagram">
+
+                            <div class="form-group">
+                                <label class="sr-only" for="username">Instagram username (without the at sign)</label>
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-addon">@</div>
+                                    <input type="text" class="form-control" name="username" placeholder="Enter your username here">
+                                    <span class="input-group-btn">
+                                        <button type="submit" class="btn btn-primary btn-lg">Find</button>
+                                    </span>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+
+                </div>
+
+        </div>
+
+	</div>
+	<!-- container2 -->
+
+  <% include ../../../partials/footer %>
+  <% include ../../../partials/sticky-sidebar-deps %>
+
+</body>
+</html>
