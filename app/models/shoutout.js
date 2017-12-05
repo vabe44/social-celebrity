@@ -23,6 +23,7 @@ module.exports = function (sequelize, DataTypes) {
             associate: function (models) {
                 models.Shoutout.belongsTo(models.User);
                 models.Shoutout.belongsTo(models.TwitterAccount);
+                models.Shoutout.hasMany(models.ShoutoutReview);
             }
         }
     });

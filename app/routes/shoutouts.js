@@ -14,73 +14,48 @@ var Promise = require("bluebird");
 var moment = require('moment');
 
 /* GET shoutouts page. */
-router.get('/', middlewares.isLoggedIn, function (req, res, next) {
+router.get('/', middlewares.asyncMiddleware(async (req, res, next) => {
 
-    models.Shoutout
-    .findAll({
-        include: [ models.User, models.TwitterAccount ]
-    })
-    .then(shoutouts => {
-        res.render('shoutouts/index', {
-            shoutouts: shoutouts
-        });
-    })
-    .catch(error => {
-        console.log("Oops, something went wrong. " + error);
-    });
+    const shoutouts = await models.Shoutout.findAll({ include: [ models.User, models.TwitterAccount ]});
+    res.render('shoutouts/index', { shoutouts });
 
-});
+}));
 
 /* POST shoutouts. */
-router.post('/', middlewares.isLoggedIn, function (req, res, next) {
+router.post('/', middlewares.isLoggedIn, middlewares.asyncMiddleware(async (req, res, next) => {
 
-    models.Shoutout
-    .create({
+    const shoutout = await models.Shoutout.create({
         description: req.body.description,
         price: req.body.price,
         user_id: res.locals.currentUser.id,
         twitter_account_id: req.body.account
-    })
-    .then(() => {
-        res.redirect('/shoutouts');
-    })
-    .catch(error => {
-        console.log("Oops, something went wrong. " + error);
     });
+    res.redirect('/shoutouts');
 
-});
+}));
 
 /* GET new shoutouts page. */
-router.get('/new', middlewares.isLoggedIn, function (req, res, next) {
+router.get('/new', middlewares.isLoggedIn, middlewares.asyncMiddleware(async (req, res, next) => {
 
-    models.TwitterAccount
-    .findAll({
-        where: {
-            user_id: res.locals.currentUser.id
-        }
-    })
-    .then(twitterAccounts => {
-        res.render('shoutouts/new', {
-            twitterAccounts: twitterAccounts
-        });
-    })
-    .catch(error => {
-        console.log("Oops, something went wrong. " + error);
-    });
+    const twitter = await models.TwitterAccount.findAll({ where: { user_id: res.locals.currentUser.id } });
+    res.render('shoutouts/new', { twitterAccounts });
 
-});
+}));
 
 /* SHOW - shows more info about one shoutout. */
-router.get('/:id', middlewares.isLoggedIn, middlewares.asyncMiddleware(async (req, res, next) => {
-
+router.get('/:id', middlewares.asyncMiddleware(async (req, res, next) => {
 
     let shoutout = await models.Shoutout.findOne({ where: { id: req.params.id }, include: [{ all: true, nested: true }]});
-    const favorited = await models.ShoutoutFavorite.findOne({
-        where: {
-            user_id: res.locals.currentUser.id,
-            shoutout_id: req.params.id
-        }
-    });
+
+    if(res.locals.currentUser) {
+        const favorited = await models.ShoutoutFavorite.findOne({
+            where: {
+                user_id: res.locals.currentUser.id,
+                shoutout_id: req.params.id
+            }
+        });
+        shoutout.favorited = favorited;
+    }
 
     const account = await twitter.get('users/show', {screen_name: shoutout.TwitterAccount.username});
     const tweets = await twitter.get('search/tweets', {
@@ -90,7 +65,9 @@ router.get('/:id', middlewares.isLoggedIn, middlewares.asyncMiddleware(async (re
         count: 6
     });
 
-    shoutout.favorited = favorited;
+    const totalScore = shoutout.ShoutoutReviews.reduce((sum, review) => sum + Number(review.rating), 0);
+    shoutout.score = (totalScore / shoutout.ShoutoutReviews.length) * 20;
+
     shoutout.twitter = account;
     shoutout.twitter.tweets = tweets;
 
@@ -230,6 +207,102 @@ router.post('/favorite', middlewares.isLoggedIn, middlewares.asyncMiddleware(asy
     });
 
     res.json({ result: result });
+
+}));
+
+/* GET new shoutout review page. */
+router.get('/:id/review', middlewares.isLoggedIn, middlewares.asyncMiddleware(async (req, res, next) => {
+
+    const order = await models.ShoutoutOrder.findOne({
+        where: {
+            user_id: res.locals.currentUser.id,
+            shoutout_id: req.params.id,
+        }
+    });
+
+    if(order) {
+        res.render('shoutouts/reviews/new', {
+            order,
+            title: "Review Shoutout — Social-Celebrity.com",
+            description: "",
+            page: req.baseUrl,
+            subpage: req.path,
+        });
+    } else {
+        res.redirect('back');
+    }
+
+}));
+
+/* POST new review */
+router.post('/review', middlewares.isLoggedIn, middlewares.asyncMiddleware(async (req, res, next) => {
+
+    // if order exist it means user can review
+    const order = await models.ShoutoutOrder.findOne({
+        where: {
+            id: req.body.orderId,
+            user_id: res.locals.currentUser.id,
+            shoutout_id: req.body.shoutoutId,
+        }
+    });
+
+    // if review exist, user already reviewed
+    const review = await models.ShoutoutReview.findOne({
+        where: {
+            user_id: res.locals.currentUser.id,
+            shoutout_id: req.body.shoutoutId,
+            shoutout_order_id: req.body.shoutoutOrderId,
+        }
+    });
+
+    if(order && !review) {
+        const newReview = await models.ShoutoutReview.create({
+            text: req.body.reviewtext,
+            rating: req.body.reviewrating,
+            user_id: res.locals.currentUser.id,
+            shoutout_id: req.body.shoutoutId,
+            shoutout_order_id: req.body.orderId
+        });
+    }
+
+    res.redirect('/shoutouts/' + req.body.shoutoutId);
+
+}));
+
+/* GET edit shoutout review page. */
+router.get('/:id/review/:reviewId/edit', middlewares.isLoggedIn, middlewares.asyncMiddleware(async (req, res, next) => {
+
+    // find review to update
+    const review = await models.ShoutoutReview.findById(req.params.reviewId);
+
+    if(review.user_id == res.locals.currentUser.id) {
+        res.render('shoutouts/reviews/edit', {
+            review,
+            title: "Edit Review — Social-Celebrity.com",
+            description: "",
+            page: req.baseUrl,
+            subpage: req.path,
+        });
+    } else {
+        res.redirect('back');
+    }
+
+}));
+
+/* PUT review */
+router.put('/:id/review', middlewares.isLoggedIn, middlewares.asyncMiddleware(async (req, res, next) => {
+
+    // find review to update
+    const review = await models.ShoutoutReview.findById(req.body.reviewId);
+
+    if(review.user_id == res.locals.currentUser.id) {
+        // update the review
+        const result = review.update({
+            text: req.body.reviewtext,
+            rating: req.body.reviewrating,
+        });
+    }
+    res.redirect('/shoutouts/' + review.shoutout_id);
 
 }));
 

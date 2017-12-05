@@ -56,6 +56,7 @@
                                                                     <th>Price option</th>
                                                                     <th>Price</th>
                                                                     <th>Publish time</th>
+                                                                    <th class="text-right">Review</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -84,6 +85,10 @@
 
                                                                         <td>
                                                                             <%= moment(order.publish_time).from(moment.now()); %>
+                                                                        </td>
+
+                                                                        <td class="text-right">
+                                                                            <a class="btn btn-default" href="/shoutouts/<%= order.Shoutout.id %>/review" role="button">Review</a>
                                                                         </td>
 
                                                                     </tr>

@@ -4,6 +4,8 @@
 
 	<div id="container2">
 
+        <% include ../partials/dashboard/nav %>
+
         <div class="row" style="width:983px;margin:0px;padding-top:15px;">
 
             <div class="col-sm-8">
@@ -21,14 +23,22 @@
                                 <small>followers:</small> <%= shoutout.twitter.followers_count %>
                             </p>
                             <p>
-                                <small>score:</small> 7.64
-                            </p>
-                            <p>
-                                <small>success rate:</small> 0%
+                                <small>score:</small> <%= shoutout.score %>
                             </p>
                         </div>
                         <div class="pull-right">
-                            <span class="glyphicon <%= shoutout.favorited ? 'glyphicon-heart' : 'glyphicon-heart-empty' %>" onclick="favorite(this)" aria-hidden="true" style="font-size:26px;color:#d50000;"></span>
+                            <% if(shoutout.favorited) { %>
+                                <span class="glyphicon <%= shoutout.favorited ? 'glyphicon-heart' : 'glyphicon-heart-empty' %>" onclick="favorite(this)" aria-hidden="true" style="font-size:26px;color:#d50000;"></span>
+                            <% } %>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-7 col-md-7 col-lg-8">
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<%= shoutout.score %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= shoutout.score %>%">
+                            <span class="sr-only"><%= shoutout.score %></span>
+                                <%= shoutout.score %>%
+                            </div>
                         </div>
                     </div>
 
@@ -85,58 +95,114 @@
 
                 <div class="clearfix"></div>
 
-                <div class="panel panel-success">
-                    <div class="panel-heading">Pricing</div>
-                    <div class="panel-body">
-                        <% if(shoutout.ShoutoutPriceOptions.length > 0) { %>
+                <!-- Nav tabs -->
+                <ul class="nav nav-pills nav-justified" role="tablist" id="myTabs">
+                    <li role="presentation" class="active"><a href="#pricing" aria-controls="pricing" role="tab" data-toggle="tab">Pricing</a></li>
+                    <li role="presentation"><a href="#reviews" aria-controls="reviews" role="tab" data-toggle="tab">Reviews</a></li>
+                </ul>
 
-                            <% shoutout.ShoutoutPriceOptions.forEach(function(option){ %>
+                <!-- Tab panes -->
+                <div class="tab-content">
 
-                                <div class="radio">
-                                    <label>
-                                        <input type="radio" name="priceOptionRadio" id="option-<%= option.id %>" value="<%= option.id %>" data-price="<%= option.ShoutoutPrice.price %>" data-description="<%= option.name %>">
-                                        <strong>
-                                            <%= `${option.name} - $${option.ShoutoutPrice.price}` %>
-                                        </strong>
-                                    </label>
-                                </div>
+                    <div role="tabpanel" class="tab-pane active" id="pricing">
 
-                            <% }); %>
+                        <div class="panel panel-default">
+                            <!-- <div class="panel-heading">Pricing</div> -->
+                            <div class="panel-body">
+                                <% if(shoutout.ShoutoutPriceOptions.length > 0) { %>
 
-                            <br>
+                                    <% shoutout.ShoutoutPriceOptions.forEach(function(option){ %>
 
-                            <div class="form-group">
-                                <label for="shoutoutCaption" class="col-sm-3 control-label">Caption</label>
-                                <textarea class="form-control" rows="2" id="shoutoutCaption" name="shoutoutCaption" placeholder="The caption of your shoutout"></textarea>
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" name="priceOptionRadio" id="option-<%= option.id %>" value="<%= option.id %>" data-price="<%= option.ShoutoutPrice.price %>" data-description="<%= option.name %>">
+                                                <strong>
+                                                    <%= `${option.name} - $${option.ShoutoutPrice.price}` %>
+                                                </strong>
+                                            </label>
+                                        </div>
+
+                                    <% }); %>
+
+                                    <br>
+
+                                    <div class="form-group">
+                                        <label for="shoutoutCaption" class="col-sm-3 control-label">Caption</label>
+                                        <textarea class="form-control" rows="2" id="shoutoutCaption" name="shoutoutCaption" placeholder="The caption of your shoutout"></textarea>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="shoutoutMediaLink" class="col-sm-3 control-label">Photo/Video</label>
+                                        <input type="text" class="form-control" id="shoutoutMediaLink" name="shoutoutMediaLink" placeholder="Link to photo/video for the shoutout">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="description" class="col-sm-12 control-label">Publish Time</label>
+                                        <div class="input-group date" id="shoutoutPublishTime">
+                                            <input type="text" class="form-control" name="publishTimeInput" placeholder="Preferred shoutout publish time" />
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-time"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <script type="text/javascript">
+                                        $(function () {
+                                            $('#shoutoutPublishTime').datetimepicker();
+                                        });
+                                    </script>
+
+
+                                <% }  else { %>
+                                    <p>No price options available.</p>
+                                <% } %>
                             </div>
 
-                            <div class="form-group">
-                                <label for="shoutoutMediaLink" class="col-sm-3 control-label">Photo/Video</label>
-                                <input type="text" class="form-control" id="shoutoutMediaLink" name="shoutoutMediaLink" placeholder="Link to photo/video for the shoutout">
-                            </div>
+                            <% if(currentUser) { %>
+                                <button id="buyButton" class="btn btn-success btn-block">Buy Now</button>
+                            <% } else { %>
+                                <button id="buyButton" class="btn btn-success btn-block" disabled="disabled">Log in to buy!</button>
+                            <% } %>
+                        </div>
 
-                            <div class="form-group">
-                                <label for="description" class="col-sm-12 control-label">Publish Time</label>
-                                <div class="input-group date" id="shoutoutPublishTime">
-                                    <input type="text" class="form-control" name="publishTimeInput" placeholder="Preferred shoutout publish time" />
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-time"></span>
-                                    </span>
-                                </div>
-                            </div>
-                            <script type="text/javascript">
-                                $(function () {
-                                    $('#shoutoutPublishTime').datetimepicker();
-                                });
-                            </script>
-
-
-                        <% }  else { %>
-                            <p>No price options available.</p>
-                        <% } %>
                     </div>
 
-                    <button id="buyButton" class="btn btn-success btn-block">Buy Now</button>
+                    <div role="tabpanel" class="tab-pane" id="reviews">
+
+                        <% if(shoutout.ShoutoutReviews.length > 0) { %>
+                            <div class="row">
+                            <br>
+                            <% shoutout.ShoutoutReviews.forEach(function(review){ %>
+                                <div class="col-sm-12">
+                                    <% if(review.rating > 3) { %><div class="panel panel-success"><% } %>
+                                    <% if(review.rating < 3) { %><div class="panel panel-danger"><% } %>
+                                    <% if(review.rating == 3) { %><div class="panel panel-warning"><% } %>
+                                        <div class="panel-heading">
+                                            <h3 class="panel-title">
+                                                <%= review.User.username %>
+                                                <span class="pull-right">Rating: <%= review.rating %></span>
+                                            </h3>
+                                        </div>
+                                        <div class="panel-body">
+                                            <p><%= review.text  %></p>
+                                            <small class="pull-right"><%= moment(review.created_at).format('LL'); %></small>
+                                        </div>
+                                        <% if(currentUser && review.user_id == currentUser.id) { %>
+                                            <div class="panel-footer">
+                                                <a class="btn btn-warning btn-block" href="/shoutouts/<%= review.shoutout_id %>/review/<%= review.id %>/edit" role="button">Edit</a>
+                                            </div>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            <% }); %>
+                            </div>
+                        <% }  else { %>
+                        <p class="page-p">
+                            <br>
+                            You have no linked accounts.
+                        </p>
+                        <% } %>
+
+                    </div>
 
                 </div>
 
@@ -217,6 +283,13 @@
 
     <% include ../partials/footer %>
 
+    <script>
+        $('#myTabs a').click(function (e) {
+            e.preventDefault()
+            $(this).tab('show')
+        })
+    </script>
+
     <!-- STRIPE  -->
     <script src="https://checkout.stripe.com/checkout.js"></script>
     <script type="text/javascript">
@@ -231,7 +304,7 @@
             bitcoin: true,
             token: function handleToken(token) {
 
-                token.userId = '<%= locals.currentUser.id %>';
+                token.userId = '<% if(currentUser) { %> currentUser.id <% } %>';
                 token.shoutoutId = '<%= shoutout.id %>';
                 token.priceOptionId = document.querySelector('input[name="priceOptionRadio"]:checked').value;
                 token.priceOptionName = document.querySelector('input[name="priceOptionRadio"]:checked').dataset.description;
