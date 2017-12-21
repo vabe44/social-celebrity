@@ -2485,3 +2485,7 @@ a:hover {
 	max-width: 985px;
 	padding: 0;
 }
+
+.glyphicon-arrow-down:before {
+	content: "";
+}

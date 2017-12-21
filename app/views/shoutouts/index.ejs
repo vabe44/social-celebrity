@@ -2,7 +2,7 @@
 
 <div id="container-bg">
 
-	<div id="container2">
+	<div id="container2" style="min-height: 500px;">
 
         <% include ../partials/dashboard/nav %>
 
@@ -41,17 +41,19 @@
                                 <th class="filter">Price</th>
                                 <th class="filter">Reviews</th>
                                 <th class="filter">Type</th>
+                                <th class="filter">Link</th>
                             </tr>
                         </thead>
 
                         <tbody>
                             <% shoutouts.forEach(function(shoutout){ %>
                                 <tr>
-                                    <td><%= shoutout.TwitterAccount.username %></td>
-                                    <td><%= shoutout.followers %></td>
-                                    <td>$<%= shoutout.ShoutoutPriceOptions[0].ShoutoutPrice.price %></td>
-                                    <td><%= shoutout.ShoutoutReviews.length %></td>
-                                    <td><%= shoutout.TwitterAccount.type %></td>
+                                    <td><a class="btn btn-primary" href="/shoutout/<%= shoutout.id %>"><%= shoutout.TwitterAccount.username %></a></td>
+                                    <td class="text-right"><%= shoutout.followers %></td>
+                                    <td class="text-right">$<%= shoutout.ShoutoutPriceOptions[0].ShoutoutPrice.price %></td>
+                                    <td class="text-right"><%= shoutout.ShoutoutReviews.length %></td>
+                                    <td class="text-right"><%= shoutout.TwitterAccount.type %></td>
+                                    <td class="text-right"><a class="btn btn-default" href="/shoutout/<%= shoutout.id %>" role="button">View</a></td>
                                 </tr>
                             <% }) %>
                         </tbody>

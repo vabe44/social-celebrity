@@ -150,7 +150,7 @@ router.get('/accounts/verify/twitter/:screen_name', middlewares.isLoggedIn, midd
     // check if account is already added and verified by someone to DB
     // if not, add or find row with user id, twitter username, and a verification code to DB
 
-    const duplicate = models.TwitterAccount.findOne({
+    const duplicate = await models.TwitterAccount.findOne({
         where: {
             username: req.params.screen_name,
             verified: true,
@@ -218,9 +218,9 @@ router.get('/accounts/verify/instagram/:username', middlewares.isLoggedIn, middl
     // check if account is already added and verified by someone to DB
     // if not, add or find row with user id, twitter username, and a verification code to DB
 
-    const duplicate = models.TwitterAccount.findOne({
+    const duplicate = await models.TwitterAccount.findOne({
         where: {
-            username: req.params.screen_name,
+            username: req.params.username,
             verified: true,
             type: "instagram",
         }
@@ -303,7 +303,7 @@ router.post('/accounts/verify/twitter/:screen_name/', middlewares.isLoggedIn, fu
             })
             .then(twitterAccount => {
                 // set account to verified if twitter bio contains verification code from DB
-                if(user.description.includes(twitterAccount.verification_code)) {
+                if(user.description && user.description.includes(twitterAccount.verification_code)) {
                     twitterAccount.update({
                         verified: true
                     }).then(twitterAccount =>{
@@ -359,7 +359,7 @@ router.post('/accounts/verify/instagram/:username/', middlewares.isLoggedIn, mid
             }
         });
 
-        if(instagram.user.biography.includes(twitterAccount.verification_code)) {
+        if(instagram.user.biography && instagram.user.biography.includes(twitterAccount.verification_code)) {
             const result = await twitterAccount.update({ verified: true });
             req.flash("success", "Verification successfully completed!");
             res.redirect('/dashboard/accounts');
